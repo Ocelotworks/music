@@ -1,0 +1,13 @@
+{
+  "Database": {
+    "host": "localhost",
+    "port": 3306,
+    "username": "",
+    "password": "",
+    "db": "music",
+    "prefix": "music"
+  },
+  "Keys": {
+    "lastfm": ""
+  }
+}
