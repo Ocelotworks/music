@@ -1,0 +1,41 @@
+@background-dark: #0b0b0b;
+@background-color: #191919;
+@background-light: #222;
+@background-lighter: #292929;
+@background-lightest: #1f1f1f;
+@background-highlight: #5a5a5a;
+
+@text-dark: #515151;
+@text-color: white;
+
+@icon-color: #9c9b9b;
+
+@green: green;
+
+@accent-color: #1ed760;
+
+@text-size: 14px;
+@titlebar-padding: 15px;
+@sidebar-width: 20%;
+@body-padding: -5px;
+@song-padding: 7px;
+
+@transition-time: 0.5s;
+
+@import "fa/less/font-awesome";
+@import "sections/navbar.less";
+@import "sections/sidebar.less";
+@import "sections/main.less";
+
+body {
+  background: @background-color;
+  color: @text-color;
+  font: @text-size "Lucida Grande", Helvetica, Arial, sans-serif;
+  padding-top: (@titlebar-padding * 2) + @text-size + @body-padding;
+}
+
+a {
+  color: #00B7FF;
+}
+
+

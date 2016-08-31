@@ -1,2 +1,25 @@
-<h1>{{title}}</h1>
-<p>Welcome to {{title}}</p>
+<div id="titlebar">
+    <span id="pageTitle">{{title}}</span>
+    <div id="nav">
+        <a class="navButton selected">Songs</a>
+        <a class="navButton">Artists</a>
+        <a class="navButton">Albums</a>
+        <a class="navButton">Genres</a>
+        <a class="navButton">Playlists</a>
+        <span><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
+    </div>
+</div>
+<div id="sidebarContainer">
+    <img src="https://placekitten.com/300/300" id="albumArt">
+    <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
+    <span id="currentSong">Never Gonna Give You Up</span>
+    <span id="currentArtist" class="secondaryText"></span>
+</div>
+<div id="tabContainer">
+    <div id="allSongs" class="songList visible">
+        {{#each songs}}
+            {{>song}}
+        {{/each}}
+    </div>
+</div>
+

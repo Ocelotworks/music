@@ -1,0 +1,19 @@
+.song {
+  width: 100%;
+  display: block;
+  padding: @song-padding;
+  transition: @transition-time;
+
+  &:nth-of-type(odd){
+    background: @background-color;
+  }
+
+  &:nth-of-type(even){
+    background: @background-lighter;
+  }
+
+  &:hover{
+    background: @background-highlight;
+    cursor: pointer;
+  }
+}
