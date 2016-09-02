@@ -80,10 +80,21 @@ module.exports = function(app){
             layout: false});
     });
 
-    router.get('/add/playlist', function(req, res, next) {
-        res.render('templates/', {songs: songs, layout: false});
+    router.get('/add', function(req, res, next) {
+        res.render('templates/add', {layout: false});
     });
 
+    router.get('/add/playlist', function(req, res, next) {
+        res.render('templates/addScreens/addPlaylist', {layout: false});
+    });
+
+    router.get('/add/song', function(req, res, next) {
+        res.render('templates/addScreens/addSong', {folders: ["nsp", "edm", "beepityboop"], layout: false});
+    });
+
+    router.get('/add/radio', function(req, res, next) {
+        res.render('templates/addScreens/addRadio', {layout: false});
+    });
 
     return router;
 };

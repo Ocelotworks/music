@@ -88,7 +88,24 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         radio: "addRadio"
     };
 
-    $scope.createAddView = function(type){
+    $scope.showErrorScreen = function(error){
+        $scope.error = error;
+        $templateRequest("error").then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, function(error){
+            console.error("Well shit "+error);
+        });
+    };
 
+
+    $scope.createAddView = function(type){
+        $templateRequest("loading").then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/add/"+$scope.addViews[type]);
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
     };
 });
