@@ -35,6 +35,7 @@ app.use(require('less-middleware')(path.join(__dirname, 'less'), {
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
+app.use('/templates', require('./routes/templates')(app));
 //app.use('/users', users);
 
 // catch 404 and forward to error handler

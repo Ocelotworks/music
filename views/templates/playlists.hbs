@@ -1,0 +1,13 @@
+<h2>Public Playlists <button class="happyButton"><i class="fa fa-plus"></i>&nbsp;Create your own</button></h2>
+<div id="publicPlaylists" class="songList">
+    {{#each publicPlaylists}}
+        {{> playlist}}
+    {{/each}}
+</div>
+
+<h2>Your Playlists <button class="happyButton"><i class="fa fa-user"></i>&nbsp;Sign In</button> to manage your own playlists.</h2>
+<div id="privatePlaylists" class="songList">
+    {{#each privatePlaylists}}
+        {{> playlist}}
+    {{/each}}
+</div>

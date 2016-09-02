@@ -20,26 +20,39 @@
   top: -2px;
 }
 
+
 .navButton{
-  color: white;
+  color: @text-color;
   padding: @titlebar-padding;
   margin-left: -4px;
-  transition: @transition-time;
+  .transition(@transition-time);
   border-bottom: 1px solid @background-dark;
 
   &.selected{
-    border-bottom: 1px solid white;
+    border-bottom: 1px solid @accent-color;
     &:hover{
-      border-bottom: 1px solid white;
+      border-bottom: 1px solid @accent-color;
     }
   }
 
+  //& .fa{
+  //  color: @text-color;
+  //}
+
   &:hover{
     background-color: @background-dark;
-    transition: @transition-time;
+    .transition(@transition-time);
     cursor: pointer;
     border-bottom: 1px solid @background-highlight;
+    color: @accent-color;
+
+    //& .fa{
+    //  color: @text-color;
+    //}
   }
+
+
+
 }
 
 #tabContainer {
@@ -47,5 +60,60 @@
   left: @sidebar-width;
   width: calc(~"99% - "@sidebar-width);
   border-left: 1px solid @background-dark;
-  height: 96%;
+  height: 94vh;
+  top: 47px;
+
+  & h2{
+    margin-left: 10px;
+    &:not(:first-of-type){
+      margin-top: 50px;
+    }
+  }
 }
+
+#profile {
+  display: inline;
+  position: absolute;
+  right: @login-right-position;
+  top: 0;
+  padding-top: @login-padding !important;
+  padding-left: @login-padding !important;
+  padding-bottom: 0;
+  height: calc(~"100% - "@login-padding);
+  width: @login-width;
+}
+
+.avatar {
+  border-radius: 100px;
+  border: 1px solid @background-dark;
+}
+
+#username {
+  bottom: 10px;
+  left: 5px;
+  position: relative;
+}
+
+#profile:hover > #loginDropdown{
+  opacity: 1;
+  .transition(@transition-time);
+  height: 120px;
+}
+
+#loginDropdown {
+  position: absolute;
+  z-index: 2;
+  padding: 5px;
+  top: 46px;
+  right: 0;
+  width: 183px;
+  height: 0;
+  border: 1px solid @background-dark;
+  background: @background-light;
+  opacity: 0;
+  .transition(@transition-time);
+  overflow-y: hidden;
+  color: @text-color;
+  cursor: default;
+}
+

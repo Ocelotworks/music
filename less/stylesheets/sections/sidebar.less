@@ -1,12 +1,95 @@
 #albumArt {
-  height: 50%;
-  width: 50%;
-  margin: 10% auto 0;
+  height: @albumart-height;
+  margin: @albumart-margin auto 0;
   display: block;
-  border: 1px solid black;
+  border: 1px solid @background-dark;
 }
 
-div#sidebarContainer {
-  width: 19.6%;
+#sidebarContainer {
+  width: @sidebar-width;
+  height: @max-height;
   position: absolute;
+  text-align: center;
 }
+
+.secondaryText{
+  color: @text-dark;
+  font-size: 16pt;
+}
+
+#nowPlayingLabel, #currentArtist {
+  display: block;
+  margin: 3%;
+}
+
+#currentSong {
+  font-size: 21pt;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.control{
+  .transition(@transition-time);
+
+  &.disabled:hover{
+    cursor: not-allowed;
+  }
+
+  &:hover{
+    cursor: pointer;
+    color: @text-color;
+    .transition(@transition-time);
+  }
+}
+
+#controls {
+  font-size: 2vw;
+  color: @text-dark;
+  transition: @transition-time;
+  padding: 10px;
+}
+
+#lesserControls {
+  font-size: 1vw;
+
+  & .control{
+
+    &.on:not(.disabled){
+      color: @accent-color;
+
+      &:hover{
+        color: @text-dark;
+      }
+    }
+
+    &:not(.disabled):hover{
+      color: @accent-color;
+    }
+  }
+}
+
+#songListQueue {
+  border-radius: 10px;
+  display: inline-block;
+  width: 100%;
+}
+
+#queueTitle {
+  padding: 10px;
+  background: @background-lightest;
+  border-bottom: 1px solid @background-dark;
+  display: block;
+  border-radius: 10px 10px 0 0;
+  text-align: center;
+}
+
+#queue {
+  text-align: initial;
+  height: 44vh;
+  & .song{
+    width: 95.8%; //Kill me
+  }
+}
+
+
+

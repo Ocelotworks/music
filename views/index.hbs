@@ -1,25 +1,53 @@
 <div id="titlebar">
-    <span id="pageTitle">{{title}}</span>
-    <div id="nav">
-        <a class="navButton selected">Songs</a>
-        <a class="navButton">Artists</a>
-        <a class="navButton">Albums</a>
-        <a class="navButton">Genres</a>
-        <a class="navButton">Playlists</a>
+    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal fa-rotate-180"></i>{{title}}</span>
+    <div id="nav" ng-controller="TabController">
+        <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
+
         <span><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
+    </div>
+    <div id="profile" class="navButton">
+        <img src="https://placekitten.com/32/32" class="avatar" id="userAvatar">
+        <span id="username">Log In &#x25BC;</span>
+        <div id="loginDropdown">
+            <img src="https://placekitten.com/32/32" class="avatar">
+            <span id="username">Guest</span>
+            <ul>
+                <li>Sign in with Google</li>
+                <li>Sign in with Facebook</li>
+                <li>Sign in with Twitter</li>
+            </ul>
+        </div>
     </div>
 </div>
 <div id="sidebarContainer">
     <img src="https://placekitten.com/300/300" id="albumArt">
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
     <span id="currentSong">Never Gonna Give You Up</span>
-    <span id="currentArtist" class="secondaryText"></span>
-</div>
-<div id="tabContainer">
-    <div id="allSongs" class="songList visible">
-        {{#each songs}}
-            {{>song}}
-        {{/each}}
+    <span id="currentArtist" class="secondaryText">Rick Astley</span>
+    <div id="controls" class="weeBox">
+        <i class="control fa fa-backward" title="Backward"></i>
+        <i class="control fa fa-play" title="Play/Pause"></i>
+        <i class="control fa fa-forward" title="Forward"></i>
+        <div id="lesserControls">
+            <i class="control fa fa-random" title="Shuffle"></i>
+            <i class="control fa fa-play-circle" title="Auto-play"></i>
+            <i class="control fa fa-retweet" title="Repeat"></i>
+        </div>
+
+
+    </div>
+    <div id="queue" class="weeBox">
+        <span id="queueTitle" class="weeBoxTitle">Queue</span>
+        <div id="songListQueue" class="songList">
+            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}">{[{song.name}]} - {[{song.title}]}</span>
+        </div>
     </div>
 </div>
-
+<div id="tabContainer" ng-controller="TabController">
+</div>
+<script type="text/ng-template" id="loading">
+This is a loading screen
+</script>
+<script type="text/ng-template" id="error">
+    <div id="errorBox">An error occurred loading this page.<br>Please wait a few seconds and try again.<br><span class="secondaryText">{[{error}]}</span></div>
+</script>
