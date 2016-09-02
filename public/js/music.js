@@ -1,11 +1,12 @@
 /*
-* Copyright Ocelotworks 2016
+ * Copyright Ocelotworks 2016
  */
 var app = angular.module("music", []);
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
 });
+
 app.controller("TabController", function($scope, $templateRequest, $sce, $compile){
 
     $scope.tabs = [
@@ -83,9 +84,9 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
 app.controller('AddController', function($scope,  $templateRequest, $sce, $compile){
 
     $scope.addViews = {
-        playlist: "addPlaylist",
-        song: "addSong",
-        radio: "addRadio"
+        playlist: "playlist",
+        song: "song",
+        radio: "radio"
     };
 
     $scope.showErrorScreen = function(error){
@@ -95,6 +96,10 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         }, function(error){
             console.error("Well shit "+error);
         });
+    };
+
+    $scope.addSong = function(){
+        console.log($scope.addSongForm);
     };
 
 

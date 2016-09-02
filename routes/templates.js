@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 
-
-
+var config = require('config').get("Folders");
+var path = require('path');
 
 module.exports = function(app){
 
@@ -90,6 +90,15 @@ module.exports = function(app){
 
     router.get('/add/song', function(req, res, next) {
         res.render('templates/addScreens/addSong', {folders: ["nsp", "edm", "beepityboop"], layout: false});
+    });
+
+    router.post('/add/song', function(req, res){
+        console.log("Received a song");
+        console.log(req.body);
+        if(req.body && req.body.url && req.body.songFolder && req.body.getLastfmData){
+            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on");
+        }
+        res.redirect('/');
     });
 
     router.get('/add/radio', function(req, res, next) {

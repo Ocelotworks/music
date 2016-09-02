@@ -5,9 +5,17 @@ var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 
+
 var app = express();
 
 app.database = require('./modules/database.js')(app);
+app.downloader = require('./modules/downloader.js')(app);
+
+
+app.database.getOrCreateArtist("maybebabies", function(err, res){
+   console.log(err);
+    console.log(res);
+});
 
 var routes          = require('./routes/index')(app);
 var users           = require('./routes/users')(app);

@@ -14,6 +14,14 @@
     },
     "prefix": "music"
   },
+  "Folders": {
+    "base": "/home/music/songs",
+    "folders": [
+      "nsp",
+      "edm",
+      "jingles"
+    ]
+  },
   "Keys": {
     "lastfm": ""
   }
