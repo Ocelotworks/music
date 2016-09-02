@@ -2,7 +2,7 @@
   background: @background-light;
   display: inline-block;
   border-radius: 10px;
-  border: 1px solid @background-dark;
+  border: 1px solid @accent-color;
   padding: 4px;
 }
 
@@ -18,7 +18,7 @@
   color: @text-color;
 
   &:focus{
-    outline-color: @accent-color;
+    outline: none;
   }
 
   & option{
@@ -26,3 +26,32 @@
     border: 1px solid @background-dark;
   }
 }
+
+.fancyInput {
+  background: #222;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 10px;
+  color: white;
+
+  &:valid{
+    border: 1px solid @accent-color;
+  }
+
+  &:invalid{
+    border: 1px solid @red;
+  }
+
+  &:focus{
+    outline: none;
+  }
+}
+
+#songUrl {
+  width: 40%;
+}
+
+.downloadButton{
+  font-family: 'FontAwesome', sans-serif;
+}
+
