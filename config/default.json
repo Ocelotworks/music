@@ -23,7 +23,9 @@
     ]
   },
   "Downloader": {
-    "proxy": null
+    "proxy": null,
+    "forceIpv4": false,
+    "audioCodec": "libmp3lame"
   },
   "Keys": {
     "lastfm": ""
