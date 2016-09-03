@@ -55,3 +55,22 @@
   font-family: 'FontAwesome', sans-serif;
 }
 
+.fancyTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+tr.song {
+  display: table-row;
+}
+
+.songControlSet{
+  text-align: center;
+  font-size: @text-size * 1.2;
+  .transition(@transition-time);
+  & i:hover{
+    color: @accent-color;
+    .transition(@transition-time);
+  }
+
+}

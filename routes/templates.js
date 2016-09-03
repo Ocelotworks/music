@@ -89,7 +89,13 @@ module.exports = function(app){
     });
 
     router.get('/add/song', function(req, res, next) {
-        res.render('templates/addScreens/addSong', {folders: ["nsp", "edm", "beepityboop"], layout: false});
+        app.database.getSongQueue(function(err, queue){
+            console.log(queue);
+            if(err)
+                console.error("WARNING: Unable to retrieve song queue.");
+            res.render('templates/addScreens/addSong', {folders: config.get("folders"), queue: queue, layout: false});
+        });
+
     });
 
     router.post('/add/song', function(req, res){

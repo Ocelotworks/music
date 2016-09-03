@@ -8,7 +8,7 @@ var uuid    = require('uuid').v4;
 
 
 module.exports = function(app){
-    return {
+    var object = {
         name: "Database Handler",
         init: function(cb){
 
@@ -47,19 +47,68 @@ module.exports = function(app){
                         });
                     }
                 }
-            })
+            });
         },
         getOrCreateAlbum: function(album, cb){
-
+            knex.select("id").from("albums").where({name: album}).limit(1).asCallback(function(err, res){
+                if(err)
+                    cb(err);
+                else{
+                    if(res.length === 1){
+                        console.log("Album "+album+" already exists");
+                        cb(null, res[0].id);
+                    }else{
+                        console.log("Creating new album "+album);
+                        var id = uuid();
+                        knex('albums').insert({
+                            name: album,
+                            id: id
+                        }).asCallback(function(err){
+                            cb(err, id);
+                        });
+                    }
+                }
+            });
+        },
+        getSongQueue: function(cb){
+          knex.select().from("queue").innerJoin("artists", "queue.artist", "artists.id").asCallback(cb);
         },
         addSongToQueue: function(url, destination, addedby, artist, title, album, cb){
             function exec(url, destination, addedById, artistId, title, albumId){
+                knex("queue").insert({
+                    url: url,
+                    destination: destination,
+                    addedby: addedById,
+                    artist: artistId,
+                    title: title,
+                    album: albumId
+                }).asCallback(cb);
+            }
 
+            function albumBit(url, destination, addedById, artistId, title, album){
+                if(!album){
+                    exec(url, destination, addedById, artistId, title, null);
+                }else
+                   object.getOrCreateAlbum(album, function(err, albumId){
+                       if(err){
+                           console.error("Error adding song to download queue: could not get album: "+err)
+                       } else{
+                           exec(url, destination, addedById, artistId, title, albumId);
+                       }
+                    });
             }
 
             if(artist){
-                module.exports.getOrCreateArtist()
-            }
+                object.getOrCreateArtist(artist, function(err, artistId){
+                   if(err)
+                       console.error("Error adding song to download queue: could not get artist: "+err);
+
+                   albumBit(url, destination, addedby, artistId, title, album);
+                });
+            }else
+                albumBit(url, destination, addedby, null, title, album);
         }
-    }
+    };
+
+    return object;
 };

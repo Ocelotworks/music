@@ -22,6 +22,9 @@
       "jingles"
     ]
   },
+  "Downloader": {
+    "proxy": null
+  },
   "Keys": {
     "lastfm": ""
   }
