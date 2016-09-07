@@ -15,7 +15,7 @@
     "prefix": "music"
   },
   "Folders": {
-    "base": "/home/music/songs",
+    "baseDir": "/home/music/songs",
     "folders": [
       "nsp",
       "edm",
@@ -25,6 +25,8 @@
   "Downloader": {
     "proxy": null,
     "forceIpv4": false,
+    "allowPlaylists": true,
+    "maxConcurrentDownloads": 1,
     "audioCodec": "libmp3lame"
   },
   "Keys": {

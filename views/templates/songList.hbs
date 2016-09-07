@@ -1,5 +1,5 @@
-<div id="allSongs" class="songList visible">
-        {{#each songs}}
-            {{>song}}
-        {{/each}}
+<div id="allSongs" class="songList visible fancyScroll" ng-controller="SongController">
+{{#each songs}}
+    {{>song}}
+{{/each}}
 </div>

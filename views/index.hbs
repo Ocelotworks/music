@@ -19,11 +19,11 @@
         </div>
     </div>
 </div>
-<div id="sidebarContainer">
+<div id="sidebarContainer" ng-controller="SongController">
     <img src="https://placekitten.com/300/300" id="albumArt">
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
-    <span id="currentSong">Never Gonna Give You Up</span>
-    <span id="currentArtist" class="secondaryText">Rick Astley</span>
+    <span id="currentSong">{[{nowPlaying.title}]}</span>
+    <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>
         <i class="control fa fa-play" title="Play/Pause"></i>
@@ -39,14 +39,14 @@
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue</span>
         <div id="songListQueue" class="songList">
-            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}">{[{song.name}]} - {[{song.title}]}</span>
+            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}">{[{song.name}]}&nbsp;-&nbsp;{[{song.title}]}</span>
         </div>
     </div>
 </div>
 <div id="tabContainer" ng-controller="TabController">
 </div>
 <script type="text/ng-template" id="loading">
-This is a loading screen
+    <i class="fa fa-shekel fa-spin fa-3x fa-flip-horizontal loading"></i>
 </script>
 <script type="text/ng-template" id="error">
     <div id="errorBox">An error occurred loading this page.<br>Please wait a few seconds and try again.<br><span class="secondaryText">{[{error}]}</span></div>

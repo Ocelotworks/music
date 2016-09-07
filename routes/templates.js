@@ -90,7 +90,6 @@ module.exports = function(app){
 
     router.get('/add/song', function(req, res, next) {
         app.database.getSongQueue(function(err, queue){
-            console.log(queue);
             if(err)
                 console.error("WARNING: Unable to retrieve song queue.");
             res.render('templates/addScreens/addSong', {folders: config.get("folders"), queue: queue, layout: false});
@@ -100,7 +99,6 @@ module.exports = function(app){
 
     router.post('/add/song', function(req, res){
         console.log("Received a song");
-        console.log(req.body);
         if(req.body && req.body.url && req.body.songFolder && req.body.getLastfmData){
             app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on");
         }

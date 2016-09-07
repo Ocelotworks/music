@@ -64,6 +64,12 @@ tr.song {
   display: table-row;
 }
 
+td .addedBy {
+  position: relative;
+  bottom: 11px;
+  left: 0;
+}
+
 .songControlSet{
   text-align: center;
   font-size: @text-size * 1.2;
@@ -73,4 +79,14 @@ tr.song {
     .transition(@transition-time);
   }
 
+}
+
+.fancyScroll{
+  overflow-y: scroll;
+}
+
+#importQueue {
+  position: absolute;
+  height: 75%;
+  width: 100%;
 }

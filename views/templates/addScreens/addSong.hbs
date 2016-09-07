@@ -18,24 +18,26 @@
 
     <h2>Import Queue</h2>
     {{#if queue}}
-        <table class="fancyTable">
-            <tr><td>Artist</td><td>Title</td><td>Source</td><td>Status</td><td>Added By</td><td>Actions</td></tr>
-            {{#each queue}}
-                <tr class="song"><td>{{name}}</td><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{status}}</td><td>
-                    <span class="addedBy">
-                        <span class="addedByName">
-                            <img class="avatar" src="{{addedBy.avatar}}">{{addedBy.name}}
+        <div id="importQueue" class="fancyScroll">
+            <table class="fancyTable">
+                <tr><td>Artist</td><td>Title</td><td>Source</td><td>Status</td><td>Added By</td><td>Actions</td></tr>
+                {{#each queue}}
+                    <tr class="song"><td>{{name}}</td><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{status}}</td><td>
+                        <span class="addedBy">
+                            <span class="addedByName">
+                                <img class="avatar" src="{{avatar}}">{{username}}
+                            </span>
                         </span>
-                    </span>
-                </td>
-                <td class="songControlSet">
-                    <i class="fa fa-edit" title="Edit"></i>
-                    <i class="fa fa-upload" title="Process Now"></i>
-                    <i class="fa fa-remove" title="Delete"></i>
-                </td>
-                </tr>
-            {{/each}}
-        </table>
+                    </td>
+                    <td class="songControlSet">
+                        <i class="fa fa-edit" title="Edit"></i>
+                        <i class="fa fa-upload" title="Process Now"></i>
+                        <i class="fa fa-remove" title="Delete"></i>
+                    </td>
+                    </tr>
+                {{/each}}
+            </table>
+        </div>
     {{else}}
         <span class="softError">There's nothing in the queue.</span>
     {{/if}}

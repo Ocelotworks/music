@@ -11,6 +11,8 @@ var app = express();
 app.database = require('./modules/database.js')(app);
 app.downloader = require('./modules/downloader.js')(app);
 
+app.downloader.processOneSong();
+
 
 //app.database.addSongToQueue("https://www.youtube.com/watch?v=ykW4rtW2eu0", "nsp", "test", "The Veronicas", "Untouched", null, function(err, res){
 //

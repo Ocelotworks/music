@@ -13,6 +13,9 @@ module.exports = function(app){
         init: function(cb){
 
         },
+        addSong: function(song, cb){
+            knex("songs").insert(song).asCallback(cb);
+        },
         getAllSongs: function(cb){
             knex.select().from("songs").orderBy("artist", "desc").asCallback(cb);
         },
@@ -21,6 +24,9 @@ module.exports = function(app){
         },
         getSongInfo: function(id, cb){
             knex.select("uuid", "artist", "album", "plays", "genre", "duration").from("songs").where({id: id}).asCallback(cb);
+        },
+        getSongPath: function(id, cb){
+            knex.select("path").from("songs").where({id: id}).limit(1).asCallback(cb);
         },
         getArtistFromSong: function(song, cb){
             knex.select("name", "id").from("artists").where({id: knex.select("artist").from("songs").where({id: song})}).asCallback(cb);
@@ -71,7 +77,17 @@ module.exports = function(app){
             });
         },
         getSongQueue: function(cb){
-          knex.select().from("queue").innerJoin("artists", "queue.artist", "artists.id").asCallback(cb);
+            knex.select().from("queue").innerJoin("artists", "queue.artist", "artists.id").innerJoin("users", "queue.addedby", "users.id").asCallback(cb);
+        },
+        getQueuedSong: function(cb){
+          knex.select().from("queue").whereNot({status: 'FAILED'}).limit(1).asCallback(cb);
+        },
+        removeQueuedSong: function(id, cb){
+          knex("queue").where({id: id}).delete().asCallback(cb);
+        },
+        updateQueuedSong: function(id, update, cb){
+            console.log("Updating queued song "+id);
+            knex("queue").where({id: id}).update(update).asCallback(cb);
         },
         addSongToQueue: function(url, destination, addedby, artist, title, album, cb){
             function exec(url, destination, addedById, artistId, title, albumId){
@@ -86,27 +102,22 @@ module.exports = function(app){
             }
 
             function albumBit(url, destination, addedById, artistId, title, album){
-                if(!album){
-                    exec(url, destination, addedById, artistId, title, null);
-                }else
-                   object.getOrCreateAlbum(album, function(err, albumId){
-                       if(err){
-                           console.error("Error adding song to download queue: could not get album: "+err)
-                       } else{
-                           exec(url, destination, addedById, artistId, title, albumId);
-                       }
-                    });
+               object.getOrCreateAlbum(album || "Unknown Album", function(err, albumId){
+                   if(err){
+                       console.error("Error adding song to download queue: could not get album: "+err)
+                   } else{
+                       exec(url, destination, addedById, artistId, title, albumId);
+                   }
+                });
             }
 
-            if(artist){
-                object.getOrCreateArtist(artist, function(err, artistId){
-                   if(err)
-                       console.error("Error adding song to download queue: could not get artist: "+err);
+            object.getOrCreateArtist(artist || "Unknown Artist", function(err, artistId){
+               if(err)
+                   console.error("Error adding song to download queue: could not get artist: "+err);
 
-                   albumBit(url, destination, addedby, artistId, title, album);
-                });
-            }else
-                albumBit(url, destination, addedby, null, title, album);
+               albumBit(url, destination, addedby, artistId, title, album);
+            });
+
         }
     };
 

@@ -31,6 +31,8 @@
 .control{
   .transition(@transition-time);
 
+  color: @background-highlight;
+
   &.disabled:hover{
     cursor: not-allowed;
   }
@@ -44,15 +46,19 @@
 
 #controls {
   font-size: 2vw;
-  color: @text-dark;
+  color: @background-highlight;
   transition: @transition-time;
   padding: 10px;
+
+
 }
 
 #lesserControls {
   font-size: 1vw;
 
   & .control{
+
+    color: @background-lighter;
 
     &.on:not(.disabled){
       color: @accent-color;
