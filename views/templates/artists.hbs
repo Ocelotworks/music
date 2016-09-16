@@ -1,5 +1,10 @@
-<div class="songList">
-    {{#each artists}}
-        {{>artist}}
-    {{/each}}
+<div class="songList" ng-controller="SongController">
+    {{#if artists}}
+        {{#each artists}}
+            {{>artist}}
+        {{/each}}
+    {{else}}
+        <div class="softError">There are no artists.</div>
+    {{/if}}
+
 </div>
