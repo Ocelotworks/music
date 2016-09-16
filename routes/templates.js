@@ -39,6 +39,16 @@ module.exports = function(app){
         ], layout: false});
     });
 
+    router.get('/artists', function(req, res){
+       app.database.getAllArtists(function(err, result){
+          if(err)
+              app.renderError(err, res);
+          else
+              res.render('templates/artists', {artists: result, layout: false});
+
+       });
+    });
+
     router.get('/playlists', function(req, res, next) {
         res.render('templates/playlists', {publicPlaylists: [
             {

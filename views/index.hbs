@@ -24,6 +24,8 @@
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
     <span id="currentSong">{[{nowPlaying.title}]}</span>
     <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>
+    <rzslider rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
+    {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>
         <i class="control fa fa-play" title="Play/Pause"></i>

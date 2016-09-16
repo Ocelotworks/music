@@ -3,14 +3,37 @@
  */
 
 var base = "http://localhost:3002/";
-var app = angular.module("music", []);
+var app = angular.module("music", ['rzModule']);
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
 });
 
+app.filter('secondsToDateTime', [function() {
+    return function(seconds) {
+        return new Date(1970, 0, 1).setSeconds(seconds);
+    };
+}]);
+
+app.filter('integer', function() {
+    return function(input) {
+        return parseInt(input);
+    };
+});
+
 app.run(['$rootScope', function($rootScope){
     console.log("Yarrr matey");
+
+    $rootScope.progressBar = {
+        options: {
+            showSelectionBar: true,
+            ceil: 100,
+            floor: 0,
+            translate: function(){
+                return "";
+            }
+        }
+    };
 
     $rootScope.nowPlaying =  {
             artist: "Nobody",
@@ -18,7 +41,8 @@ app.run(['$rootScope', function($rootScope){
             title: "Nothing",
             duration: 0,
             elapsed: 0,
-            playing: false
+            playing: false,
+            buffered: 0
         };
 
 
@@ -38,32 +62,31 @@ app.run(['$rootScope', function($rootScope){
         $rootScope.audioPlayer.play();
     };
 
+
     $rootScope.audioPlayer.onplaying = function(){
         $rootScope.nowPlaying.playing = true;
+        $rootScope.audioPlayer.ontimeupdate = function(){
+            $rootScope.nowPlaying.elapsed = $rootScope.audioPlayer.currentTime;
+            $rootScope.$apply();
+        };
     };
 
     $rootScope.audioPlayer.onpause = function(){
         $rootScope.nowPlaying.playing = false;
     };
 
-    $rootScope.audioPlayer.durationchange = function(){
+    $rootScope.audioPlayer.ondurationchange = function(){
         $rootScope.nowPlaying.duration = $rootScope.audioPlayer.duration;
+        $rootScope.progressBar.options.ceil = parseInt($rootScope.nowPlaying.duration);
     };
 
-
-    $rootScope.audioPlayer.stalled = function(){
+    $rootScope.audioPlayer.onstalled = function(){
         console.log("Buffering");
     };
 
-    $rootScope.audioPlayer.timeupdate = function(){
-        $rootScope.nowPlaying.elapsed = $rootScope.mediaPlayer.elapsed;
-    };
-
-    $rootScope.audioPlayer.volumechange = function(){
+    $rootScope.audioPlayer.onvolumechange = function(){
         console.log("Aye lad the volume changed");
     };
-
-
 
 }]);
 
@@ -182,10 +205,8 @@ app.controller('SongController', function($scope, $rootScope){
 
     $scope.playSong = function(event){
         var info = event.target.outerText.split("\u00A0-\u00A0");
-        $rootScope.nowPlaying = {
-            artist: info[0],
-            title: info[1]
-        };
+        $rootScope.nowPlaying.artist = info[0];
+        $rootScope.nowPlaying.title = info[1];
         $rootScope.audioPlayer.src = base+"song/"+event.target.attributes["data-id"].value;
     } ;
 });
