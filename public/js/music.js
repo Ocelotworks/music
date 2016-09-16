@@ -201,12 +201,39 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
 
 
-app.controller('SongController', function($scope, $rootScope){
+app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile){
 
     $scope.playSong = function(event){
         var info = event.target.outerText.split("\u00A0-\u00A0");
         $rootScope.nowPlaying.artist = info[0];
         $rootScope.nowPlaying.title = info[1];
         $rootScope.audioPlayer.src = base+"song/"+event.target.attributes["data-id"].value;
-    } ;
+    };
+
+
+    $scope.showErrorScreen = function(error){
+        $scope.error = error;
+        $templateRequest("error").then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, function(error){
+            console.error("Well shit "+error);
+        });
+    };
+
+    $scope.showSongList = function(template){
+        $templateRequest("loading").then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/songs/"+template);
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+    };
+
+    $scope.playArtist = function(id){
+        $scope.showSongList("artist/"+id);
+    }
+
 });
