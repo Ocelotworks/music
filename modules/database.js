@@ -20,16 +20,16 @@ module.exports = function(app){
             knex.select().from("songs").orderBy("artist", "desc").asCallback(cb);
         },
         getAllArtists: function(cb){
-            knex.select().from("artists").distinct("name").orderBy("name", "desc").asCallback(cb);
+            knex.select("name", "id").from("artists").distinct("name").orderBy("name", "desc").asCallback(cb);
         },
         getAllAlbums: function(cb){
             knex.select().from("albums").distinct("title").orderby("title", "desc").asCallback(cb);
         },
         getSongsByArtist: function(artist, cb){
-            knex.select().from("songs").where({artist: artist}).asCallback(cb);
+            knex.from("songs").where({artist: artist}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
         },
         getSongsByAlbum: function(album, cb){
-            knex.select().from("albums").where({album: album}).asCallback(cb);
+            knex.from("albums").where({album: album}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
         },
         getSongList: function(cb){
             knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
