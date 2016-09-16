@@ -16,6 +16,26 @@ module.exports = function(app){
         });
     });
 
+    router.get('/songs/artist/:id', function(req, res){
+        app.database.getSongsByArtist(req.params.id, function(err, songs){
+            if(err)
+                app.renderError(err, res);
+            else
+                res.render('templates/songList', {songs: songs, layout: false});
+        });
+    });
+
+    router.get('/songs/album/:id', function(req, res){
+       app.database.getSongsByAlbum(req.params.id, function(err, songs){
+            if(err)
+                app.renderError(err, res);
+           else
+                res.render('templates/songList', {songs: songs, layout: false});
+       });
+    });
+
+
+
     router.get('/radio', function(req, res, next) {
         res.render('templates/radioList', {radios: [
             {
@@ -43,9 +63,10 @@ module.exports = function(app){
        app.database.getAllArtists(function(err, result){
           if(err)
               app.renderError(err, res);
-          else
+          else {
+              console.log(result);
               res.render('templates/artists', {artists: result, layout: false});
-
+          }
        });
     });
 
