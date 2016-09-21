@@ -215,7 +215,11 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
 
     $scope.togglePlaying = function(){
-        $rootScope.audioPlayer.playing = !$rootScope.audioPlayer.playing;
+        console.log("Toggling??");
+        if($rootScope.audioPlayer.paused)
+            $rootScope.audioPlayer.play();
+        else
+            $rootScope.audioPlayer.pause();
     };
 
 

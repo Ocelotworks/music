@@ -27,7 +27,7 @@
     {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>
-        <i class="control fa fa-play" title="Play/Pause"></i>
+        <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : 'fa-pause'"></i>
         <i class="control fa fa-forward" title="Forward"></i>
         <div id="lesserControls">
             <i class="control fa fa-random" title="Shuffle"></i>
