@@ -2,7 +2,6 @@
     <span id="pageTitle"><i class="fa fa-shekel fa-rotate-180"></i>&nbsp;{{title}}</span>
     <div id="nav" ng-controller="TabController">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
-
         <span><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
     </div>
     <div id="profile" class="navButton">
@@ -35,8 +34,6 @@
             <i class="control fa fa-play-circle" title="Auto-play"></i>
             <i class="control fa fa-retweet" title="Repeat"></i>
         </div>
-
-
     </div>
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue</span>

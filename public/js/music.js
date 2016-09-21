@@ -29,6 +29,9 @@ app.run(['$rootScope', function($rootScope){
             showSelectionBar: true,
             ceil: 100,
             floor: 0,
+            onChange: function(unk1, val, unk2, unk3){
+                $rootScope.audioPlayer.currentTime = val;
+            },
             translate: function(){
                 return "";
             }
@@ -208,6 +211,11 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         $rootScope.nowPlaying.artist = info[0];
         $rootScope.nowPlaying.title = info[1];
         $rootScope.audioPlayer.src = base+"song/"+event.target.attributes["data-id"].value;
+    };
+
+
+    $scope.togglePlaying = function(){
+        $rootScope.audioPlayer.playing = !$rootScope.audioPlayer.playing;
     };
 
 
