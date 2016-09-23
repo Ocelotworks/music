@@ -23,12 +23,12 @@
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
     <span id="currentSong">{[{nowPlaying.title}]}</span>
     <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>
-    <rzslider id="timeElapsedBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
+    <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>
-        <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : 'fa-pause'"></i>
-        <i class="control fa fa-forward" title="Forward"></i>
+        <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>
+        <i class="control fa fa-forward" title="Forward" ng-click="playNext()"></i>
         <div id="lesserControls">
             <i class="control fa fa-random" title="Shuffle"></i>
             <i class="control fa fa-play-circle" title="Auto-play"></i>
@@ -38,10 +38,17 @@
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue</span>
         <div id="songListQueue" class="songList">
-            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}">{[{song.name}]}&nbsp;-&nbsp;{[{song.title}]}</span>
+            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}">{[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}</span>
         </div>
     </div>
 </div>
+<ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController">
+    <li ng-click="ctxAddToQueue($event)"><i class="fa fa-fw fa-plus"></i> Add to Queue</li>
+    <li ng-click="ctxPlayNext($event)"><i class="fa fa-fw fa-fast-forward"></i> Play Next</li>
+    <li ng-click="ctxViewAlbum($event)"><i class="fa fa-fw fa-square"></i> Go to Album</li>
+    <li ng-click="ctxViewArtist($event)"><i class="fa fa-fw fa-user"></i> Go to Artist</li>
+    <li ng-click="ctxReport($event)"><i class="fa fa-fw fa-exclamation"></i> Report</li>
+</ul>
 <div id="tabContainer" ng-controller="TabController">
 </div>
 <script type="text/ng-template" id="loading">

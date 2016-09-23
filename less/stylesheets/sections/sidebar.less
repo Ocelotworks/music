@@ -101,6 +101,10 @@
   margin-left: @timeElapsedBar-margin;
   margin-right: @timeElapsedBar-margin;
   width: calc(~"100% - "@timeElapsedBar-margin*2);
+
+  &.smoothUpdate .rz-bar-wrapper{
+    transition: 1.5s linear;
+  }
 }
 
 

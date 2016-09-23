@@ -21,8 +21,25 @@ app.filter('integer', function() {
     };
 });
 
+app.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
+    };
+});
+
 app.run(['$rootScope', function($rootScope){
-    console.log("Yarrr matey");
+
+
+    $(document).bind("mousedown", function (e) {
+        if (!$(e.target).parents(".contextMenu").length > 0)
+            $(".contextMenu").hide(100);
+    });
 
     $rootScope.progressBar = {
         options: {
@@ -43,10 +60,48 @@ app.run(['$rootScope', function($rootScope){
             album: null,
             title: "Nothing",
             duration: 0,
+            normalPlay: false,
             elapsed: 0,
             playing: false,
-            buffered: 0
+            buffered: 0,
+            buffering: false
         };
+
+
+    $rootScope.queue = [];
+
+
+    $rootScope.getSongById = function(id){
+        return $(".song[data-id='"+id+"']").get(0);
+    };
+
+    $rootScope.addToQueueById = function(id){
+        $rootScope.addToQueue($rootScope.getSongById(id));
+    };
+
+    $rootScope.addToQueue = function(element){
+        var info = element.outerText.split("\u00A0-\u00A0");
+        var songObject = {
+            artist:  info[0],
+            title: info[1],
+            id: element.attributes["data-id"].value
+        };
+        $rootScope.queue.push(songObject);
+    };
+
+    $rootScope.queueNextById = function(id){
+      $rootScope.queueNext($rootScope.getSongById(id));
+    };
+
+    $rootScope.queueNext = function(element){
+        var info = element.outerText.split("\u00A0-\u00A0");
+        var songObject = {
+            artist:  info[0],
+            title: info[1],
+            id: element.attributes["data-id"].value
+        };
+        $rootScope.queue.unshift(songObject);
+    };
 
 
     $rootScope.audioPlayer = new Audio();
@@ -63,32 +118,74 @@ app.run(['$rootScope', function($rootScope){
 
     $rootScope.audioPlayer.oncanplay = function(){
         $rootScope.audioPlayer.play();
+        $rootScope.nowPlaying.normalPlay = false;
+        console.log("Can play");
     };
 
 
     $rootScope.audioPlayer.onplaying = function(){
         $rootScope.nowPlaying.playing = true;
-        $rootScope.audioPlayer.ontimeupdate = function(){
-            $rootScope.nowPlaying.elapsed = $rootScope.audioPlayer.currentTime;
-            $rootScope.$apply();
-        };
+        console.log("playing");
+    };
+
+    $rootScope.audioPlayer.ontimeupdate = function(){
+        $rootScope.nowPlaying.elapsed = $rootScope.audioPlayer.currentTime;
+        $rootScope.$apply();
+        $rootScope.nowPlaying.buffering = false;
+        $rootScope.nowPlaying.normalPlay = $rootScope.audioPlayer.currentTime > 1;
     };
 
     $rootScope.audioPlayer.onpause = function(){
         $rootScope.nowPlaying.playing = false;
     };
 
+    $rootScope.audioPlayer.onloadeddata = function(){
+        console.log("No longer buffering");
+        $rootScope.nowPlaying.buffering = false;
+    };
+
     $rootScope.audioPlayer.ondurationchange = function(){
         $rootScope.nowPlaying.duration = $rootScope.audioPlayer.duration;
         $rootScope.progressBar.options.ceil = parseInt($rootScope.nowPlaying.duration);
+        $rootScope.nowPlaying.normalPlay = false;
     };
 
     $rootScope.audioPlayer.onstalled = function(){
         console.log("Buffering");
+        $rootScope.nowPlaying.buffering = true;
     };
 
     $rootScope.audioPlayer.onvolumechange = function(){
         console.log("Aye lad the volume changed");
+    };
+
+    $rootScope.audioPlayer.onended = function(){
+        $rootScope.playNext();
+    };
+
+    $rootScope.playNext = function playNext(){
+        $rootScope.nowPlaying.normalPlay = false;
+        if($rootScope.queue.length > 0){
+            var nextSong = $rootScope.queue.shift();
+            $rootScope.playById(nextSong.id);
+        }else{
+            var availableSongs = $(".songList:visible .song");
+            $rootScope.playByElement(availableSongs[parseInt(Math.random() * availableSongs.length)]);
+        }
+    };
+
+
+    $rootScope.playById = function playById(id){
+        $rootScope.playByElement($rootScope.getSongById(id));
+    };
+
+    $rootScope.playByElement = function playByElement(element){
+        if(!element)return console.warn("Warning: playByElement called with a null element! Bad ID somewhere?");
+        var info = element.outerText.split("\u00A0-\u00A0");
+        $rootScope.nowPlaying.artist = info[0];
+        $rootScope.nowPlaying.title = info[1];
+        $rootScope.nowPlaying.buffering = true;
+        $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
     };
 
 }]);
@@ -207,10 +304,12 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile){
 
     $scope.playSong = function(event){
-        var info = event.target.outerText.split("\u00A0-\u00A0");
-        $rootScope.nowPlaying.artist = info[0];
-        $rootScope.nowPlaying.title = info[1];
-        $rootScope.audioPlayer.src = base+"song/"+event.target.attributes["data-id"].value;
+        $rootScope.playByElement(event.target);
+    };
+
+
+    $scope.showSongContextMenu = function(event){
+        $("#songContextMenu").finish().toggle(100).css({left: event.pageX, top: event.pageY, display: "absolute"}).data("id", event.target.attributes["data-id"].value);
     };
 
 
@@ -248,4 +347,19 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         $scope.showSongList("artist/"+id);
     }
 
+});
+
+
+app.controller("ContextMenuController", function($scope, $rootScope){
+    $scope.ctxPlayNext = function(event){
+        var contextMenu = $("#songContextMenu");
+        $rootScope.queueNextById(contextMenu.data("id"));
+        contextMenu.toggle(100);
+    };
+
+    $scope.ctxAddToQueue = function(event){
+        var contextMenu = $("#songContextMenu");
+        $rootScope.addToQueueById(contextMenu.data("id"));
+        contextMenu.toggle(100);
+    };
 });

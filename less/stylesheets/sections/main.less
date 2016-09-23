@@ -90,11 +90,42 @@
   }
 }
 
-.loading {
+
+.fa-shekel {
   transform-origin: 39% 44%;
+}
+
+.loading {
   position: absolute;
   left: 46%;
   top: 44%;
 }
 
+.contextMenu {
+  position: absolute;
+  background: @background-dark;
+  border: 1px solid @background-highlight;
+  z-index: 100;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  display: none;
+}
+
+.contextMenu li {
+
+  padding: 10px;
+  transition: @transition-time;
+  cursor: pointer;
+
+  &:hover{
+    transition: @transition-time;
+    background-color: @background-highlight;
+  }
+
+  &:not(:last-of-type){
+    border-bottom: 1px solid @background-light;
+  }
+
+}
 
