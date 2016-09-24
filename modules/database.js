@@ -20,7 +20,7 @@ module.exports = function(app){
             knex.select().from("songs").orderBy("artist", "desc").asCallback(cb);
         },
         getAllArtists: function(cb){
-            knex.select("name", "id").from("artists").distinct("name").orderBy("name", "desc").asCallback(cb);
+            knex.select("name", "id").from("artists").distinct("name").orderBy("name", "asc").asCallback(cb);
         },
         getAllAlbums: function(cb){
             knex.select().from("albums").distinct("title").orderby("title", "desc").asCallback(cb);
@@ -32,7 +32,7 @@ module.exports = function(app){
             knex.from("albums").where({album: album}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
         },
         getSongList: function(cb){
-            knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
+            knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").orderBy("artists.name", "ASC").asCallback(cb);
         },
         getSongInfo: function(id, cb){
             knex.select("uuid", "artist", "album", "plays", "genre", "duration").from("songs").where({id: id}).asCallback(cb);
@@ -80,6 +80,27 @@ module.exports = function(app){
                         var id = uuid();
                         knex('albums').insert({
                             name: album,
+                            id: id
+                        }).asCallback(function(err){
+                            cb(err, id);
+                        });
+                    }
+                }
+            });
+        },
+        getOrCreateGenre: function(genre, cb){
+            knex.select("id").from("genres").where({name: genre}).limit(1).asCallback(function(err, res){
+                if(err)
+                    cb(err);
+                else{
+                    if(res.length === 1){
+                        console.log("Genre "+genre+" already exists");
+                        cb(null, res[0].id);
+                    }else{
+                        console.log("Creating new genre "+genre);
+                        var id = uuid();
+                        knex('genres').insert({
+                            name: genre,
                             id: id
                         }).asCallback(function(err){
                             cb(err, id);
