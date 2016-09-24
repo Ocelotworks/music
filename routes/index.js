@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-
+var config = require('config');
 
 
 
@@ -8,17 +8,8 @@ module.exports = function(app){
 
 
     /* GET home page. */
-    router.get('/', function(req, res, next) {
-        res.render('index', {title: "Petify"});
-        //app.database.getSongList(function(err, songs){
-        //    if(err){
-        //        app.renderError(err, res);
-        //    }else{
-        //        console.log(songs);
-        //
-        //    }
-        //});
-
+    router.get('/', function(req, res) {
+        res.render('index', {title: "Petify", user: req.user});
     });
 
 

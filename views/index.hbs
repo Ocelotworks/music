@@ -5,17 +5,31 @@
         <span><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
     </div>
     <div id="profile" class="navButton">
-        <img src="https://placekitten.com/32/32" class="avatar" id="userAvatar">
-        <span id="username">Log In &#x25BC;</span>
-        <div id="loginDropdown">
-            <img src="https://placekitten.com/32/32" class="avatar">
-            <span id="username">Guest</span>
-            <ul>
-                <li>Sign in with Google</li>
-                <li>Sign in with Facebook</li>
-                <li>Sign in with Twitter</li>
-            </ul>
-        </div>
+        {{#if user}}
+            <img src="{{user.avatar}}" class="avatar" id="userAvatar">
+            <span id="username">{{user.username}} &#x25BC;</span>
+            <div id="loginDropdown">
+                <img src="{{user.avatar}}" class="avatar" id="userAvatar">
+                <span id="username">{{user.username}}</span>
+                <ul>
+                    <li>Settings</li>
+                    <li><a href="auth/logout">Log out</a></li>
+                </ul>
+            </div>
+        {{else}}
+            <img src="https://placekitten.com/32/32" class="avatar" id="userAvatar">
+            <span id="username">Log In &#x25BC;</span>
+            <div id="loginDropdown">
+                <img src="https://placekitten.com/32/32" class="avatar">
+                <span id="username">Guest</span>
+                <ul>
+                    <li><a href="auth/google">Sign in with Google</a></li>
+                    <li>Sign in with Facebook</li>
+                    <li>Sign in with Twitter</li>
+                </ul>
+            </div>
+        {{/if}}
+
     </div>
 </div>
 <div id="sidebarContainer" ng-controller="SongController">

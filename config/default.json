@@ -30,6 +30,13 @@
     "audioCodec": "libmp3lame"
   },
   "Keys": {
-    "lastfm": ""
+    "lastfm": "",
+    "Google": {
+      "clientID": "",
+      "clientSecret": ""
+    }
+  },
+  "General": {
+    "baseURL": ""
   }
 }

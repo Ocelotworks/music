@@ -151,6 +151,39 @@ module.exports = function(app){
                albumBit(url, destination, addedby, artistId, title, album);
             });
 
+        },
+        getOrCreateUser: function(identifier, username, avatar, strategy, cb){
+            knex.select().from("users").where({authkey: identifier}).limit(1).asCallback(function(err, res){
+                if(err){
+                    cb(err, null);
+                }else{
+                    if(res.length === 1){
+
+                        console.log("User "+res[0].id+" already exists");
+                        cb(null, res[0]);
+                    }else{
+                        console.log("Creating new user "+username);
+                        var id = uuid();
+                        var user = {
+                            username: username,
+                            id: id,
+                            avatar: avatar,
+                            userlevel: 0,
+                            authtype: strategy,
+                            authkey: identifier
+                        };
+                        knex('users').insert(user).asCallback(function(err){
+                            cb(err, user);
+                        });
+                    }
+                }
+            });
+        },
+        getUserInfo: function(id, cb){
+            knex.select().from("users").where({id: id}).limit(1).asCallback(function(err, res){
+                if(res[0])cb(err, res[0]);
+                else cb(err, null);
+            });
         }
     };
 

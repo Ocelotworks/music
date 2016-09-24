@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-var base = "http://localhost:3002/";
+var base = "http://unacceptableuse.com:3002/";
 var app = angular.module("music", ['rzModule']);
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');

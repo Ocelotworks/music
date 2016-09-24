@@ -15,9 +15,9 @@
     "prefix": "music"
   },
   "Folders": {
-    "baseDir": "C:\\Users\\Peter\\Music\\petify\\",
+    "baseDir": "/home/peter/music/songs/",
     "folders": [
-      "nsp",
+      "pop",
       "edm",
       "jingles"
     ]
@@ -30,6 +30,13 @@
     "audioCodec": "libmp3lame"
   },
   "Keys": {
-    "lastfm": ""
+    "lastfm": "",
+    "Google": {
+      "clientID": "331584033255-odnn19v79jcbr2gffc3cumh64bkpbt9e.apps.googleusercontent.com",
+      "clientSecret": "fawNM7HmMA0sXo2dl4f6jSxL"
+    }
+  },
+  "General": {
+    "baseURL": "http://unacceptableuse.com:3002/"
   }
 }
