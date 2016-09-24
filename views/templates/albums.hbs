@@ -1,0 +1,9 @@
+<div class="songList" ng-controller="SongController">
+    {{#if albums}}
+        {{#each albums}}
+            {{>album}}
+        {{/each}}
+    {{else}}
+        <div class="softError">There doesn't seem to be anything here.</div>
+    {{/if}}
+</div>

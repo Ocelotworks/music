@@ -64,10 +64,19 @@ module.exports = function(app){
           if(err)
               app.renderError(err, res);
           else {
-              console.log(result);
               res.render('templates/artists', {artists: result, layout: false});
           }
        });
+    });
+
+    router.get('/albums', function(req, res){
+        app.database.getAllAlbums(function(err, result){
+            if(err)
+                app.renderError(err, res);
+            else
+                res.render('templates/albums', {albums: result, layout: false});
+
+        });
     });
 
     router.get('/playlists', function(req, res, next) {

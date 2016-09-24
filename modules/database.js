@@ -23,7 +23,7 @@ module.exports = function(app){
             knex.select("name", "id").from("artists").distinct("name").orderBy("name", "asc").asCallback(cb);
         },
         getAllAlbums: function(cb){
-            knex.select().from("albums").distinct("title").orderby("title", "desc").asCallback(cb);
+            knex.select("name", "id").from("albums").distinct("name").orderBy("name", "desc").asCallback(cb);
         },
         getSongsByArtist: function(artist, cb){
             knex.from("songs").where({artist: artist}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
