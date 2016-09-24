@@ -11,13 +11,23 @@ var app = express();
 app.database = require('./modules/database.js')(app);
 app.downloader = require('./modules/downloader.js')(app);
 
+//require('./modules/petify-import.js')(app);
+
 app.downloader.processOneSong();
+//
+//app.database.getOrCreateArtist("Savant", function(err, res){
+//    console.log(err);
+//    console.log(res);
+//});
 
 
 //app.database.addSongToQueue("https://www.youtube.com/watch?v=ykW4rtW2eu0", "nsp", "test", "The Veronicas", "Untouched", null, function(err, res){
 //
 //    console.log(res);
 //});
+
+
+
 
 var routes          = require('./routes/index')(app);
 var users           = require('./routes/users')(app);
