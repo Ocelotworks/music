@@ -125,5 +125,46 @@
 
 
 
+#albumArtContainer:hover > #albumOverlay {
+  opacity: 1;
+  transition: @transition-time;
+}
+
+#albumOverlay {
+  position: absolute;
+  top: 1px;
+  height: 21vh;
+  text-align: center;
+  margin: 10% auto 0;
+  background: rgba(0, 0, 0, 0.6);
+  width: 208px;
+  left: 88px;
+  opacity: 0;
+  transition: @transition-time;
+}
+
+.songRate {
+  display: inline-block;
+  top: 38%;
+  width: 36px;
+  background: rgba(0,0,0,0.8);
+  color: rgba(255,255,255,0.8);
+  position: relative;
+  font-size: 24pt;
+  margin: 4px;
+  padding: 5px;
+  border: 1px solid #000;
+  border-radius: 200px;
+  cursor: pointer;
+  transition: @transition-time;
+
+  &:hover{
+    border-color: @background-highlight;
+    color: white;
+    transition: @transition-time;
+  }
+}
+
+
 
 
