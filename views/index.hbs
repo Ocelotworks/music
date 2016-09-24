@@ -7,10 +7,10 @@
     <div id="profile" class="navButton">
         {{#if user}}
             <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
-            <span id="username" class="userlevel-{{user.userlevel}}">{{user.username}} &#x25BC;</span>
+            <span id="displayUsername" class="username userlevel-{{user.userlevel}}">{{user.username}} &#x25BC;</span>
             <div id="loginDropdown">
                 <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
-                <span id="username" class="userlevel-{{user.userlevel}}">{{user.username}}</span>
+                <span class="username userlevel-{{user.userlevel}}">{{user.username}}</span>
                 <ul>
                     <li>Settings</li>
                     <li><a href="auth/logout">Log out</a></li>
@@ -18,10 +18,10 @@
             </div>
         {{else}}
             <img src="https://placekitten.com/32/32" class="avatar" id="userAvatar">
-            <span id="username">Log In &#x25BC;</span>
+            <span id="displayUsername" class="username">Log In &#x25BC;</span>
             <div id="loginDropdown">
                 <img src="https://placekitten.com/32/32" class="avatar">
-                <span id="username">Guest</span>
+                <span class="username">Guest</span>
                 <a href="auth/google"><div class="login login-google"><i class="fa fa-google"></i> Sign In With Google</div></a>
                 <a href="auth/twitter"><div class="login login-twitter"><i class="fa fa-twitter"></i> Sign In With Twitter</div></a>
             </div>
@@ -30,7 +30,13 @@
     </div>
 </div>
 <div id="sidebarContainer" ng-controller="SongController">
-    <img src="https://placekitten.com/300/300" id="albumArt">
+    <div id="albumArtContainer">
+        <img src="https://placekitten.com/300/300" id="albumArt">
+        <div id="albumOverlay">
+            <span title="Rate Up" class="songRate"><i class="fa fa-thumbs-up"></i></span>
+            <span title="Rate Down" class="songRate"><i class="fa fa-thumbs-down"></i></span>
+        </div>
+    </div>
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
     <span id="currentSong">{[{nowPlaying.title}]}</span>
     <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>

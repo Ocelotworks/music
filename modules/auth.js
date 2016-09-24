@@ -8,9 +8,6 @@ var TwitterStrategy = require('passport-twitter').Strategy;
 var config = require('config');
 
 module.exports = function(app){
-
-
-
     app.passport = require('passport');
 
 
