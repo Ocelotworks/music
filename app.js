@@ -44,6 +44,8 @@ require('./handlebarsHelpers.js');
 
 
 
+
+
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -54,6 +56,10 @@ app.use(cookieParser());
 app.use(app.passport.initialize());
 app.use(app.passport.session());
 
+app.use('/', routes);
+app.use('/auth', auth);
+app.use('/templates', require('./routes/templates')(app));
+
 app.use(require('less-middleware')(path.join(__dirname, 'less'), {
     debug: app.get('env') === 'development',
     dest: path.join(__dirname, 'public'),
@@ -61,9 +67,7 @@ app.use(require('less-middleware')(path.join(__dirname, 'less'), {
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/auth', auth);
-app.use('/templates', require('./routes/templates')(app));
+
 //app.use('/users', users);
 
 // catch 404 and forward to error handler

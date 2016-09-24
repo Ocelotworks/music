@@ -110,7 +110,7 @@ module.exports = function(app){
             });
         },
         getSongQueue: function(cb){
-            knex.select().from("queue").innerJoin("artists", "queue.artist", "artists.id").innerJoin("users", "queue.addedby", "users.id").asCallback(cb);
+            knex.select().from("queue").innerJoin("artists", "queue.artist", "artists.id").innerJoin("users", "queue.addedby", "users.id").orderBy("queue.id", "DESC").asCallback(cb);
         },
         getQueuedSong: function(cb){
           knex.select().from("queue").whereNot({status: 'FAILED'}).limit(1).asCallback(cb);

@@ -30,7 +30,7 @@ module.exports = function(app){
                             var downloaderConfig = config.get("Downloader");
                             var proxy = downloaderConfig.get("proxy");
                             if (proxy)
-                                options.push("--proxy " + proxy);
+                                options.push("--proxy=" + proxy);
 
                             if (downloaderConfig.get("forceIpv4"))
                                 options.push("--force-ipv4");
@@ -82,13 +82,13 @@ module.exports = function(app){
         queue: function(url, destination, getLastmData, addedBy){
             console.log("Received a song to queue "+url+" -> "+destination);
             if(url && destination){
-                app.database.addSongToQueue(url, destination, "c999f4ab-72a6-11e6-839f-00224dae0d2a", null, "Unknown", null, function(err, result){
+                app.database.addSongToQueue(url, destination, addedBy, null, "Unknown", null, function(err, result){
                     var id = result[0];
                     var options = ["--ignore-errors"];
                     var downloaderConfig = config.get("Downloader");
                     var proxy = downloaderConfig.get("proxy");
                     if(proxy)
-                        options.push("--proxy "+proxy);
+                        options.push("--proxy="+proxy);
 
                     if(downloaderConfig.get("forceIpv4"))
                         options.push("--force-ipv4");

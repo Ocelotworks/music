@@ -6,11 +6,11 @@
     </div>
     <div id="profile" class="navButton">
         {{#if user}}
-            <img src="{{user.avatar}}" class="avatar" id="userAvatar">
-            <span id="username">{{user.username}} &#x25BC;</span>
+            <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
+            <span id="username" class="userlevel-{{user.userlevel}}">{{user.username}} &#x25BC;</span>
             <div id="loginDropdown">
-                <img src="{{user.avatar}}" class="avatar" id="userAvatar">
-                <span id="username">{{user.username}}</span>
+                <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
+                <span id="username" class="userlevel-{{user.userlevel}}">{{user.username}}</span>
                 <ul>
                     <li>Settings</li>
                     <li><a href="auth/logout">Log out</a></li>

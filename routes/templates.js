@@ -129,9 +129,9 @@ module.exports = function(app){
     });
 
     router.post('/add/song', function(req, res){
-        console.log("Received a song");
+        console.log("Received a song from "+req.user.id);
         if(req.body && req.body.url && req.body.songFolder && req.body.getLastfmData){
-            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on");
+            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on", req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
         }
         res.redirect('/');
     });

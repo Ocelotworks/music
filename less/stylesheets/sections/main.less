@@ -128,4 +128,65 @@
   }
 
 }
+/*
+* Banned
+*/
+.userlevel--1, .userlevel--2, .userlevel--3 {
+  span&{
+    color: red;
+    text-decoration: line-through;
+  }
+
+  img&{
+    .filter(brightness(70%) blur(5px));
+  }
+}
+
+/*
+* Guest, Regular User
+*/
+.userlevel-0, .userlevel-1 {
+  span& {
+    color: white;
+  }
+}
+
+/*
+* Admin
+*/
+.userlevel-2{
+  span&{
+    color: gold;
+  }
+
+  img&{
+    border-color: gold;
+  }
+
+}
+
+/*
+* Superadmin
+*/
+.userlevel-3{
+  span&{
+    color: red;
+  }
+}
+
+/*
+* System
+*/
+.userlevel-100{
+  span&{
+    color: @accent-color;
+    font-weight: bold;
+  }
+
+  img&{
+    border-color: @accent-color;
+  }
+}
+
+
 
