@@ -4,6 +4,7 @@
 
 
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy.Strategy;
+var TwitterStrategy = require('passport-twitter').Strategy;
 var config = require('config');
 
 module.exports = function(app){
@@ -33,6 +34,16 @@ module.exports = function(app){
     }, function(accessToken, refreshToken, profile, cb){
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
+
+    app.passport.use(new TwitterStrategy({
+        consumerKey: keys.get("Twitter.consumerKey"),
+        consumerSecret: keys.get("Twitter.consumerSecret"),
+        callbackURL: baseURL+"auth/twitter/callback"
+    }, function(token, tokenSecret, profile, cb){
+        console.log(profile);
+        app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
+    }));
+
 
 
 

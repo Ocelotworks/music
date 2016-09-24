@@ -29,6 +29,10 @@ module.exports = function(app){
     router.get('/google/callback', app.passport.authenticate('google', options), correctLogin);
 
 
+    router.get('/twitter', app.passport.authenticate('twitter'));
+    router.get('/twitter/callback', app.passport.authenticate('twitter', options), correctLogin);
+
+
     ////Facebook Auth routes
     //router.get('/facebook', app.passport.authenticate('facebook'));
     //router.get('/auth/facebook/callback', app.passport.authenticate('facebook', options, correctLogin));

@@ -2,7 +2,7 @@
     <span id="pageTitle"><i class="fa fa-shekel fa-rotate-180"></i>&nbsp;{{title}}</span>
     <div id="nav" ng-controller="TabController">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
-        <span><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
+        <span id="searchBar"><input class="search" type="text" placeholder="search"> <i class="fa fa-search"></i></span>
     </div>
     <div id="profile" class="navButton">
         {{#if user}}
@@ -22,11 +22,8 @@
             <div id="loginDropdown">
                 <img src="https://placekitten.com/32/32" class="avatar">
                 <span id="username">Guest</span>
-                <ul>
-                    <li><a href="auth/google">Sign in with Google</a></li>
-                    <li>Sign in with Facebook</li>
-                    <li>Sign in with Twitter</li>
-                </ul>
+                <a href="auth/google"><div class="login login-google"><i class="fa fa-google"></i> Sign In With Google</div></a>
+                <a href="auth/twitter"><div class="login login-twitter"><i class="fa fa-twitter"></i> Sign In With Twitter</div></a>
             </div>
         {{/if}}
 
@@ -59,6 +56,7 @@
 <ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController">
     <li ng-click="ctxAddToQueue($event)"><i class="fa fa-fw fa-plus"></i> Add to Queue</li>
     <li ng-click="ctxPlayNext($event)"><i class="fa fa-fw fa-fast-forward"></i> Play Next</li>
+    <li ng-click="ctxAddToPlaylist($event)"><i class="fa fa-fw fa-plus"></i> Add to Playlist</li>
     <li ng-click="ctxViewAlbum($event)"><i class="fa fa-fw fa-square"></i> Go to Album</li>
     <li ng-click="ctxViewArtist($event)"><i class="fa fa-fw fa-user"></i> Go to Artist</li>
     <li ng-click="ctxReport($event)"><i class="fa fa-fw fa-exclamation"></i> Report</li>

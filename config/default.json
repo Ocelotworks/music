@@ -34,6 +34,10 @@
     "Google": {
       "clientID": "",
       "clientSecret": ""
+    },
+    "Twitter": {
+      "consumerKey": "",
+      "consumerSecret": ""
     }
   },
   "General": {
