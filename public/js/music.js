@@ -186,6 +186,7 @@ app.run(['$rootScope', function($rootScope){
         $rootScope.nowPlaying.title = info[1];
         $rootScope.nowPlaying.buffering = true;
         $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
+        $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
     };
 
 }]);

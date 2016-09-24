@@ -18,7 +18,7 @@ module.exports = function(app){
             console.error("Error connecting to rethinkdb: "+err);
         }else{
             console.log("Getting all the albums... This will take a while");
-            r.table("music").pluck("album", "albumArt").distinct().run(rconn, function(err, cursor){
+            r.table("music").pluck("album", "albumArt").run(rconn, function(err, cursor){
                 if(err){
                     console.error("Error getting all songs: "+err);
                 } else{
@@ -26,13 +26,24 @@ module.exports = function(app){
                         if(err){
                             console.error("Error during cursor foreach: "+err);
                         }else{
+                            if(song.album){
 
-                            app.database.getOrCreateAlbum(song.album, function(err, albumID){
-                               app.database.updateAlbumArt(albumID, song.albumArt, function(err, res){
-                                   console.log("Done "+song.album);
-                                  cb();
-                               });
-                            });
+                                app.database.getOrCreateAlbum(song.album, function(err, albumID){
+                                    app.database.updateAlbumArt(albumID, song.albumArt, function(err, res){
+                                        if(err){
+                                            console.log(err);
+                                            cb();
+                                        }else{
+                                            console.log("Done "+song.album);
+                                            cb();
+                                        }
+
+                                    });
+                                });
+                            }else{
+                                cb();
+                            }
+
 
                             //app.database.getOrCreateAlbum(song.album ? song.album.trim() : "Unknown Album", function(err, albumID){
                             //    app.database.getOrCreateArtist(song.artist ? song.artist.trim() : "Unknown Artist", function(err, artistID){
@@ -60,6 +71,8 @@ module.exports = function(app){
                             //    });
                             //});
                         }
+                    }, function(){
+                        console.log("Done");
                     });
                 }
             });

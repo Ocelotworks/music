@@ -32,7 +32,7 @@ module.exports = function(app){
             knex.from("albums").where({album: album}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
         },
         getSongList: function(cb){
-            knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").orderBy("artists.name", "ASC").asCallback(cb);
+            knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album").orderBy("artists.name", "ASC").asCallback(cb);
         },
         getSongInfo: function(id, cb){
             knex.select("uuid", "artist", "album", "plays", "genre", "duration").from("songs").where({id: id}).asCallback(cb);
@@ -87,6 +87,12 @@ module.exports = function(app){
                     }
                 }
             });
+        },
+        updateAlbumArt: function(album, blob, cb){
+          knex("albums").update({image: blob}).where({id: album}).asCallback(cb);
+        },
+        getAlbumArt: function(album, cb){
+            knex.select("image").from("albums").where({id: album}).limit(1).asCallback(cb);
         },
         getOrCreateGenre: function(genre, cb){
             knex.select("id").from("genres").where({name: genre}).limit(1).asCallback(function(err, res){
