@@ -346,6 +346,11 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
     $scope.playArtist = function(id){
         $scope.showSongList("artist/"+id);
+    };
+
+
+    $scope.playAlbum = function(id){
+        $scope.showSongList("album/"+id);
     }
 
 });
