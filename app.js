@@ -34,6 +34,7 @@ app.downloader.processOneSong();
 var routes          = require('./routes/index')(app);
 var users           = require('./routes/users')(app);
 var auth            = require('./routes/auth')(app);
+var search          = require('./routes/search')(app);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -58,6 +59,7 @@ app.use(app.passport.session());
 
 app.use('/', routes);
 app.use('/auth', auth);
+app.use('/search', search);
 app.use('/templates', require('./routes/templates')(app));
 
 app.use(require('less-middleware')(path.join(__dirname, 'less'), {
@@ -86,7 +88,8 @@ if (app.get('env') === 'development') {
     res.status(err.status || 500);
     res.render('error', {
       message: err.message,
-      error: err
+      error: err,
+        layout: false
     });
   });
 }
@@ -97,8 +100,9 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
     console.log(err);
   res.render('error', {
-    message: err.message,
-    error: {}
+        message: err.message,
+        error: {},
+      layout: false
   });
 });
 
@@ -106,7 +110,8 @@ app.renderError = function(err, res){
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
-        error: app.get('env') === 'development' ? err : {}
+        error: app.get('env') === 'development' ? err : {},
+        layout: false
     });
 };
 

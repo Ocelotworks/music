@@ -4,6 +4,45 @@
 
 var base = "http://unacceptableuse.com:3002/";
 var app = angular.module("music", ['rzModule']);
+
+function debounce(func, wait, immediate) {
+    var timeout;
+    return function() {
+        var context = this, args = arguments;
+        var later = function() {
+            timeout = null;
+            if (!immediate) func.apply(context, args);
+        };
+        var callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(context, args);
+    };
+}
+
+function throttle(fn, threshhold, scope) {
+    threshhold || (threshhold = 250);
+    var last,
+        deferTimer;
+    return function () {
+        var context = scope || this;
+
+        var now = +new Date,
+            args = arguments;
+        if (last && now < last + threshhold) {
+            // hold on to it
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+                last = now;
+                fn.apply(context, args);
+            }, threshhold);
+        } else {
+            last = now;
+            fn.apply(context, args);
+        }
+    };
+}
+
 app.config(function($interpolateProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
@@ -237,6 +276,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         $scope.switchTab($scope.tabs[0]);
     }, $scope.showErrorScreen);
 
+
     $scope.showErrorScreen = function(error){
         $scope.error = error;
         $templateRequest("error").then(function(template){
@@ -245,6 +285,18 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             console.error("Well shit "+error);
         });
     };
+
+    $scope.search = debounce(function(){
+        var query = $("#searchBar").find(".search").val();
+        if(query && query.length > 0) {
+            var templateUrl = $sce.getTrustedResourceUrl("search/template/" + query);
+            $templateRequest(templateUrl).then(function (template) {
+                $compile($("#tabContainer").html(template).contents())($scope);
+            }, $scope.showErrorScreen);
+        }else{
+            $scope.switchTab($scope.tabs[0]);
+        }
+    }, 150);
 
     $scope.switchTab = function(tab){
         //TODO: Angular if statement for this?

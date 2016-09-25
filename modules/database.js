@@ -190,6 +190,13 @@ module.exports = function(app){
                 if(res[0])cb(err, res[0]);
                 else cb(err, null);
             });
+        },
+        search: function(query, cb){
+            knex.select("title", "name", "songs.id AS song_id", "artists.id AS artist_id")
+                .from("songs")
+                .join("artists", "songs.artist", "artists.id")
+                .where(knex.raw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .asCallback(cb);
         }
     };
 
