@@ -82,48 +82,27 @@ module.exports = function(app){
     });
 
     router.get('/playlists', function(req, res, next) {
-        res.render('templates/playlists', {publicPlaylists: [
-            {
-                addedBy: {
-                    username: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64",
-                    userlevel: 2
-                },
-                title: "Songs About Lidl",
-                count: 69
-            },
-            {
-                addedBy: {
-                    username: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64",
-                    userlevel: 2
-                },
-                title: "Songs About Time",
-                count: 6900
-            }
-        ],
-        privatePlaylists: [
-            {
-                addedBy: {
-                    username: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64",
-                    userlevel: 2
-                },
-                title: "Songs to Masturbate To",
-                count: 69,
-                private: true
-            },
-            {
-                addedBy: {
-                    username: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64",
-                    userlevel: 2
-                },
-                title: "Songs About Time",
-                count: 6900
-            }
-        ],
-            layout: false});
+        app.database.getPublicPlaylists(function(err, publicPlaylists){
+            if(err)console.warn("Error getting public playlists: "+err);
+           if(req.user)
+                app.database.getPrivatePlaylists(req.user.id, function(err, privatePlaylists){
+                    if(err)console.warn("Error getting private playlists: "+err);
+                    res.render('templates/playlists', {
+                        publicPlaylists: publicPlaylists || [],
+                        privatePlaylists: privatePlaylists || [],
+                        layout: false,
+                        signedIn: true
+                    });
+                });
+            else
+                res.render('templates/playlists', {
+                    publicPlaylists: publicPlaylists || [],
+                    privatePlaylists: [],
+                    signedIn: false,
+                    layout: false
+                });
+        });
+
     });
 
     router.get('/add', function(req, res, next) {
@@ -140,6 +119,26 @@ module.exports = function(app){
         });
     });
 
+    router.post('/add/playlist', function(req, res, next){
+       var playlist = {};
+        playlist.name = req.body.name;
+        playlist.private = req.body.private == "on";
+        playlist.addedby = req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a";
+        playlist.songs = [];
+        for(var k in req.body)
+            if(req.body.hasOwnProperty(k) && k.indexOf("song-") > -1)
+                playlist.songs.push(k.split("song-")[1]);
+
+        app.database.createPlaylist(playlist, function(err, resp){
+            if(err){
+                app.renderError(err, res);
+            }else{
+                res.redirect("/");
+            }
+        });
+
+    });
+
     router.get('/add/song', function(req, res, next) {
         app.database.getSongQueue(function(err, queue){
             if(err)
@@ -150,7 +149,6 @@ module.exports = function(app){
     });
 
     router.post('/add/song', function(req, res){
-        console.log("Received a song from "+req.user.id);
         if(req.body && req.body.url && req.body.songFolder && req.body.getLastfmData){
             app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on", req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
         }

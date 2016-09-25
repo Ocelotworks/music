@@ -1,13 +1,23 @@
 <h2>Public Playlists <button class="happyButton"><i class="fa fa-plus"></i>&nbsp;Create your own</button></h2>
 <div id="publicPlaylists" class="songList">
-    {{#each publicPlaylists}}
-        {{> playlist}}
-    {{/each}}
+    {{#if publicPlaylists}}
+        {{#each publicPlaylists}}
+            {{> playlist}}
+        {{/each}}
+    {{else}}
+        There are no public playlists yet! {{#if signedIn}}Maybe you should make one?{{/if}}
+    {{/if}}
+
 </div>
 
-<h2>Your Playlists <button class="happyButton"><i class="fa fa-user"></i>&nbsp;Sign In</button> to manage your own playlists.</h2>
+<h2>Your Playlists {{#unless signedIn}}<button class="happyButton"><i class="fa fa-user"></i>&nbsp;Sign In</button> to manage your own playlists.{{/unless}}</h2>
 <div id="privatePlaylists" class="songList">
-    {{#each privatePlaylists}}
-        {{> playlist}}
-    {{/each}}
+    {{#if privatePlaylists}}
+        {{#each privatePlaylists}}
+            {{> playlist}}
+        {{/each}}
+    {{else}}
+        You have no private playlists. {{#if signedIn}}Nothing to hide, huh?{{/if}}
+    {{/if}}
+
 </div>

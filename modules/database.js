@@ -197,6 +197,39 @@ module.exports = function(app){
                 .join("artists", "songs.artist", "artists.id")
                 .where(knex.raw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
                 .asCallback(cb);
+        },
+        createPlaylist: function(playlist, cb){
+            var id = uuid();
+            knex("playlists").insert({
+                id: id,
+                name: playlist.name,
+                private: playlist.private,
+                owner: playlist.addedby
+            }).asCallback(cb);
+            for(var i in playlist.songs)
+                if(playlist.songs.hasOwnProperty(i))
+                    knex("playlist_data").insert({
+                        position: i,
+                        song_id: playlist.songs[i],
+                        playlist_id: id
+                    }).asCallback(function(err){
+                        if(err)console.warn("Warning: error inserting song into playlist "+id+": "+err);
+                    });
+        },
+        getPublicPlaylists: function(cb){
+            knex.select("name", "playlists.id", knex.raw("(SELECT count(*) FROM playlist_data WHERE playlist_id = playlists.id) AS count"), "users.username", "users.avatar", "users.userlevel")
+                .from("playlists")
+                .where("private", 0)
+                .join("users", "playlists.owner", "users.id")
+                .asCallback(cb);
+        },
+        getPrivatePlaylists: function(id, cb){
+            knex.select("name", "private", "playlists.id", knex.raw("(SELECT count(*) FROM playlist_data WHERE playlist_id = playlists.id) AS count"), "users.username", "users.avatar", "users.userlevel")
+                .from("playlists")
+                .where("private", 1)
+                .andWhere("owner", id)
+                .join("users", "playlists.owner", "users.id")
+                .asCallback(cb);
         }
     };
 
