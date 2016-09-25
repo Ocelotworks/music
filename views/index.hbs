@@ -9,8 +9,7 @@
             <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
             <span id="displayUsername" class="username userlevel-{{user.userlevel}}">{{user.username}} &#x25BC;</span>
             <div id="loginDropdown">
-                <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
-                <span class="username userlevel-{{user.userlevel}}">{{user.username}}</span>
+                {{>user}}
                 <ul>
                     <li>Settings</li>
                     <li><a href="auth/logout">Log out</a></li>

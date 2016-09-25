@@ -369,3 +369,20 @@ app.controller("ContextMenuController", function($scope, $rootScope){
         contextMenu.toggle(100);
     };
 });
+
+
+app.controller("AddPlaylistController", function($scope){
+    $scope.checkAll = function(){
+        $(".songSelect").prop("checked", true)
+    };
+
+    $scope.uncheckAll = function(){
+        $(".songSelect").prop("checked", false)
+    };
+
+    $scope.invertAll = function(){
+        $(".songSelect").prop("checked",  function(_, checked) {
+            return !checked;
+        });
+    };
+});

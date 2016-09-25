@@ -90,3 +90,51 @@ td .addedBy {
   height: 75%;
   width: 100%;
 }
+
+.formInputGroup {
+  margin-bottom: 15px;
+}
+
+.songSelect {
+  width: 100%;
+  position: absolute;
+  -webkit-appearance: none;
+  cursor: pointer;
+  height: 72%;
+  bottom: 3px;
+  right: -5px;
+  &:checked {
+    &:before {
+      transition: @transition-time/2;
+      color: white;
+    }
+
+    & ~ .songSelectName {
+      color: @accent-color;
+      transition: @transition-time/2;
+    }
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:before {
+    transition: @transition-time/2;
+    content: "\f14a";
+    top: 5px;
+    left: 11px;
+    position: relative;
+    font-family: "FontAwesome";
+  }
+}
+
+.songSelectName {
+  margin-left: 32px;
+  transition: @transition-time/2;
+}
+
+#playlistAddSongs{
+  height: 67%;
+  position: absolute;
+}

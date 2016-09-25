@@ -40,8 +40,9 @@ module.exports = function(app){
         res.render('templates/radioList', {radios: [
             {
                 addedBy: {
-                    name: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "Peter Maguire",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 2
                 },
                 title: "Non-stop Pop",
                 desc: "Just a fun loving dad on the internet",
@@ -49,8 +50,9 @@ module.exports = function(app){
             },
             {
                 addedBy: {
-                    name: "OcelotBOT",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "System",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 100
                 },
                 title: "Natasha Bedingfield",
                 desc: "The rest is still unwritten",
@@ -83,16 +85,18 @@ module.exports = function(app){
         res.render('templates/playlists', {publicPlaylists: [
             {
                 addedBy: {
-                    name: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "Peter Maguire",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 2
                 },
                 title: "Songs About Lidl",
                 count: 69
             },
             {
                 addedBy: {
-                    name: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "Peter Maguire",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 2
                 },
                 title: "Songs About Time",
                 count: 6900
@@ -101,8 +105,9 @@ module.exports = function(app){
         privatePlaylists: [
             {
                 addedBy: {
-                    name: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "Peter Maguire",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 2
                 },
                 title: "Songs to Masturbate To",
                 count: 69,
@@ -110,8 +115,9 @@ module.exports = function(app){
             },
             {
                 addedBy: {
-                    name: "Peter Maguire",
-                    avatar: "https://placekitten.com/64/64"
+                    username: "Peter Maguire",
+                    avatar: "https://placekitten.com/64/64",
+                    userlevel: 2
                 },
                 title: "Songs About Time",
                 count: 6900
@@ -125,7 +131,13 @@ module.exports = function(app){
     });
 
     router.get('/add/playlist', function(req, res, next) {
-        res.render('templates/addScreens/addPlaylist', {layout: false});
+        app.database.getSongList(function(err, songs){
+            res.render('templates/addScreens/addPlaylist', {
+                signedIn: req.user != null,
+                songs: songs,
+                layout: false
+            });
+        });
     });
 
     router.get('/add/song', function(req, res, next) {

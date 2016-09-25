@@ -1,0 +1,34 @@
+<h1>Create Playlist</h1>
+<form ng-controller="AddPlaylistController">
+    <div class="formInputGroup">
+        <input id="privatePlaylist" name="private" type="checkbox" {{#unless signedIn}}disabled{{/unless}}>
+        <label for="privatePlaylist">
+            <i class="fa fa-lock"></i>
+            {{#if signedIn}}
+                Make playlist private
+            {{else}}
+                You need to <b><i class="fa fa-user"></i> Sign In</b> to make private playlists.
+            {{/if}}
+        </label>
+    </div>
+
+    <div class="formInputGroup">
+        <input class="fancyInput" placeholder="Playlist Name" type="text" required> &nbsp; <input type="submit" value="Create" class="happyButton" title="I'm just going to put this button here for now">
+    </div>
+
+    <div class="formInputGroup">
+        <h3>Add songs</h3>
+        <input type="button" ng-click="checkAll()" class="happyButton downloadButton" value="&#61770; Check all">
+        <input type="button" ng-click="uncheckAll()" class="happyButton downloadButton" value="&#61510; Un-check all">
+        <input type="button" ng-click="invertAll()" class="happyButton downloadButton" value="&#61640; Invert all">
+    </div>
+
+    <div class="formInputGroup">
+        <div class="songList fancyScroll" id="playlistAddSongs">
+            {{#each songs}}
+                <span class="song" data-id="{{song_id}}" data-artist="{{artist_id}}" data-album="{{album}}"><input type="checkbox" class="songSelect"><span class="songSelectName">{{name}}&nbsp;-&nbsp;{{title}}</span></span>
+            {{/each}}
+        </div>
+    </div>
+
+</form>
