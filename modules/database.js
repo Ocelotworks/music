@@ -192,7 +192,7 @@ module.exports = function(app){
             });
         },
         search: function(query, cb){
-            knex.select("title", "name", "songs.id AS song_id", "artists.id AS artist_id")
+            knex.select("title", "name", "songs.id AS song_id", "artists.id AS artist_id", "album")
                 .from("songs")
                 .join("artists", "songs.artist", "artists.id")
                 .where(knex.raw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
