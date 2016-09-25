@@ -53,7 +53,7 @@ module.exports = function(app){
                                         app.database.addSong({
                                             id: songUUID,
                                             path: path.join(info.destination, songUUID + ".mp3"),
-                                            artist: info.artist,
+                                            artist: info.artist.replace(" Listen ad-free with YouTube Red", ""),
                                             album: info.album,
                                             addedby: info.addedby,
                                             title: info.title,
