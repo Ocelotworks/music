@@ -1,5 +1,5 @@
 <div id="titlebar">
-    <span id="pageTitle"><i class="fa fa-shekel fa-rotate-180"></i>&nbsp;{{title}}</span>
+    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal"></i>&nbsp;{{title}}</span>
     <div id="nav" ng-controller="TabController">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
         <span id="searchBar"><input class="search" type="search" placeholder="search" ng-model="text" ng-change="search()"></span>
