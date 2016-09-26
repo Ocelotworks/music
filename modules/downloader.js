@@ -53,7 +53,7 @@ module.exports = function(app){
                                         app.database.addSong({
                                             id: songUUID,
                                             path: path.join(info.destination, songUUID + ".mp3"),
-                                            artist: info.artist.replace(" Listen ad-free with YouTube Red", ""),
+                                            artist: info.artist,
                                             album: info.album,
                                             addedby: info.addedby,
                                             title: info.title,
@@ -123,7 +123,7 @@ module.exports = function(app){
                                 if (info.alt_title)
                                     title = info.alt_title;
 
-                                app.database.getOrCreateArtist(artist, function(err, artistId){
+                                app.database.getOrCreateArtist(artist.replace(" Listen ad-free with YouTube Red", ""), function(err, artistId){
                                     if(!err){
                                         app.database.updateQueuedSong(id, {
                                             artist: artistId,
