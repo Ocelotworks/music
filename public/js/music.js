@@ -312,12 +312,14 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
+    };
 
-    }
+    $scope.$on("switchTab", function(evt, tab){
+        $scope.switchTab($scope.tabs[tab]);
+    });
 });
 
-
-app.controller('AddController', function($scope,  $templateRequest, $sce, $compile){
+app.controller('AddController', function($scope,  $templateRequest, $sce, $compile, $http){
 
     $scope.addViews = {
         playlist: "playlist",
@@ -335,7 +337,23 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
     };
 
     $scope.addSong = function(){
-        console.log($scope.addSongForm);
+        console.log($scope.song);
+        $http.post(base+"templates/add/song", $scope.song)
+        .then(function(response){
+            if(!response.data.err){
+                console.log("Aye aye cpn");
+                var templateUrl = $sce.getTrustedResourceUrl("templates/add/song#"+Math.random());
+                $templateRequest(templateUrl).then(function(template){
+                    $compile($("#tabContainer").html(template).contents())($scope);
+                }, $scope.showErrorScreen);
+            }else{
+                $scope.err = response.data.err;
+            }
+        },
+        function(err){
+            $scope.err = err;
+            console.log("There was an error: "+err);
+        });
     };
 
 
@@ -350,9 +368,6 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         }, $scope.showErrorScreen);
     };
 });
-
-
-
 
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile){
 
@@ -407,7 +422,6 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
 });
 
-
 app.controller("ContextMenuController", function($scope, $rootScope){
     $scope.ctxPlayNext = function(event){
         var contextMenu = $("#songContextMenu");
@@ -422,8 +436,7 @@ app.controller("ContextMenuController", function($scope, $rootScope){
     };
 });
 
-
-app.controller("AddPlaylistController", function($scope){
+app.controller("AddPlaylistController", function($scope, $http){
     $scope.checkAll = function(){
         $(".songSelect").prop("checked", true)
     };
@@ -437,4 +450,18 @@ app.controller("AddPlaylistController", function($scope){
             return !checked;
         });
     };
+
+    $scope.createPlaylist = function(){
+        $http.post(base+"templates/add/playlist", $scope.playlist).then(function(response){
+            if(!response.data.err){
+                $scope.$emit("switchTab", 4)
+            }else{
+                $scope.err = response.data.err;
+            }
+        },
+        function(err){
+            $scope.err = err;
+            console.log("There was an error: "+err);
+        });
+    }
 });

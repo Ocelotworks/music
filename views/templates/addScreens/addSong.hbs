@@ -1,17 +1,17 @@
 <div>
     <h2>Import Song</h2>
     <h3>You can import songs from most popular sites such as youtube or soundcloud. The song must be available to stream in the servers country.</h3>
-    <form name="addSongForm" method="POST" action="/templates/add/song">
-        <input id="songUrl" type="url" name="url" class="fancyInput" required placeholder="Source URL">
+    <form name="addSongForm" ng-submit="addSong()">
+        <input id="songUrl" type="url" name="url" class="fancyInput" required placeholder="Source URL" ng-model="song.url">
         <div class="dropdownWithName">
             <label for="songFolder" class="dropdownName">Destination Folder</label>
-            <select id="songFolder" class="dropdownBox" name="songFolder" required>
+            <select id="songFolder" class="dropdownBox" name="songFolder" required ng-model="song.songFolder">
                 {{#each folders}}
                     <option value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
         </div><br><br>
-        <input id="pullSongData" name="getLastfmData" type="checkbox" checked>
+        <input id="pullSongData" name="getLastfmData" type="checkbox" ng-model="song.getLastfmData" checked>
         <label for="pullSongData">Pull song data from last.fm</label>
         <input type="submit" value="&#61677; Add to Download Queue" class="happyButton downloadButton">
     </form>

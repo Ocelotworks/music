@@ -122,18 +122,18 @@ module.exports = function(app){
     router.post('/add/playlist', function(req, res, next){
        var playlist = {};
         playlist.name = req.body.name;
-        playlist.private = req.body.private == "on";
+        playlist.private = req.body.private;
         playlist.addedby = req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a";
         playlist.songs = [];
         for(var k in req.body)
-            if(req.body.hasOwnProperty(k) && k.indexOf("song-") > -1)
+            if(req.body.hasOwnProperty(k) && k.indexOf("song-") > -1 && req.body[k])
                 playlist.songs.push(k.split("song-")[1]);
 
         app.database.createPlaylist(playlist, function(err, resp){
             if(err){
-                app.renderError(err, res);
+                res.json({err: err});
             }else{
-                res.redirect("/");
+                res.json({});
             }
         });
 
@@ -149,10 +149,13 @@ module.exports = function(app){
     });
 
     router.post('/add/song', function(req, res){
-        if(req.body && req.body.url && req.body.songFolder && req.body.getLastfmData){
-            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData === "on", req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
+        if(req.body && req.body.url && req.body.songFolder){
+            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
+            res.json({});
+        }else{
+            res.json({err: "A required piece of data is missing."});
         }
-        res.redirect('/');
+
     });
 
     router.get('/add/radio', function(req, res, next) {
