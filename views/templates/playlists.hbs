@@ -1,5 +1,5 @@
-<h2>Public Playlists <button class="happyButton"><i class="fa fa-plus"></i>&nbsp;Create your own</button></h2>
-<div id="publicPlaylists" class="songList">
+<h2>Public Playlists <button class="happyButton" ng-click="showAddPlaylist()"><i class="fa fa-plus"></i>&nbsp;Create your own</button></h2>
+<div id="publicPlaylists" class="songList" ng-controller="SongController">
     {{#if publicPlaylists}}
         {{#each publicPlaylists}}
             {{> playlist}}
@@ -11,7 +11,7 @@
 </div>
 
 <h2>Your Playlists {{#unless signedIn}}<button class="happyButton"><i class="fa fa-user"></i>&nbsp;Sign In</button> to manage your own playlists.{{/unless}}</h2>
-<div id="privatePlaylists" class="songList">
+<div id="privatePlaylists" class="songList" ng-controller="SongController">
     {{#if privatePlaylists}}
         {{#each privatePlaylists}}
             {{> playlist}}

@@ -257,12 +257,14 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         {
             name: "Playlists",
             icon: "fa-th-list",
-            template: "playlists"
+            template: "playlists",
+            nocache: true
         },
         {
             name: "Radio",
             icon: "fa-fast-forward",
-            template: "radio"
+            template: "radio",
+            nocache: true
         },
         {
             name: "Add",
@@ -298,6 +300,17 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         }
     }, 150);
 
+    $scope.showAddPlaylist = function(){
+        $templateRequest("loading").then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/add/playlist");
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+    };
+
     $scope.switchTab = function(tab){
         //TODO: Angular if statement for this?
         for(var i in $scope.tabs)
@@ -308,7 +321,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
-        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template);
+        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.nocache ? "#"+Math.random() : ""));
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
@@ -323,7 +336,7 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
     $scope.addViews = {
         playlist: "playlist",
-        song: "song",
+        song: "song#"+Math.random(),
         radio: "radio"
     };
 
@@ -418,7 +431,11 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
     $scope.playAlbum = function(id){
         $scope.showSongList("album/"+id);
-    }
+    };
+
+    $scope.playPlaylist = function(id){
+        $scope.showSongList("playlist/"+id);
+    };
 
 });
 
@@ -464,4 +481,8 @@ app.controller("AddPlaylistController", function($scope, $http){
             console.log("There was an error: "+err);
         });
     }
+});
+
+app.controller("PlaylistController", function($scope){
+   //tbc
 });

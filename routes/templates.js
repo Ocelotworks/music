@@ -34,7 +34,26 @@ module.exports = function(app){
        });
     });
 
-
+    router.get('/songs/playlist/:id', function(req, res){
+       app.database.getPlaylistInfo(req.params.id, function(err, playlist){
+          if(err)
+            app.renderError(err, res);
+          else{
+              if(!playlist.private  || (playlist.private && req.user && req.user.id == playlist.owner)){
+                  app.database.getSongsByPlaylist(req.params.id, function(err, songs){
+                      if(err)
+                          app.renderError(err, res);
+                      else {
+                          console.log(playlist);
+                          res.render('templates/playlist', {songs: songs, info: playlist[0], isOwner: req.user && playlist[0].owner == req.user.id, layout: false});
+                      }
+                  });
+              }else{
+                  res.status(403).json({});
+              }
+          }
+       });
+    });
 
     router.get('/radio', function(req, res, next) {
         res.render('templates/radioList', {radios: [
@@ -122,7 +141,7 @@ module.exports = function(app){
     router.post('/add/playlist', function(req, res, next){
        var playlist = {};
         playlist.name = req.body.name;
-        playlist.private = req.body.private;
+        playlist.private = req.body.private == "on" || req.body.private == true;
         playlist.addedby = req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a";
         playlist.songs = [];
         for(var k in req.body)

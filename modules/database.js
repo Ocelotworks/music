@@ -230,6 +230,23 @@ module.exports = function(app){
                 .andWhere("owner", id)
                 .join("users", "playlists.owner", "users.id")
                 .asCallback(cb);
+        },
+        getPlaylistInfo: function(id, cb){
+            knex.select("name", "private", "playlists.id", "owner", knex.raw("(SELECT count(*) FROM playlist_data WHERE playlist_id = playlists.id) AS count"), "users.username", "users.avatar", "users.userlevel")
+                .from("playlists")
+                .where("playlists.id", id)
+                .limit(1)
+                .join("users", "playlists.owner", "users.id")
+                .asCallback(cb);
+        },
+        getSongsByPlaylist: function(id, cb){
+            knex.select("position", "artist AS artist_id", "album", "title", "name", "song_id")
+                .from("playlist_data")
+                .innerJoin("songs", "song_id", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .where({playlist_id: id})
+                .orderBy("position", "DESC")
+                .asCallback(cb);
         }
     };
 
