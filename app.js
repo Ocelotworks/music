@@ -5,6 +5,7 @@ var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
+var RateLimit       = require('express-rate-limit');
 
 
 var app = express();
@@ -48,7 +49,7 @@ require('./handlebarsHelpers.js');
 
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(session({ secret: 'aTotallyTemporarySecret' }));
@@ -57,10 +58,30 @@ app.use(cookieParser());
 app.use(app.passport.initialize());
 app.use(app.passport.session());
 
+//Rate limiting
+app.enable('trust proxy');
+app.use(new RateLimit({
+    windowMs: 900000,
+    max: 100,
+    delayMs: 0,
+    headers: true,
+    keyGenerator: function(req){
+        return req.user ? req.user.id : req.ip;
+    }
+}));
+
+app.use('/templates/add', new RateLimit({
+    headers: true,
+    keyGenerator: function(req){
+        return req.user ? req.user.id : req.ip;
+    }
+}));
+
 app.use('/', routes);
 app.use('/auth', auth);
 app.use('/search', search);
 app.use('/templates', require('./routes/templates')(app));
+
 
 app.use(require('less-middleware')(path.join(__dirname, 'less'), {
     debug: app.get('env') === 'development',
