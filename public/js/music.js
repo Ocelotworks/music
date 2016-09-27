@@ -372,14 +372,15 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
     $scope.createAddView = function(type){
         $templateRequest("loading").then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $compile($("#modalBox").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
         var templateUrl = $sce.getTrustedResourceUrl("templates/add/"+$scope.addViews[type]);
         $templateRequest(templateUrl).then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $compile($("#modalBox").html(template).contents())($scope);
         }, $scope.showErrorScreen);
     };
+
 });
 
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile){
@@ -485,4 +486,48 @@ app.controller("AddPlaylistController", function($scope, $http){
 
 app.controller("PlaylistController", function($scope){
    //tbc
+});
+
+app.controller("ModalController", function($scope, $rootScope, $sce, $templateRequest, $compile){
+    $templateRequest("loading").then(function(template){
+        $compile($("#modalBox").html(template).contents())($scope);
+    }, $scope.showErrorScreen);
+
+
+    $scope.showErrorScreen = function(error){
+        $scope.error = error;
+        $templateRequest("error").then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, function(error){
+            console.error("Well shit "+error);
+        });
+    };
+
+    $scope.openModal = function(path, nocache){
+        $("#modalShadow").addClass("modal-visible");
+        $templateRequest("loading").then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/"+path+(nocache ? "#"+Math.random() : ""));
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+    };
+
+    $scope.closeModal = function(){
+        $("#modalShadow").removeClass("modal-visible");
+    };
+
+    $scope.$on("openModal", function(evt, path, nocache){
+        $scope.openModal(path, nocache)
+    });
+
+    $scope.$on("closeModal", $scope.closeModal);
+
+    $("#modalShadow").click(function(){
+        $scope.closeModal();
+    });
+
+
 });
