@@ -72,6 +72,8 @@ app.use(new RateLimit({
 
 app.use('/templates/add', new RateLimit({
     headers: true,
+    max: 5,
+    windowMs: 1000,
     keyGenerator: function(req){
         return req.user ? req.user.id : req.ip;
     }
