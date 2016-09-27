@@ -192,3 +192,18 @@
 
 
 
+.fancyScroll {
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    /* border-radius: 10px; */
+    background-color: #444444;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: #656565;
+    border-radius: 35px;
+  }
+
+}
