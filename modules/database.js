@@ -247,6 +247,20 @@ module.exports = function(app){
                 .where({playlist_id: id})
                 .orderBy("position", "DESC")
                 .asCallback(cb);
+        },
+        getDetailedSongInfo: function(id, cb){
+            knex.select("songs.id AS song_id", "genres.id AS genre_id",
+                "albums.id AS album_id", "artists.id AS artist_id", "songs.plays",
+                "songs.duration", "songs.title", "artists.name AS artist_name",
+                "albums.name AS album_name", "genres.name AS genre_name", "username", "avatar", "userlevel")
+                .from("songs")
+                .innerJoin("albums", "songs.album", "albums.id")
+                .innerJoin("genres", "songs.genre", "genres.id")
+                .innerJoin("users", "songs.addedby", "users.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .where({'songs.id': id})
+                .limit(1)
+                .asCallback(cb);
         }
     };
 

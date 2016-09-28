@@ -181,6 +181,16 @@ module.exports = function(app){
         res.render('templates/addScreens/addRadio', {layout: false});
     });
 
+    router.get('/songInfo/:id', function(req, res){
+        app.database.getDetailedSongInfo(req.params.id, function(err, resp){
+           if(err)
+               app.renderError(err, res);
+            else
+               res.render('templates/modals/songInfo', {layout: false, info: resp[0]})
+        });
+
+    });
+
     return router;
 };
 

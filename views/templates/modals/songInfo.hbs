@@ -1,0 +1,28 @@
+<div id="songInfoContainer">
+    <img id="songInfoAlbumArt" src="http://unacceptableuse.com:3002/album/{{info.album_id}}" alt="{{info.album_name}}">
+    <div id="songInfoTitle">
+        <h1>{{info.title}}</h1>
+        <h2>{{info.artist_name}} ({{info.genre_name}})</h2>
+        <h3>{{info.album_name}}</h3>
+        <h3>{[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]}</h3>
+    </div>
+    <span class="addedBy">
+        Added By
+        <span class="addedByName">
+            {{>user user=info}}
+        </span>
+    </span>
+</div>
+<div id="songInfoTabContainer">
+    <div id="songInfoTabs" class="modalTabBar">
+        <a class="modalTab"><i class="fa fa-list"></i>&nbsp;Playlists</a>
+        <a class="modalTab userlevel-2"><i class="fa fa-copy"></i>&nbsp;Replace</a>
+        <a class="modalTab userlevel-2"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
+        <a class="modalTab userlevel-3"><i class="fa fa-trash"></i>&nbsp;Delete</a>
+
+    </div>
+    <div id="modalTabContainer">
+
+    </div>
+</div>
+

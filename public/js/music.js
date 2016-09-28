@@ -440,6 +440,52 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
 });
 
+app.controller("ModalController", function($scope, $rootScope, $sce, $templateRequest, $compile){
+    $templateRequest("loading").then(function(template){
+        $compile($("#modalBox").html(template).contents())($scope);
+    }, $scope.showErrorScreen);
+
+
+    $scope.showErrorScreen = function(error){
+        $scope.error = error;
+        $templateRequest("error").then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, function(error){
+            console.error("Well shit "+error);
+        });
+    };
+
+    $scope.openModal = function(path, nocache){
+        $("#modalShadow").addClass("modal-visible");
+        $templateRequest("loading").then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/"+path+(nocache ? "#"+Math.random() : ""));
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#modalBox").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+    };
+
+    $scope.closeModal = function(){
+        $("#modalShadow").removeClass("modal-visible");
+    };
+
+    $rootScope.$on("openModal", function(evt, path, nocache){
+        console.log("Received openmodal event");
+        $scope.openModal(path, nocache)
+    });
+
+    $rootScope.$on("closeModal", $scope.closeModal);
+
+    $("#modalShadow").click(function(e){
+        if(e.target != this) return;
+        $scope.closeModal();
+    });
+
+
+});
+
 app.controller("ContextMenuController", function($scope, $rootScope){
     $scope.ctxPlayNext = function(event){
         var contextMenu = $("#songContextMenu");
@@ -450,6 +496,13 @@ app.controller("ContextMenuController", function($scope, $rootScope){
     $scope.ctxAddToQueue = function(event){
         var contextMenu = $("#songContextMenu");
         $rootScope.addToQueueById(contextMenu.data("id"));
+        contextMenu.toggle(100);
+    };
+
+    $scope.ctxSongInfo = function(event){
+        //console.log("Opening a wee modal");
+        var contextMenu = $("#songContextMenu");
+        $rootScope.$emit("openModal", "songInfo/"+contextMenu.data("id"), false);
         contextMenu.toggle(100);
     };
 });
@@ -486,48 +539,4 @@ app.controller("AddPlaylistController", function($scope, $http){
 
 app.controller("PlaylistController", function($scope){
    //tbc
-});
-
-app.controller("ModalController", function($scope, $rootScope, $sce, $templateRequest, $compile){
-    $templateRequest("loading").then(function(template){
-        $compile($("#modalBox").html(template).contents())($scope);
-    }, $scope.showErrorScreen);
-
-
-    $scope.showErrorScreen = function(error){
-        $scope.error = error;
-        $templateRequest("error").then(function(template){
-            $compile($("#modalBox").html(template).contents())($scope);
-        }, function(error){
-            console.error("Well shit "+error);
-        });
-    };
-
-    $scope.openModal = function(path, nocache){
-        $("#modalShadow").addClass("modal-visible");
-        $templateRequest("loading").then(function(template){
-            $compile($("#modalBox").html(template).contents())($scope);
-        }, $scope.showErrorScreen);
-
-        var templateUrl = $sce.getTrustedResourceUrl("templates/"+path+(nocache ? "#"+Math.random() : ""));
-        $templateRequest(templateUrl).then(function(template){
-            $compile($("#modalBox").html(template).contents())($scope);
-        }, $scope.showErrorScreen);
-    };
-
-    $scope.closeModal = function(){
-        $("#modalShadow").removeClass("modal-visible");
-    };
-
-    $scope.$on("openModal", function(evt, path, nocache){
-        $scope.openModal(path, nocache)
-    });
-
-    $scope.$on("closeModal", $scope.closeModal);
-
-    $("#modalShadow").click(function(){
-        $scope.closeModal();
-    });
-
-
 });

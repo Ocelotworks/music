@@ -20,6 +20,9 @@
   top: -2px;
 }
 
+.selected{
+  border-bottom: 1px solid @accent-color !important;
+}
 
 .navButton{
   color: @text-color;
@@ -27,13 +30,6 @@
   margin-left: -4px;
   .transition(@transition-time);
   border-bottom: 1px solid @background-dark;
-
-  &.selected{
-    border-bottom: 1px solid @accent-color;
-    &:hover{
-      border-bottom: 1px solid @accent-color;
-    }
-  }
 
   //& .fa{
   //  color: @text-color;
