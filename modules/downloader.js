@@ -50,27 +50,29 @@ module.exports = function(app){
                                     })
                                     .on('end', function () {
                                         console.log("Finished downloading " + info.id);
-                                        app.database.addSong({
-                                            id: songUUID,
-                                            path: path.join(info.destination, songUUID + ".mp3"),
-                                            artist: info.artist,
-                                            album: info.album,
-                                            addedby: info.addedby,
-                                            title: info.title,
-                                            duration: 0,
-                                            genre: "memes"
-                                        }, function (err, res) {
-                                            if (err) {
-                                                app.database.updateQueuedSong(info.id, {
-                                                    status: "FAILED"
-                                                }, function () {
-                                                });
-                                            } else {
-                                                app.database.removeQueuedSong(info.id, function () {
-                                                });
-                                            }
-                                            object.songsProcessing--;
-                                            object.processOneSong();
+                                        app.database.getOrCreateGenre(info.destination, function(err, genreID){
+                                            app.database.addSong({
+                                                id: songUUID,
+                                                path: path.join(info.destination, songUUID + ".mp3"),
+                                                artist: info.artist,
+                                                album: info.album,
+                                                addedby: info.addedby,
+                                                title: info.title,
+                                                duration: 0,
+                                                genre: genreID
+                                            }, function (err, res) {
+                                                if (err) {
+                                                    app.database.updateQueuedSong(info.id, {
+                                                        status: "FAILED"
+                                                    }, function () {
+                                                    });
+                                                } else {
+                                                    app.database.removeQueuedSong(info.id, function () {
+                                                    });
+                                                }
+                                                object.songsProcessing--;
+                                                object.processOneSong();
+                                            });
                                         });
                                     });
                             });
