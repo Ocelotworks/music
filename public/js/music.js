@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-var base = "http://unacceptableuse.com:3002/";
+var base = "https://unacceptableuse.com/petify/";
 var app = angular.module("music", ['rzModule']);
 
 function debounce(func, wait, immediate) {
@@ -372,12 +372,12 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
     $scope.createAddView = function(type){
         $templateRequest("loading").then(function(template){
-            $compile($("#modalBox").html(template).contents())($scope);
+            $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
         var templateUrl = $sce.getTrustedResourceUrl("templates/add/"+$scope.addViews[type]);
         $templateRequest(templateUrl).then(function(template){
-            $compile($("#modalBox").html(template).contents())($scope);
+            $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
     };
 

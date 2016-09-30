@@ -4,6 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
+var base = require('config').get("General.baseURL");
 
 module.exports = function(app){
 
@@ -11,7 +12,7 @@ module.exports = function(app){
     var correctLogin = function(req, res){
         console.log("Login success");
         console.log(req.user);
-        res.redirect('/');
+        res.redirect(base);
     };
 
     var options = {
@@ -21,7 +22,7 @@ module.exports = function(app){
 
     router.get('/logout', function(req, res){
         req.logout();
-        res.redirect('/');
+        res.redirect(base);
     });
 
     //Google Auth routes

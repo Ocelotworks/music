@@ -36,7 +36,8 @@ var routes          = require('./routes/index')(app);
 var users           = require('./routes/users')(app);
 var auth            = require('./routes/auth')(app);
 var search          = require('./routes/search')(app);
-
+var api             = require('./routes/api')(app);
+var templates       = require('./routes/templates')(app);
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -82,7 +83,8 @@ app.use('/templates/add', new RateLimit({
 app.use('/', routes);
 app.use('/auth', auth);
 app.use('/search', search);
-app.use('/templates', require('./routes/templates')(app));
+app.use('/api', api);
+app.use('/templates', templates);
 
 
 app.use(require('less-middleware')(path.join(__dirname, 'less'), {
