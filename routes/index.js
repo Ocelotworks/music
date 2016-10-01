@@ -9,7 +9,7 @@ module.exports = function(app){
 
     /* GET home page. */
     router.get('/', function(req, res) {
-        res.render('index', {title: "Petify", user: req.user});
+        res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development'});
     });
 
 
