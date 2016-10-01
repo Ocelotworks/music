@@ -1,0 +1,12 @@
+<h1>User Settings</h1>
+<form id="userSettings" ng-controller="SettingsController">
+    <div class="formInputGroup">
+        <input type="checkbox" id="showSongInUrl"><label for="showSongInUrl">Show song ID in URL bar</label><br>
+        <input type="checkbox" id="showSongInTitle"><label for="showSongInTitle">Show song name in page title</label>
+    </div>
+    <div class="formInputGroup">
+        <h2>API Access</h2>
+        <h3>Below is your key for accessing the API. Keep this secret as it has access to your full account. Regenerating the key will revoke the old one!</h3>
+        <input readonly type="text" placeholder="You have not yet generated a key" id="apiKey" class="fancyInput"><button class="happyButton" id="generateAPIKey" title="Regenerate key"><i class="fa fa-repeat"></i></button>
+    </div>
+</form>

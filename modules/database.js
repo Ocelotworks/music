@@ -261,6 +261,22 @@ module.exports = function(app){
                 .where({'songs.id': id})
                 .limit(1)
                 .asCallback(cb);
+        },
+        generateApiKey: function(id, cb){
+            knex("api_keys").update({revoked: 1}).where({revoked: 0, owner: id}).asCallback(function(err, res){
+                if(err){
+                    cb(err, null);
+                }else{
+                    var newKey = uuid();
+                    knex("api_keys").insert({owner: id, id: newKey}).asCallback(function(err, res){
+                       if(err){
+                           cb(err, null);
+                       } else{
+                           cb(null, newKey);
+                       }
+                    });
+                }
+            })
         }
     };
 

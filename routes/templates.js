@@ -191,6 +191,24 @@ module.exports = function(app){
 
     });
 
+    router.get('/settings', function(req, res){
+       res.render('templates/modals/settings', {layout: false});
+    });
+
+    router.get('/settings/generateAPIKey', function(req, res){
+        if(!req.user){
+            res.header(403).json({err: "You need to be signed in to do that."});
+        }else{
+            app.database.generateApiKey(req.user.id, function(err, key){
+                if(err){
+                    res.header(500).json({err: err});
+                }else{
+                    res.json({key: key});
+                }
+            });
+        }
+    });
+
     return router;
 };
 
