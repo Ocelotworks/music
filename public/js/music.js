@@ -94,6 +94,17 @@ app.run(['$rootScope', function($rootScope){
             translate: function(){
                 return "";
             }
+        },
+        volumeOptions: {
+            showSelectionBar: true,
+            ceil: 1,
+            step: 0.01,
+            hideLimitLabels: true,
+            precision: 2,
+            floor: 0,
+            translate: function(val){
+                return parseInt(val*100)+"%";
+            }
         }
     };
 

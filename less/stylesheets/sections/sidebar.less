@@ -107,8 +107,9 @@
   }
 }
 
-
-.rz-pointer{
+//What do you call a room full of drunk hindus?
+//              v
+.rz-pointer .seekBar{
   opacity: 1;
   transition: @transition-time;
   transition-property: opacity;
@@ -167,6 +168,28 @@
     transition: @transition-time;
   }
 }
+
+.rz-bubble {
+  font-size: 12pt;
+  color: @text-dark !important;
+  opacity: 0;
+  transition: @transition-time;
+  transition-property: opacity;
+
+  .rzslider:hover > &{
+    opacity: 1;
+    transition: @transition-time;
+    transition-property: opacity;
+
+  }
+}
+
+#volumeBar {
+    margin-left: 10%;
+    margin-right: 10%;
+    width: 80%;
+}
+
 
 
 
