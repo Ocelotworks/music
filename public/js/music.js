@@ -74,6 +74,9 @@ app.directive('ngRightClick', function($parse) {
 
 app.run(['$rootScope', function($rootScope){
 
+    $("#albumArt").error(function(){
+       $(this).attr('src', "img/album.png");
+    });
 
     $(document).bind("mousedown", function (e) {
         if (!$(e.target).parents(".contextMenu").length > 0)
