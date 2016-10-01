@@ -7,7 +7,7 @@
 <span class="inline addedBy" style="top: 10px;">Added By<span class="addedByName">
     {{> user user=info}}
 </span></span>
-<div class="songList" ng-controller="SongController">
+<div class="songList playable" ng-controller="SongController">
     {{#each songs}}
         {{>song}}
     {{/each}}

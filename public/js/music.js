@@ -108,6 +108,12 @@ app.run(['$rootScope', function($rootScope){
         }
     };
 
+    $rootScope.settings = {
+        shuffle: true,
+        repeat: false,
+        autoplay: true
+    };
+
     $rootScope.nowPlaying =  {
             artist: "Nobody",
             album: null,
@@ -213,7 +219,12 @@ app.run(['$rootScope', function($rootScope){
     };
 
     $rootScope.audioPlayer.onended = function(){
-        $rootScope.playNext();
+        if($rootScope.settings.autoplay){
+            if($rootScope.settings.repeat)
+                $rootScope.audioPlayer.currentTime = 0;
+            else
+                $rootScope.playNext();
+        }
     };
 
     $rootScope.playNext = function playNext(){
@@ -222,7 +233,7 @@ app.run(['$rootScope', function($rootScope){
             var nextSong = $rootScope.queue.shift();
             $rootScope.playById(nextSong.id);
         }else{
-            var availableSongs = $(".songList:visible .song");
+            var availableSongs = $(".songList.playable:visible .song");
             $rootScope.playByElement(availableSongs[parseInt(Math.random() * availableSongs.length)]);
         }
     };

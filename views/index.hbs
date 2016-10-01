@@ -46,9 +46,9 @@
         <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>
         <i class="control fa fa-forward" title="Forward" ng-click="playNext()"></i>
         <div id="lesserControls">
-            <i class="control fa fa-random" title="Shuffle"></i>
-            <i class="control fa fa-play-circle" title="Auto-play"></i>
-            <i class="control fa fa-retweet" title="Repeat"></i>
+            <i class="control fa fa-random" title="Shuffle" ng-class="{'enabled': settings.shuffle}" ng-click="settings.shuffle = !settings.shuffle"></i>
+            <i class="control fa fa-play-circle" title="Auto-play" ng-class="{'enabled': settings.autoplay}" ng-click="settings.autoplay = !settings.autoplay"></i>
+            <i class="control fa fa-retweet" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
         </div>
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
     </div>
