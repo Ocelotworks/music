@@ -6,6 +6,7 @@ var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var RateLimit       = require('express-rate-limit');
+var Compressor      = require('node-minify');
 
 
 var app = express();
@@ -46,7 +47,25 @@ app.set('view engine', 'hbs');
 require('./handlebarsHelpers.js');
 
 
-
+new Compressor.minify({
+    type: 'uglifyjs',
+    fileIn:  [
+        "client/AppInit.js",
+        "client/RootScope.js",
+        "client/AddController.js",
+        "client/AddPlaylistController.js",
+        "client/ContextMenuController.js",
+        "client/ModalController.js",
+        "client/SongController.js",
+        "client/TabController.js"
+    ],
+    fileOut: 'public/js/music.js',
+    callback: function(err){
+        if(err){
+            console.error("CRIT: Error minifying javascript, client WILL NOT WORK! "+err);
+        }
+    }
+});
 
 
 // uncomment after placing your favicon in /public
