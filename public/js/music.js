@@ -143,7 +143,8 @@ app.run(['$rootScope', function($rootScope){
         var songObject = {
             artist:  info[0],
             title: info[1],
-            id: element.attributes["data-id"].value
+            id: element.attributes["data-id"].value,
+            album: element.attributes["data-album"].value
         };
         $rootScope.queue.push(songObject);
     };
@@ -157,7 +158,8 @@ app.run(['$rootScope', function($rootScope){
         var songObject = {
             artist:  info[0],
             title: info[1],
-            id: element.attributes["data-id"].value
+            id: element.attributes["data-id"].value,
+            album: element.attributes["data-album"].value
         };
         $rootScope.queue.unshift(songObject);
     };
