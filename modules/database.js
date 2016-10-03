@@ -277,6 +277,15 @@ module.exports = function(app){
                     });
                 }
             })
+        },
+        getSettingsForUser: function(id, cb){
+            knex.select().from("settings").where({owner: id}).asCallback(cb);
+        },
+        getApiKeyFromUser: function(id, cb){
+            knex.select("id").from("api_keys").where({owner: id, revoked: 0}).limit(1).asCallback(cb);
+        },
+        getUserFromApiKey: function(key, cb){
+            knex.select("owner").from("api_keys").where({id: key, revoked: 0}).limit(1).asCallback(cb);
         }
     };
 

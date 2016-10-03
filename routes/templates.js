@@ -192,7 +192,24 @@ module.exports = function(app){
     });
 
     router.get('/settings', function(req, res){
-       res.render('templates/modals/settings', {layout: false});
+        if(!req.user){
+            res.header(401);
+        }else{
+            app.database.getSettingsForUser(req.user.id, function(err, data){
+                res.render('templates/modals/settings', {layout: false, settings: data[0]});
+            });
+
+        }
+    });
+
+    router.get('/settings/getApiKey', function(req, res){
+       if(req.user){
+           app.database.getApiKeyFromUser(req.user.id, function(err, data){
+               res.json(data[0]);
+           });
+       }else{
+           res.header(401);
+       }
     });
 
     router.get('/settings/generateAPIKey', function(req, res){

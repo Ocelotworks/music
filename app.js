@@ -40,7 +40,8 @@ new Compressor.minify({
         "client/ContextMenuController.js",
         "client/ModalController.js",
         "client/SongController.js",
-        "client/TabController.js"
+        "client/TabController.js",
+        "client/SettingsController.js"
     ],
     fileOut: 'public/js/music.js',
     callback: function(err){
