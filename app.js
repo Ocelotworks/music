@@ -38,6 +38,7 @@ new Compressor.minify({
         "client/AddController.js",
         "client/AddPlaylistController.js",
         "client/ContextMenuController.js",
+        "client/PlaylistController.js",
         "client/ModalController.js",
         "client/SongController.js",
         "client/TabController.js",
