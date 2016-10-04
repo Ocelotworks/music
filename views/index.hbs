@@ -1,9 +1,10 @@
 <div id="titlebar">
     <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal"></i>&nbsp;{{title}} {{#if developmentMode}}DEVELOPMENT MODE{{/if}}</span>
+    <input type="checkbox" class="hamburger" title="Menu">
     <div id="nav" ng-controller="TabController">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
-        <span id="searchBar"><input class="search" type="search" placeholder="search" ng-model="text" ng-change="search()"></span>
     </div>
+    <span id="searchBar"><input class="search" type="search" placeholder="search" ng-model="text" ng-controller="TabController" ng-change="search()"></span><!--TODO: move search from TabController-->
     <div id="profile" class="navButton">
         {{#if user}}
             <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
@@ -40,7 +41,9 @@
     <span id="currentSong">{[{nowPlaying.title}]}</span>
     <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
-    {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
+    <span id="currentTime">
+            {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
+    </span>
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>
         <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>

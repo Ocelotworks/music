@@ -97,6 +97,13 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
+
+        if(window.innerWidth <= 1111){
+            console.log("Aye aye cap'n");
+           $(".hamburger").prop("checked", false);
+        }else{
+            console.log(window.innerWidth);
+        }
     };
 
     $scope.$on("switchTab", function(evt, tab){

@@ -183,6 +183,10 @@ app.run(['$rootScope', function($rootScope){
         $rootScope.nowPlaying.buffering = true;
         $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
-    };
+        if(window.innerWidth <= 1111){
+            changeFavicon(base+"album/"+element.attributes["data-album"].value);
+            document.title = info[0] + " - " + info[1];
+        }
 
+    };
 }]);
