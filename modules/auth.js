@@ -10,10 +10,7 @@ var config = require('config');
 module.exports = function(app){
     app.passport = require('passport');
 
-
     app.passport.serializeUser(function(user, done) {
-        console.log("Attempting to serialise");
-        console.log(user);
         done(null, user.id);
     });
 
@@ -29,6 +26,7 @@ module.exports = function(app){
         clientSecret: keys.get("Google.clientSecret"),
         callbackURL: baseURL+"auth/google/callback"
     }, function(accessToken, refreshToken, profile, cb){
+        app.log("Logging in Google user "+profile.id);
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
 
@@ -37,12 +35,9 @@ module.exports = function(app){
         consumerSecret: keys.get("Twitter.consumerSecret"),
         callbackURL: baseURL+"auth/twitter/callback"
     }, function(token, tokenSecret, profile, cb){
-        console.log(profile);
+        app.log("Logging in Twitter user "+profile.id);
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
-
-
-
 
     var obj = {
 

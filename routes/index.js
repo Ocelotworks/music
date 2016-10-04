@@ -16,13 +16,14 @@ module.exports = function(app){
     router.get("/song/:id", function(req, res){
        app.database.getSongPath(req.params.id, function(err, resp){
            if(err){
-               console.log(err);
-               res.header(500).json(err);
+               app.warn("Error getting song path: "+err);
+               res.sendFile("/home/peter/doot/doot me up inside.mp3");
            }else{
                if(resp.length > 0){
                    var path = resp[0].path;
                    res.sendFile(path);
                }else{
+                   app.warn("Received request for unknown song: "+req.param.id);
                    res.header(404).json({error: "Not Found"});
                }
            }

@@ -7,9 +7,37 @@ var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var RateLimit       = require('express-rate-limit');
 var Compressor      = require('node-minify');
+var caller_id       = require('caller-id');
+var colors          = require('colors');
+var dateFormat      = require('dateformat');
 
 
 var app = express();
+
+app.log = function(message, caller){
+    if(!caller)
+        caller = caller_id.getData();
+    var file = ["Nowhere"];
+    if(caller.filePath)
+        file = caller.filePath.split("/");
+
+    var origin = `[${file[file.length-1]}${caller.functionName ? "/"+caller.functionName : ""}] `.bold;
+
+    var output = origin+message;
+    console.log(`[${dateFormat(new Date(), "dd/mm/yy hh:MM")}]`+output);
+};
+
+app.error = function(message){
+    app.log(message.red, caller_id.getData());
+};
+
+app.warn = function(message){
+    app.log(message.orange, caller_id.getData());
+};
+
+if(app.get('env') === 'development')
+    app.warn("Started in DEVELOPMENT MODE! For better performance, set NODE_ENV to PRODUCTION");
+
 
 app.database = require('./modules/database.js')(app);
 app.downloader = require('./modules/downloader.js')(app);
@@ -141,6 +169,9 @@ app.renderError = function(err, res){
         layout: false
     });
 };
+
+
+
 
 
 module.exports = app;

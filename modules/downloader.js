@@ -13,14 +13,19 @@ var songRegex = /\{*.\)|lyrics|official/g;
 module.exports = function(app){
     var object = {
         songsProcessing: 0,
-
-        processOneSong: function(){
+        processOneSong: function processSong(){
             app.database.getQueuedSong(function(err, info){
                 if(err){
                     console.log("Error processing queued song: "+err);
                 }else {
                     if (info && info[0] && info[0].id) {
-
+                        var updateErrorHandler = function updateErrorHandler(err){
+                            if(err){
+                                app.error("Failed to update status of "+info.id+": "+err);
+                            }else{
+                                app.log("Successfully updated status of "+info.id)
+                            }
+                        };
                         info = info[0];
                         object.songsProcessing++;
                         app.database.updateQueuedSong(info.id, {
@@ -36,21 +41,20 @@ module.exports = function(app){
                                 options.push("--force-ipv4");
                             var downloader = ytdl(info.url, options);
                             var songUUID = uuid();
-                            downloader.on("info", function () {
+                            downloader.on("info", function songInfoStart() {
                                 ffmpeg()
                                     .input(downloader)
                                     .audioCodec(downloaderConfig.get("audioCodec"))
                                     .save(path.join(info.destination, songUUID + ".mp3"))
-                                    .on('error', function (err) {
+                                    .on('error', function songDownloadError(err) {
                                         console.log("Error downloading video: " + err);
                                         app.database.updateQueuedSong(info.id, {
                                             status: "FAILED"
-                                        }, function () {
-                                        });
+                                        }, updateErrorHandler);
                                     })
-                                    .on('end', function () {
-                                        console.log("Finished downloading " + info.id);
-                                        app.database.getOrCreateGenre(info.destination, function(err, genreID){
+                                    .on('end', function songDownloadEnd() {
+                                        app.log("Finished downloading " + info.id);
+                                        app.database.getOrCreateGenre(info.destination, function createGenre(err, genreID){
                                             app.database.addSong({
                                                 id: songUUID,
                                                 path: path.join(info.destination, songUUID + ".mp3"),
@@ -60,15 +64,13 @@ module.exports = function(app){
                                                 title: info.title,
                                                 duration: 0,
                                                 genre: genreID
-                                            }, function (err, res) {
+                                            }, function addSong(err, res) {
                                                 if (err) {
                                                     app.database.updateQueuedSong(info.id, {
                                                         status: "FAILED"
-                                                    }, function () {
-                                                    });
+                                                    }, updateErrorHandler);
                                                 } else {
-                                                    app.database.removeQueuedSong(info.id, function () {
-                                                    });
+                                                    app.database.removeQueuedSong(info.id, updateErrorHandler);
                                                 }
                                                 object.songsProcessing--;
                                                 object.processOneSong();
@@ -81,10 +83,10 @@ module.exports = function(app){
                 }
             });
         },
-        queue: function(url, destination, getLastmData, addedBy){
-            console.log("Received a song to queue "+url+" -> "+destination);
+        queue: function queueSong(url, destination, getLastmData, addedBy){
+            app.log("Received a song to queue "+url+" -> "+destination);
             if(url && destination){
-                app.database.addSongToQueue(url, destination, addedBy, null, "Unknown", null, function(err, result){
+                app.database.addSongToQueue(url, destination, addedBy, null, "Unknown", null, function addSongToQueue(err, result){
                     var id = result[0];
                     var options = ["--ignore-errors"];
                     var downloaderConfig = config.get("Downloader");
@@ -101,12 +103,13 @@ module.exports = function(app){
                     } else
                         options.push("--no-playlist");
 
-                    ytdl.getInfo(url, options, function(err, info){
+                    ytdl.getInfo(url, options, function getYTInfo(err, info){
 
                         console.log("Pre-processing song "+id);
                         if(info) {
                             if(info[0]){
-                                app.database.removeQueuedSong(id, function(err, res){
+                                app.database.removeQueuedSong(id, function removeSongFromQueue(err){
+                                    if(err)app.error("Failed to remove queued song "+id+" from database: "+err);
                                    for(var i in info)
                                     if(info.hasOwnProperty(i))
                                         object.queue(info[i].url, destination, getLastmData, addedBy);
@@ -125,19 +128,19 @@ module.exports = function(app){
                                 if (info.alt_title)
                                     title = info.alt_title;
 
-                                app.database.getOrCreateArtist(artist.replace(" Listen ad-free with YouTube Red", ""), function(err, artistId){
+                                app.database.getOrCreateArtist(artist.replace(" Listen ad-free with YouTube Red", ""), function createArtist(err, artistId){
                                     if(!err){
                                         app.database.updateQueuedSong(id, {
                                             artist: artistId,
                                             title: title
                                         }, function(err, res){
                                             if(err){
-                                                console.log("Error updating queued song: "+err);
+                                                app.error("Error updating queued song: "+err);
                                             }else{
-                                                console.log("Success!");
-                                                if(object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")){
-                                                    object.processOneSong();
-                                                }
+                                                app.error("Success!");
+                                            }
+                                            if(object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")){
+                                                object.processOneSong();
                                             }
                                         });
                                     }
@@ -147,6 +150,10 @@ module.exports = function(app){
                             console.log("Error: "+err);
                             app.database.updateQueuedSong(id, {
                                 status: "FAILED"
+                            },function updateQueuedSong(err){
+                                if(err){
+                                    app.error("Failed to set "+id+" status to failed");
+                                }
                             });
                         }
 

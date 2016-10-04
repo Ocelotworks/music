@@ -218,6 +218,7 @@ module.exports = function(app){
         }else{
             app.database.generateApiKey(req.user.id, function(err, key){
                 if(err){
+                    app.warn("Error generating API key: "+err);
                     res.header(500).json({err: err});
                 }else{
                     res.json({key: key});

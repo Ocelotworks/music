@@ -11,6 +11,8 @@ module.exports = function(app){
     router.get('/query/:query', function(req, res){
        app.database.search(req.params.query, function(err, resp){
           if(err){
+              app.warn("Received invalid search query "+req.params.query);
+              app.warn("Producing error: "+err);
               res.status(500).json({err: err});
           } else{
               res.send(resp);

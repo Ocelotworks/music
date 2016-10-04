@@ -10,8 +10,8 @@ module.exports = function(app){
 
 
     var correctLogin = function(req, res){
-        console.log("Login success");
-        console.log(req.user);
+        app.log(req.user.id+" logged in");
+
         res.redirect(base);
     };
 
@@ -21,6 +21,7 @@ module.exports = function(app){
 
 
     router.get('/logout', function(req, res){
+        app.log(req.user.id+" logged out");
         req.logout();
         res.redirect(base);
     });
