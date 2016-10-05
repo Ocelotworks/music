@@ -205,5 +205,35 @@
     background-color: #656565;
     border-radius: 35px;
   }
+}
+
+.albumList{
+  display: flex;
+  flex-wrap: wrap;
+  max-height: 100%;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+.album{
+  border: 1px solid black;
+  text-align: center;
+  background: @background-dark;
+  margin: 5px;
+  & img{
+    display: block;
+    width: 300px;
+    background-image: url('img/album.png');
+  }
+
+  & span{
+    width: 300px;
+  }
+
+  &:hover{
+    border: 1px solid white;
+    cursor: pointer;
+    filter: hue-rotate(180deg);
+  }
 
 }
