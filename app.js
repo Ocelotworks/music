@@ -86,10 +86,7 @@ app.use(bodyParser.json());
 app.use(session({
     secret: 'aTotallyTemporarySecret',
     resave: false,
-    saveUninitialized: true,
-    cookie: {
-        secure: true
-    }
+    saveUninitialized: true
 }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
