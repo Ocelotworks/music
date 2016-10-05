@@ -1,8 +1,8 @@
 <h1>User Settings</h1>
 <form id="userSettings" ng-controller="SettingsController">
     <div class="formInputGroup">
-        <input type="checkbox" id="showSongInUrl" ng-model="settings.showSongInUrl"><label for="showSongInUrl">Show song ID in URL bar</label><br>
-        <input type="checkbox" id="showSongInTitle" ng-model="settings.showSongInTitle"><label for="showSongInTitle">Show song name in page title</label>
+        <input type="checkbox" id="showSongInUrl" ng-model="settings.showSongInUrl" {{#if settings.showSongInUrl}}checked{{/if}}><label for="showSongInUrl">Show song ID in URL bar</label><br>
+        <input type="checkbox" id="showSongInTitle" ng-model="settings.showSongInTitle" {{#if settings.showSongInUrl}}checked{{/if}}><label for="showSongInTitle">Show song name in page title</label>
     </div>
     <div class="formInputGroup">
         <h2>API Access</h2>
