@@ -40,9 +40,11 @@
     display: none;
   }
 
-  span#nowPlayingLabel {display: none;}
+  #nowPlayingLabel {
+    display: none;
+  }
 
-  span#currentSong {
+  #currentSong {
     font-size: 18pt;
     margin-left: 18vw;
     text-overflow: ellipsis;
@@ -52,16 +54,16 @@
     width: 62%;
   }
 
-  div#sidebarContainer {
+  #sidebarContainer {
     text-align: left;
   }
 
-  span#currentArtist {
+  #currentArtist {
     margin-left: 18vw;
     margin-top: 4vh;
   }
 
-  div#timeElapsedBar {
+  #timeElapsedBar {
     display: none;
   }
 
@@ -75,35 +77,33 @@
     margin: 0;
   }
 
-  div#queue {
+  #queue {
     display: none;
   }
 
-  span#currentTime {
+  #currentTime {
     position: absolute;
     right: 10px;
     top: 5px;
   }
 
-  div#tabContainer {
+  #tabContainer {
     left: 0;
     width: 100%;
     top: 51px;
     border-left: none;
   }
 
-  div#allSongs {}
-
   .search{
     top: 11px;
     right: 10px;
   }
 
-  div#profile {
+  #profile {
     display: none;
   }
 
-  div#nav {
+  #nav {
     float: left;
     position: fixed;
     left: -50%;
@@ -145,14 +145,14 @@
     }
   }
 
-  a.navButton {
+  .navButton {
     display: block;
+    &.selected{
+      border-bottom: 1px solid black !important;
+      border-right: 1px solid @accent-color;
+    }
   }
 
-  a.navButton.selected {
-    border-bottom: 1px solid black !important;
-    border-right: 1px solid @accent-color;
-  }
 
 }
 
