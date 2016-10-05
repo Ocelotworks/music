@@ -13,6 +13,9 @@ var songRegex = /\{*.\)|lyrics|official/g;
 module.exports = function(app){
     var object = {
         songsProcessing: 0,
+        /**
+         *  Process a single song from the queue
+         */
         processOneSong: function processSong(){
             app.database.getQueuedSong(function(err, info){
                 if(err){
@@ -83,6 +86,13 @@ module.exports = function(app){
                 }
             });
         },
+        /**
+         * Retrieve information about a song and then add it to the queue
+         * @param url The URL of the song to download
+         * @param destination The path of the song
+         * @param getLastmData Boolean to retrieve data from last.fm or not
+         * @param addedBy The UUID of the user that queued the song
+         */
         queue: function queueSong(url, destination, getLastmData, addedBy){
             app.log("Received a song to queue "+url+" -> "+destination);
             if(url && destination){
