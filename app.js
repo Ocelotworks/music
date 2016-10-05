@@ -96,8 +96,8 @@ app.use(app.passport.session());
 //Rate limiting
 app.enable('trust proxy');
 app.use(new RateLimit({
-    windowMs: 90000,
-    max: 200,
+    windowMs: 1000,
+    max: 100,
     delayMs: 0,
     headers: true,
     keyGenerator: function(req){
