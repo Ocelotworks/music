@@ -8,7 +8,7 @@
     <div id="profile" class="navButton">
         {{#if user}}
             <img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar">
-            <span id="displayUsername" class="username userlevel-{{user.userlevel}}">{{sanitised user.username}} &#x25BC;</span>
+            <span id="displayUsername" class="username userlevel-{{user.userlevel}}">{{user.username}} &#x25BC;</span>
             <div id="loginDropdown">
                 {{>user}}
                 <ul>
