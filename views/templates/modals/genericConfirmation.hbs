@@ -1,0 +1,21 @@
+<div class="centred" {{#if controller}}ng-controller={{controller}}{{/if}}>
+    <h1>{{title}}</h1>
+    {{#if desc}}
+        <div>{{desc}}</div>
+    {{/if}}
+    <br><br><br>
+    <button class="happyButton {{#if yes.critical}}red{{/if}}" {{#if yes.controller}}ng-controller="{{yes.controller}}"{{/if}} ng-click="{{yes.action}}">
+        {{#if yes.name}}
+            {{yes.name}}
+        {{else}}
+            Yes
+        {{/if}}
+    </button>
+    <button class="happyButton {{#if no.critical}}red{{/if}}" {{#if no.controller}}ng-controller="{{no.controller}}"{{/if}} ng-click="{{no.action}}">
+        {{#if no.name}}
+            {{no.name}}
+        {{else}}
+            No
+        {{/if}}
+    </button>
+</div>

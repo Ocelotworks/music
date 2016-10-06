@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller("TabController", function($scope, $templateRequest, $sce, $compile){
+app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope){
 
     $scope.tabs = [
         {
@@ -107,6 +107,10 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     };
 
     $scope.$on("switchTab", function(evt, tab){
+        $scope.switchTab($scope.tabs[tab]);
+    });
+
+    $rootScope.$on("switchTab", function(evt, tab){
         $scope.switchTab($scope.tabs[tab]);
     });
 });

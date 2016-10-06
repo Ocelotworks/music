@@ -348,6 +348,18 @@ module.exports = function(app){
                     });
         },
         /**
+         * Deletes a playlist and all it's songs. Executes cb when the playlist object has been deleted and not when the playlist data has.
+         * @param id
+         * @param cb
+         */
+        deletePlaylist: function(id, cb){
+            knex("playlists").delete().where({id: id}).limit(1).asCallback(cb);
+            knex("playlist_data").delete().where({playlist_id: id}).asCallback(function(err){
+                if(err)
+                    app.warn("Could not delete playlist_data entries for "+id);
+            });
+        },
+        /**
          * Get all playlists that are not marked as private
           * @param cb
          */
