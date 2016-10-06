@@ -1,4 +1,4 @@
-<h1 ng-controller="PlaylistController">{{#if info.private}}<i class="fa fa-lock" title="Private"></i>&nbsp;{{/if}}{{info.name}}
+<h1 ng-controller="PlaylistController">{{#if info.private}}<i class="fa fa-lock" title="Private"></i>&nbsp;{{/if}}{{sanitised info.name}}
     {{#if isOwner}}
         <button class="happyButton" ng-click=""><i class="fa fa-pencil"></i> Edit</button><button class="happyButton" ng-click="deletePlaylist('{{info.id}}')"><i class="fa fa-trash"></i> Delete</button>
     {{/if}}

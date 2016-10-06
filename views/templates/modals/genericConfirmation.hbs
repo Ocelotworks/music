@@ -1,7 +1,7 @@
 <div class="centred" {{#if controller}}ng-controller={{controller}}{{/if}}>
-    <h1>{{title}}</h1>
+    <h1>{{sanitised title}}</h1>
     {{#if desc}}
-        <div>{{desc}}</div>
+        <div>{{sanitised desc}}</div>
     {{/if}}
     <br><br><br>
     <button class="happyButton {{#if yes.critical}}red{{/if}}" {{#if yes.controller}}ng-controller="{{yes.controller}}"{{/if}} ng-click="{{yes.action}}">

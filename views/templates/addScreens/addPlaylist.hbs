@@ -26,7 +26,7 @@
     <div class="formInputGroup">
         <div class="songList fancyScroll" id="playlistAddSongs">
             {{#each songs}}
-                <span class="song" data-id="{{song_id}}" data-artist="{{artist_id}}" data-album="{{album}}"><input type="checkbox" class="songSelect" ng-model="playlist['song-{{song_id}}']"><span class="songSelectName">{{name}}&nbsp;-&nbsp;{{title}}</span></span>
+                <span class="song" data-id="{{song_id}}" data-artist="{{artist_id}}" data-album="{{album}}"><input type="checkbox" class="songSelect" ng-model="playlist['song-{{song_id}}']"><span class="songSelectName">{{sanitised name}}&nbsp;-&nbsp;{{sanitised title}}</span></span>
             {{/each}}
         </div>
     </div>

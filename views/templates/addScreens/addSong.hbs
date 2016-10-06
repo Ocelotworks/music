@@ -22,7 +22,7 @@
             <table class="fancyTable">
                 <tr><td>Artist</td><td>Title</td><td>Source</td><td>Status</td><td>Added By</td><td>Actions</td></tr>
                 {{#each queue}}
-                    <tr class="song"><td>{{name}}</td><td>{{title}}</td><td><a href="{{url}}">{{url}}</a></td><td>{{status}}</td><td>
+                    <tr class="song"><td>{{sanitised name}}</td><td>{{sanitised title}}</td><td><a href="{{url}}">{{sanitised url}}</a></td><td>{{status}}</td><td>
                         <span class="addedBy">
                             <span class="addedByName">
                                 {{>user user=this}}
