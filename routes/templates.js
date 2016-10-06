@@ -147,23 +147,29 @@ module.exports = function(app){
                         }
                     });
                 }
-
             }
         });
-
     });
-
 
     router.get('/delete/playlist/:id/confirmed', function(req, res){
-       app.database.deletePlaylist(req.params.id, function(err){
-           if(err)
-            app.warn("Error deleting playlist "+req.params.id+": "+err);
-           else
-            app.log("Playlist "+req.params.id+" deleted.");
-            res.send("");
-       });
+        if(req.user){
+            res.header(401).send("");
+        }else{
+            app.database.canUserEditPlaylist(req.params.id, req.user.id, function(err, bool){
+                if(bool){
+                    app.database.deletePlaylist(req.params.id, function(err){
+                        if(err)
+                            app.warn("Error deleting playlist "+req.params.id+": "+err);
+                        else
+                            app.log("Playlist "+req.params.id+" deleted.");
+                        res.send("");
+                    });
+                }else{
+                    res.header(401).send("");
+                }
+            });
+        }
     });
-
 
     router.get('/add', function(req, res, next) {
         res.render('templates/add', {layout: false});

@@ -371,6 +371,21 @@ module.exports = function(app){
                 .asCallback(cb);
         },
         /**
+         * Looks up if a user can perform administrative functions on a playlist
+         * @param id The UUID of the playlist
+         * @param user The UUID of the user
+         * @param cb function(err, canEdit)
+         */
+        canUserEditPlaylist: function(id, user, cb){
+          knex.select("count(*)").from("playlists").where({id: id, owner: user}).limit(1).asCallback(function(err, res){
+                  if(err){
+                      cb(err, false);
+                  }else{
+                      cb(null, res[0] && res[0]["count(*)"]);
+                  }
+          });
+        },
+        /**
          * Get all playlists owned by a certain user
          * @param id The user UUID
          * @param cb
