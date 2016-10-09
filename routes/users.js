@@ -8,7 +8,7 @@ module.exports = function(app){
     res.send('respond with a resource');
   });
 
-  return app;
+  return router;
 };
 
 
