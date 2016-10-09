@@ -48,6 +48,7 @@ app.run(['$rootScope', function($rootScope){
         artist: "Nobody",
         album: null,
         id: null,
+        artistID: null,
         title: "Nothing",
         duration: 0,
         normalPlay: false,
@@ -180,6 +181,7 @@ app.run(['$rootScope', function($rootScope){
         if(!element)return console.warn("Warning: playByElement called with a null element! Bad ID somewhere?");
         var info = element.outerText.split("\u00A0-\u00A0");
         $rootScope.nowPlaying.id = element.attributes["data-id"].value;
+        $rootScope.nowPlaying.artistID = element.attributes["data-artist"].value;
         $rootScope.nowPlaying.artist = info[0];
         $rootScope.nowPlaying.title = info[1];
         $rootScope.nowPlaying.buffering = true;

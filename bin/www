@@ -20,7 +20,7 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
-
+app.expressWs = require('express-ws')(app, server);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -87,4 +87,6 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+    console.log("fucking listening and shit");
+  app.initRoutes();
 }
