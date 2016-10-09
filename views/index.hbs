@@ -34,6 +34,7 @@
         <img src="img/album.png" id="albumArt">
         <div id="albumOverlay">
             <span title="Rate Up" class="songRate"><i class="fa fa-thumbs-up"></i></span>
+            <span title="Song Info" class="songRate"><i class="fa fa-ellipsis-h" ng-click="$emit('openModal', 'songInfo/'+nowPlaying.id);"></i></span>
             <span title="Rate Down" class="songRate"><i class="fa fa-thumbs-down"></i></span>
         </div>
     </div>
@@ -43,6 +44,9 @@
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
             {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
+            {{#if developmentMode}}
+                <br>{[{nowPlaying.id}]}
+            {{/if}}
     </span>
     <div id="controls" class="weeBox">
         <i class="control fa fa-backward" title="Backward"></i>

@@ -56,5 +56,4 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     $scope.playPlaylist = function(id){
         $scope.showSongList("playlist/"+id);
     };
-
 });
