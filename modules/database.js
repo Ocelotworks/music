@@ -103,15 +103,15 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateArtist: function(artist, cb){
-            knex.select("id").from("artists").where({name: artist}).limit(1).asCallback(function(err, res){
+            knex.select("id").from("artists").where({name: artist}).limit(1).asCallback(function getOrCreateArtistQuery(err, res){
                 if(err)
                     cb(err);
                 else{
                     if(res.length === 1){
-                        console.log("Artist "+artist+" already exists");
+                        app.log("Artist "+artist+" already exists");
                         cb(null, res[0].id);
                     }else{
-                        console.log("Creating new artist "+artist);
+                        app.log("Creating new artist "+artist);
                         var id = uuid();
                         knex('artists').insert({
                             name: artist,
@@ -129,15 +129,15 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateAlbum: function(album, cb){
-            knex.select("id").from("albums").where({name: album}).limit(1).asCallback(function(err, res){
+            knex.select("id").from("albums").where({name: album}).limit(1).asCallback(function getOrCreateAlbum(err, res){
                 if(err)
                     cb(err);
                 else{
                     if(res.length === 1){
-                        console.log("Album "+album+" already exists");
+                        app.log("Album "+album+" already exists");
                         cb(null, res[0].id);
                     }else{
-                        console.log("Creating new album "+album);
+                        app.log("Creating new album "+album);
                         var id = uuid();
                         knex('albums').insert({
                             name: album,
@@ -173,15 +173,15 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateGenre: function(genre, cb){
-            knex.select("id").from("genres").where({name: genre}).limit(1).asCallback(function(err, res){
+            knex.select("id").from("genres").where({name: genre}).limit(1).asCallback(function getOrCreateGenre(err, res){
                 if(err)
                     cb(err);
                 else{
                     if(res.length === 1){
-                        console.log("Genre "+genre+" already exists");
+                        app.log("Genre "+genre+" already exists");
                         cb(null, res[0].id);
                     }else{
-                        console.log("Creating new genre "+genre);
+                        app.log("Creating new genre "+genre);
                         var id = uuid();
                         knex('genres').insert({
                             name: genre,
@@ -222,7 +222,7 @@ module.exports = function(app){
          * @param cb
          */
         updateQueuedSong: function(id, update, cb){
-            console.log("Updating queued song "+id);
+            app.log("Updating queued song "+id);
             knex("queue").where({id: id}).update(update).asCallback(cb);
         },
         /**
@@ -250,7 +250,7 @@ module.exports = function(app){
             function albumBit(url, destination, addedById, artistId, title, album){
                object.getOrCreateAlbum(album || "Unknown Album", function(err, albumId){
                    if(err){
-                       console.error("Error adding song to download queue: could not get album: "+err)
+                       app.error("Error adding song to download queue: could not get album: "+err)
                    } else{
                        exec(url, destination, addedById, artistId, title, albumId);
                    }
@@ -259,7 +259,7 @@ module.exports = function(app){
 
             object.getOrCreateArtist(artist || "Unknown Artist", function(err, artistId){
                if(err)
-                   console.error("Error adding song to download queue: could not get artist: "+err);
+                   app.error("Error adding song to download queue: could not get artist: "+err);
 
                albumBit(url, destination, addedby, artistId, title, album);
             });
@@ -280,10 +280,10 @@ module.exports = function(app){
                 }else{
                     if(res.length === 1){
 
-                        console.log("User "+res[0].id+" already exists");
+                        app.log("User "+res[0].id+" already exists");
                         cb(null, res[0]);
                     }else{
-                        console.log("Creating new user "+username);
+                        app.log("Creating new user "+username);
                         var id = uuid();
                         var user = {
                             username: username,
@@ -344,7 +344,7 @@ module.exports = function(app){
                         song_id: playlist.songs[i],
                         playlist_id: id
                     }).asCallback(function(err){
-                        if(err)console.warn("Warning: error inserting song into playlist "+id+": "+err);
+                        if(err)app.warn("Warning: error inserting song into playlist "+id+": "+err);
                     });
         },
         /**

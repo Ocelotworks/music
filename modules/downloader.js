@@ -19,7 +19,7 @@ module.exports = function(app){
         processOneSong: function processSong(){
             app.database.getQueuedSong(function(err, info){
                 if(err){
-                    console.log("Error processing queued song: "+err);
+                    app.log("Error processing queued song: "+err);
                 }else {
                     if (info && info[0] && info[0].id) {
                         var updateErrorHandler = function updateErrorHandler(err){
@@ -50,7 +50,7 @@ module.exports = function(app){
                                     .audioCodec(downloaderConfig.get("audioCodec"))
                                     .save(path.join(info.destination, songUUID + ".mp3"))
                                     .on('error', function songDownloadError(err) {
-                                        console.log("Error downloading video: " + err);
+                                        app.log("Error downloading video: " + err);
                                         app.database.updateQueuedSong(info.id, {
                                             status: "FAILED"
                                         }, updateErrorHandler);
@@ -115,7 +115,7 @@ module.exports = function(app){
 
                     ytdl.getInfo(url, options, function getYTInfo(err, info){
 
-                        console.log("Pre-processing song "+id);
+                        app.log("Pre-processing song "+id);
                         if(info) {
                             if(info[0]){
                                 app.database.removeQueuedSong(id, function removeSongFromQueue(err){
@@ -157,7 +157,7 @@ module.exports = function(app){
                                 });
                             }
                         }else{
-                            console.log("Error: "+err);
+                            app.log("Error: "+err);
                             app.database.updateQueuedSong(id, {
                                 status: "FAILED"
                             },function updateQueuedSong(err){
