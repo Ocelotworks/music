@@ -1,3 +1,6 @@
+{{!
+    NAVBAR
+}}
 <div id="titlebar">
     <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal"></i>&nbsp;{{title}} {{#if developmentMode}}DEVELOPMENT MODE{{/if}}</span>
     <input type="checkbox" class="hamburger" title="Menu">
@@ -29,6 +32,9 @@
 
     </div>
 </div>
+{{!
+    SIDEBAR
+}}
 <div id="sidebarContainer" ng-controller="SongController">
     <div id="albumArtContainer">
         <img src="img/album.png" id="albumArt">
@@ -67,6 +73,9 @@
         </div>
     </div>
 </div>
+{{!
+    Song context menu
+}}
 <ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController">
     <li ng-click="ctxAddToQueue($event)"><i class="fa fa-fw fa-plus"></i> Add to Queue</li>
     <li ng-click="ctxPlayNext($event)"><i class="fa fa-fw fa-fast-forward"></i> Play Next</li>
@@ -75,12 +84,21 @@
     <li ng-click="ctxViewArtist($event)"><i class="fa fa-fw fa-user"></i> Go to Artist</li>
     <li ng-click="ctxSongInfo($event)"><i class="fa fa-fw fa-info-circle"></i> Song Info</li>
 </ul>
+{{!
+    Main container
+}}
 <div id="tabContainer" ng-controller="TabController">
 </div>
+{{!
+    Modal container
+}}
 <div id="modalShadow" ng-controller="ModalController">
     <div id="modalBox">
     </div>
 </div>
+{{!
+    Templates
+}}
 <script type="text/ng-template" id="loading">
     <i class="fa fa-shekel fa-spin fa-3x fa-flip-horizontal loading"></i>
 </script>
