@@ -47,11 +47,6 @@ app.downloader.processOneSong();
 app.initRoutes = function(){
 
 
-    app.use(function(req, res, next){
-       app.log(req.url);
-        next();
-    });
-
     app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     app.use(logger('dev'));
     app.use(bodyParser.json());
