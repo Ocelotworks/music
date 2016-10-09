@@ -36,6 +36,9 @@
     SIDEBAR
 }}
 <div id="sidebarContainer" ng-controller="SongController">
+    <div ng-if="serverIssues" id="serverIssuesBox">
+        There appears to be a connection issue.
+    </div>
     <div id="albumArtContainer">
         <img src="img/album.png" id="albumArt">
         <div id="albumOverlay">
@@ -94,6 +97,16 @@
 }}
 <div id="modalShadow" ng-controller="ModalController">
     <div id="modalBox">
+    </div>
+</div>
+{{!
+    Message container
+}}
+<div id="messageContainer">
+    <div ng-repeat="message in messages" class="message" data-index="{[{$index}]}">
+        <img ng-src="{[{message.image}]}"><span ng-click="delete messages[$index]" class="messageClose">&times;</span>
+        <h2 class="messageTitle">{[{message.title}]}</h2>
+        <span class="messageBody">{[{message.body}]}</span>
     </div>
 </div>
 {{!

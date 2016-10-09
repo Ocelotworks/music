@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/client/SettingsController.js" libraries="{angular}" />
     <file url="file://$PROJECT_DIR$/client/SongController.js" libraries="{angular, jquery-2.1.3}" />
     <file url="file://$PROJECT_DIR$/client/TabController.js" libraries="{jquery-2.1.3}" />
+    <file url="file://$PROJECT_DIR$/client/UpdateManager.js" libraries="{jquery-2.1.3}" />
     <file url="file://$PROJECT_DIR$/handlebarsHelpers.js" libraries="{Node.js v0.10.33 Core Modules, music node_modules}" />
     <file url="file://$PROJECT_DIR$/modules/auth.js" libraries="{Node.js v0.10.33 Core Modules, music node_modules}" />
     <file url="file://$PROJECT_DIR$/modules/database.js" libraries="{Node.js v0.10.33 Core Modules, music node_modules}" />

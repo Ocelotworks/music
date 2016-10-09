@@ -236,5 +236,43 @@
     cursor: pointer;
     filter: hue-rotate(180deg);
   }
+}
 
+#messageContainer {
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  width: 20%;
+  padding-bottom: 1%;
+  padding-right: 4%;
+}
+
+.message {
+  background: rgba(0,0,0,0.7);
+  margin: 5%;
+  width: 100%;
+  padding: 5%;
+  position: relative;
+}
+
+.message img {
+  width: 64px;
+}
+
+.messageTitle {
+  position: absolute;
+  top: -7px;
+  left: 93px;
+}
+
+.messageBody {
+  position: relative;
+  bottom: 25px;
+  left: 5px;
+}
+
+.messageClose {
+  position: absolute;
+  right: 45px;
+  cursor: pointer;
 }

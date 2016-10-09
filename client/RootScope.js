@@ -193,4 +193,6 @@ app.run(['$rootScope', function($rootScope){
         }
 
     };
+
+    initialiseWebsocket($rootScope);
 }]);
