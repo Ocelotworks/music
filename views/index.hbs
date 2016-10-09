@@ -40,12 +40,13 @@
     </div>
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
     <span id="currentSong">{[{nowPlaying.title}]}</span>
-    <span id="currentArtist" class="secondaryText">{[{nowPlaying.artist}]}</span>
+    <span id="currentArtist" class="secondaryText" ng-click="playArtist(nowPlaying.artistID)" title="See more by this artist">{[{nowPlaying.artist}]}</span>
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
             {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
             {{#if developmentMode}}
-                <br>{[{nowPlaying.id}]}
+                <br>S: {[{nowPlaying.id}]}
+                <br>A: {[{nowPlaying.artistID}]}
             {{/if}}
     </span>
     <div id="controls" class="weeBox">
