@@ -60,7 +60,7 @@
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
     </div>
     <div id="queue" class="weeBox">
-        <span id="queueTitle" class="weeBoxTitle">Queue</span>
+        <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" title="Save Queue as Playlist"></i></span></span>
         <div id="songListQueue" class="songList">
             <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}" data-album="{[{song.album}]}">{[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}</span>
         </div>

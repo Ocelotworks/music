@@ -192,3 +192,19 @@
 .enabled {
   color: @accent-color !important;
 }
+#queueControls {
+  right: 2vw;
+  position: absolute;
+  color: @text-dark;
+
+  & .fa{
+    padding-left: 4px;
+    cursor: pointer;
+    transition: @transition-time;
+    &:hover{
+      color: white;
+      transition: @transition-time;
+    }
+  }
+}
+
