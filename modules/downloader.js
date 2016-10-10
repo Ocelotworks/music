@@ -57,6 +57,12 @@ module.exports = function(app){
                                     })
                                     .on('end', function songDownloadEnd() {
                                         app.log("Finished downloading " + info.id);
+                                        app.broadcastUpdate("alert", {
+                                            lifetime: 5,
+                                            title: "Download Finished",
+                                            body: `${info.title} has downloaded successfully.`,
+                                            image: "album/"+info.album
+                                        });
                                         app.database.getOrCreateGenre(info.destination, function createGenre(err, genreID){
                                             app.database.addSong({
                                                 id: songUUID,

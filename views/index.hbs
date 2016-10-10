@@ -104,7 +104,7 @@
 }}
 <div id="messageContainer">
     <div ng-repeat="message in messages" class="message" data-index="{[{$index}]}">
-        <img ng-src="{[{message.image}]}"><span ng-click="delete messages[$index]" class="messageClose">&times;</span>
+        <img ng-src="{[{message.image}]}">
         <h2 class="messageTitle">{[{message.title}]}</h2>
         <span class="messageBody">{[{message.body}]}</span>
     </div>

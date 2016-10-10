@@ -8,23 +8,20 @@ function initialiseWebsocket($rootScope){
 
     $rootScope.serverIssues = false;
 
-    $rootScope.messages = [
-        {
-            title: "A test message",
-            body: "A test body",
-            image: "https://placekitten.com/300/300"
-        },
-        {
-            title: "A test message",
-            body: "A test body",
-            image: "https://placekitten.com/300/300"
-        },
-        {
-            title: "A test message",
-            body: "A test body",
-            image: "https://placekitten.com/300/300"
-        }
-    ];
+    $rootScope.messages = [];
+
+
+    setInterval(function(){
+        $rootScope.messages.forEach(function(message, index){
+           message.lifetime--;
+            if(message.lifetime <= 0){
+                $(".message[data-index="+index+"]").fadeOut(400, function(){
+                    $rootScope.messages.splice(index, 1);
+                    console.log($rootScope.messages);
+                });
+            }
+        });
+    }, 1000);
 
     $rootScope.updateSocket = new WebSocket(websocketBase+"/updates");
 
@@ -44,7 +41,12 @@ function initialiseWebsocket($rootScope){
     };
 
     $rootScope.updateSocket.onmessage = function(message){
-        console.log("Recieved message: ");
-        console.log(message);
+        var data = JSON.parse(message.data);
+        if(data && data.type && data.message){
+            switch(data.type){
+                case "alert":
+                    $rootScope.messages.push(data.message)
+            }
+        }
     };
 }
