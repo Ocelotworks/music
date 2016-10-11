@@ -2,52 +2,59 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope){
+app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope, $location){
+
 
     $scope.tabs = [
         {
             name: "Songs",
             icon: "fa-music",
             template: "songs",
+            location: "songs",
             default: "selected"
         },
         {
             name: "Artists",
             icon: "fa-user",
+            location: "artists",
             template: "artists"
         },
         {
             name: "Albums",
             icon: "fa-square",
+            location: "albums",
             template: "albums"
         },
         {
             name: "Genres",
             icon: "fa-list",
+            location: "genres",
             template: "genres"
         },
         {
             name: "Playlists",
             icon: "fa-th-list",
+            location: "playlists",
             template: "playlists",
             nocache: true
         },
         {
             name: "Radio",
             icon: "fa-fast-forward",
+            location: "radio",
             template: "radio",
             nocache: true
         },
         {
             name: "Add",
             icon: "fa-plus",
+            location: "add",
             template: "add"
         }
     ];
 
     $templateRequest("loading").then(function(template){
         $compile($("#tabContainer").html(template).contents())($scope);
-        $scope.switchTab($scope.tabs[0]);
     }, $scope.showErrorScreen);
 
 
@@ -98,12 +105,12 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
-        if(window.innerWidth <= 1111){
-            console.log("Aye aye cap'n");
+        console.log("Setting location "+$location.path());
+        $location.path("/"+tab.location);
+
+        if(window.innerWidth <= 1111)
            $(".hamburger").prop("checked", false);
-        }else{
-            console.log(window.innerWidth);
-        }
+
     };
 
     $scope.$on("switchTab", function(evt, tab){
@@ -113,4 +120,8 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $rootScope.$on("switchTab", function(evt, tab){
         $scope.switchTab($scope.tabs[tab]);
     });
+
+    $rootScope.$emit("tabControllerReady");
+
+
 });

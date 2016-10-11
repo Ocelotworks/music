@@ -7,9 +7,25 @@ var config = require('config');
 module.exports = function(app){
 
 
+    var tabs = [
+        "songs",
+        "artists",
+        "albums",
+        "genres",
+        "playlists",
+        "radio",
+        "add"
+    ];
+
+
     /* GET home page. */
     router.get('/', function(req, res) {
-        res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development'});
+        res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', startTab: 0});
+    });
+
+    router.get('/:tab', function(req, res){
+        var startTab = tabs.indexOf(req.params.tab);
+        res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', startTab: startTab > -1 ? startTab : 0});
     });
 
 

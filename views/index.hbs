@@ -118,3 +118,11 @@
 <script type="text/ng-template" id="error">
     <div id="errorBox">An error occurred loading this page.<br>Please wait a few seconds and try again.<br><span class="secondaryText">{[{message}]}</span></div>
 </script>
+<script>
+
+    app.run(['$rootScope', function($rootScope) {
+       $rootScope.$on("tabControllerReady", function(){
+           $rootScope.$broadcast("switchTab", {{startTab}});
+       });
+    }]);
+</script>

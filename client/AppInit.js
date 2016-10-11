@@ -58,9 +58,11 @@ function changeFavicon(src) {
     document.head.appendChild(link);
 }
 
-app.config(function($interpolateProvider) {
+app.config(function($interpolateProvider, $locationProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
+
+    $locationProvider.html5Mode(true);
 });
 
 app.filter('secondsToDateTime', [function() {
