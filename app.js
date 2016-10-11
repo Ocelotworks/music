@@ -60,12 +60,14 @@ app.initRoutes = function(){
     app.use(app.passport.initialize());
     app.use(app.passport.session());
 
-    app.use('/',            require('./routes/index')(app));
-    app.use('/auth',        require('./routes/auth')(app));
-    app.use('/search',      require('./routes/search')(app));
-    app.use('/api',         require('./routes/api')(app));
-    app.use('/templates',   require('./routes/templates')(app));
-    app.use('/ws',          require('./routes/websocket')(app));
+    app.use('/',                    require('./routes/index')(app));
+    app.use('/auth',                require('./routes/auth')(app));
+    app.use('/search',              require('./routes/search')(app));
+    app.use('/api',                 require('./routes/api')(app));
+    app.use('/templates',           require('./routes/templates.js')(app));
+    app.use('/templates/admin',     require('./routes/templates/admin')(app));
+    app.use('/templates/modals',    require('./routes/templates/modals')(app));
+    app.use('/ws',                  require('./routes/websocket')(app));
 
     //Rate limiting
     app.enable('trust proxy');
@@ -155,6 +157,7 @@ new Compressor.minify({
         "client/AppInit.js",
         "client/UpdateManager.js",
         "client/RootScope.js",
+        "client/AdminController.js",
         "client/AddController.js",
         "client/AddPlaylistController.js",
         "client/ContextMenuController.js",
