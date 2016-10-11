@@ -62,7 +62,10 @@ app.config(function($interpolateProvider, $locationProvider) {
     $interpolateProvider.startSymbol('{[{');
     $interpolateProvider.endSymbol('}]}');
 
-    $locationProvider.html5Mode(true);
+    $locationProvider.html5Mode({
+        enabled: true,
+        rewriteLinks: false
+    });
 });
 
 app.filter('secondsToDateTime', [function() {
