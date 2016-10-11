@@ -53,6 +53,14 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         }
     ];
 
+    if($rootScope.userLevel >= 2)
+        $scope.tabs.push({
+            name: "Admin",
+            icon: "fa-lock",
+            location: "admin",
+            template: "admin"
+        });
+
     $templateRequest("loading").then(function(template){
         $compile($("#tabContainer").html(template).contents())($scope);
     }, $scope.showErrorScreen);
