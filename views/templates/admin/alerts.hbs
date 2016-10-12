@@ -1,0 +1,16 @@
+<h1>Alert Manager</h1>
+<h3>You can send global alerts, or alerts to specific online users.</h3>
+<form ng-controller="AlertSendController">
+    <div class="formInputGroup">
+        <input type="radio" ng-model="alert.global" id="globalAlert"><label for="globalAlert">Send to All</label>
+        <input type="radio" ng-model="alert.specificUsers" id="globalAlert"><label for="globalAlert">Send to specific User(s)</label>
+        <div ng-if="alert.specificUsers">
+            <h2>Online Users</h2>
+            <div class="songList fancyScroll" id="playlistAddSongs">
+                {{#each onlineUsers}}
+                    <span class="song" data-id="{{id}}"><input type="checkbox" class="songSelect" ng-model="alert.users"><span class="songSelectName">{{#if username}}{{username}}{{else}}Guest{{/if}}</span></span>
+                {{/each}}
+            </div>
+        </div>
+    </div>
+</form>
