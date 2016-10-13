@@ -7,7 +7,7 @@ var config = require('config');
 module.exports = function(app){
 
 
-    var tabs = [
+    const tabs = [
         "songs",
         "artists",
         "albums",
@@ -27,6 +27,17 @@ module.exports = function(app){
     router.get('/:tab', function(req, res){
         var startTab = tabs.indexOf(req.params.tab);
         res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', startTab: startTab > -1 ? startTab : 0});
+    });
+
+    const types = {
+        playlist: "templates/songs/playlist/",
+        radio: "",
+        artist: "templates/songs/artist/",
+        album: "templates/songs/album/"
+    };
+
+    router.get("/playlist/:id", function(req, res){
+        res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', loadPage: types["playlist"]+req.params.id});
     });
 
 

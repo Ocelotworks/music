@@ -62,7 +62,6 @@ app.initRoutes = function(){
     app.use(app.passport.session());
 
     app.use(minifyhtml({
-        override:      true,
         htmlMinifier: {
             removeComments:            true,
             collapseWhitespace:        true,
