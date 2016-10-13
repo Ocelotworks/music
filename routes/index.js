@@ -14,7 +14,8 @@ module.exports = function(app){
         "genres",
         "playlists",
         "radio",
-        "add"
+        "add",
+        "admin"
     ];
 
 

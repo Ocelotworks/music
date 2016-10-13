@@ -157,7 +157,7 @@ new Compressor.minify({
         "client/AppInit.js",
         "client/UpdateManager.js",
         "client/RootScope.js",
-        "client/AdminController.js",
+        "client/admin/AdminController.js",
         "client/AddController.js",
         "client/AddPlaylistController.js",
         "client/ContextMenuController.js",

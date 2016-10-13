@@ -1,14 +1,40 @@
 <h1>Alert Manager</h1>
 <h3>You can send global alerts, or alerts to specific online users.</h3>
-<form ng-controller="AlertSendController">
+<form ng-controller="AdminController" ng-submit="sendAlert()" name="alertForm">
+    <div id="mockAlert">
+        <img id="mockAlertImage" ng-src="{[{alert.url}]}">
+        <span id="mockAlertTitle">{[{alert.title}]}</span>
+        <span id="mockAlertBody">{[{alert.body}]}</span>
+    </div>
     <div class="formInputGroup">
-        <input type="radio" ng-model="alert.global" id="globalAlert"><label for="globalAlert">Send to All</label>
-        <input type="radio" ng-model="alert.specificUsers" id="globalAlert"><label for="globalAlert">Send to specific User(s)</label>
+        <input type="url" class="fancyInput" placeholder="img/album.png" ng-model="alert.url">
+    </div>
+    <div class="formInputGroup">
+        <input type="text" class="fancyInput" required placeholder="Alert Title" ng-model="alert.title">
+    </div>
+    <div class="formInputGroup">
+        <input type="text" class="fancyInput" required placeholder="Alert Body" ng-model="alert.body">
+    </div>
+    <div class="formInputGroup">
+        <code>{[{alert | json}]}</code><br>
+        <input type="checkbox" ng-model="alert.global" id="globalAlert" name="alertScope" checked><label for="globalAlert">Send to All</label>
+        <input type="checkbox" ng-model="alert.specificUsers" id="globalAlert" name="alertScope"><label for="globalAlert">Send to specific User(s)</label>
+    </div>
+    <div class="formInputGroup">
         <div ng-if="alert.specificUsers">
-            <h2>Online Users</h2>
+            <h2 class="inline">Online Users</h2> <input type="checkbox" ng-model="alertSettings.showUserIds" id="showUserIds"><label for="showUserIds">Show User IDs</label>
             <div class="songList fancyScroll" id="playlistAddSongs">
                 {{#each onlineUsers}}
-                    <span class="song" data-id="{{id}}"><input type="checkbox" class="songSelect" ng-model="alert.users"><span class="songSelectName">{{#if username}}{{username}}{{else}}Guest{{/if}}</span></span>
+                    <span class="song" data-id="{{id}}">
+                        <input type="checkbox" class="songSelect" ng-model="users['{{@index}}']">
+                        <span class="songSelectName">
+                            {{#if user.username}}
+                                <span ng-if="alertSettings.showUserIds">({{user.id}})</span> {{user.username}}
+                            {{else}}
+                                Guest
+                            {{/if}}
+                        </span>
+                    </span>
                 {{/each}}
             </div>
         </div>
