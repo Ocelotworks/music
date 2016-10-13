@@ -10,6 +10,7 @@ var Compressor      = require('node-minify');
 var caller_id       = require('caller-id');
 var colors          = require('colors');
 var dateFormat      = require('dateformat');
+var minifyhtml      = require('express-minify-html');
 
 
 var app = express();
@@ -59,6 +60,18 @@ app.initRoutes = function(){
     app.use(cookieParser());
     app.use(app.passport.initialize());
     app.use(app.passport.session());
+
+    app.use(minifyhtml({
+        override:      true,
+        htmlMinifier: {
+            removeComments:            true,
+            collapseWhitespace:        true,
+            collapseBooleanAttributes: true,
+            removeAttributeQuotes:     true,
+            removeEmptyAttributes:     true,
+            minifyJS:                  true
+        }
+    }));
 
     app.use('/',                    require('./routes/index')(app));
     app.use('/auth',                require('./routes/auth')(app));
