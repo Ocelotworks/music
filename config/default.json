@@ -42,5 +42,43 @@
   },
   "General": {
     "baseURL": ""
+  },
+  "Advanced": {
+    "htmlMinifier": {
+      "removeComments": true,
+      "collapseWhitespace": true,
+      "collapseBooleanAttributes": true,
+      "removeAttributeQuotes": true,
+      "removeEmptyAttributes": true,
+      "minifyJS": true
+    },
+    "bodyParser": {
+      "extended": false
+    },
+    "session": {
+      "secret": "aTotallyTemporarySecret",
+      "resave": false,
+      "saveUninitialized": true
+    }
+  },
+  "RateLimiter": {
+    "General": {
+      "window": 1000,
+      "max": 100,
+      "delay": 0,
+      "headers": true
+    },
+    "IntensiveActions": {
+      "window": 1000,
+      "max": 5,
+      "delay": 0,
+      "headers": true
+    },
+    "API": {
+      "window": 1000,
+      "max": 100,
+      "delay": 0,
+      "headers": true
+    }
   }
 }

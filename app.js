@@ -11,6 +11,7 @@ var caller_id       = require('caller-id');
 var colors          = require('colors');
 var dateFormat      = require('dateformat');
 var minifyhtml      = require('express-minify-html');
+var config          = require('config');
 
 
 var app = express();
@@ -49,27 +50,16 @@ app.initRoutes = function(){
 
 
     app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-    app.use(logger('dev'));
+    //app.use(logger('dev'));
     app.use(bodyParser.json());
-    app.use(session({
-        secret: 'aTotallyTemporarySecret',
-        resave: false,
-        saveUninitialized: true
-    }));
-    app.use(bodyParser.urlencoded({ extended: false }));
+    app.use(session(config.get("Advanced.session")));
+    app.use(bodyParser.urlencoded(config.get("Advanced.bodyparser")));
     app.use(cookieParser());
     app.use(app.passport.initialize());
     app.use(app.passport.session());
 
     app.use(minifyhtml({
-        htmlMinifier: {
-            removeComments:            true,
-            collapseWhitespace:        true,
-            collapseBooleanAttributes: true,
-            removeAttributeQuotes:     true,
-            removeEmptyAttributes:     true,
-            minifyJS:                  true
-        }
+        htmlMinifier: config.get("Advanced.htmlMinifier")
     }));
 
     app.use('/',                    require('./routes/index')(app));
@@ -84,19 +74,20 @@ app.initRoutes = function(){
     //Rate limiting
     app.enable('trust proxy');
     app.use(new RateLimit({
-        windowMs: 1000,
-        max: 100,
-        delayMs: 0,
-        headers: true,
+        windowMs: config.get("RateLimiter.General.window"),
+        max: config.get("RateLimiter.General.max"),
+        delayMs: config.get("RateLimiter.General.delay"),
+        headers: config.get("RateLimiter.General.headers"),
         keyGenerator: function(req){
             return req.user ? req.user.id : req.ip;
         }
     }));
 
     app.use('/templates/add', new RateLimit({
-        headers: true,
-        max: 5,
-        windowMs: 1000,
+        windowMs: config.get("RateLimiter.General.window"),
+        max: config.get("RateLimiter.General.max"),
+        delayMs: config.get("RateLimiter.General.delay"),
+        headers: config.get("RateLimiter.General.headers"),
         keyGenerator: function(req){
             return req.user ? req.user.id : req.ip;
         }
