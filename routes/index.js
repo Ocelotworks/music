@@ -42,7 +42,7 @@ module.exports = function(app){
 
 
     router.get("/song/:id", function(req, res){
-       app.database.getSongPath(req.params.id, function(err, resp){
+       app.database.getSongPathToPlay(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, resp){
            if(err){
                app.warn("Error getting song path: "+err);
                res.sendFile("/home/peter/doot/doot me up inside.mp3");

@@ -74,12 +74,20 @@ module.exports = function(app){
             knex.select("uuid", "artist", "album", "plays", "genre", "duration").from("songs").where({id: id}).asCallback(cb);
         },
         /**
-         * Gets the path of a song
+         * Gets the path of a song, and logs the play
          * @param id the song UUID
+         * @param userid the UUID of the user playing the song
          * @param cb function(err, path)
          */
-        getSongPath: function(id, cb){
+        getSongPathToPlay: function(id, userid, cb){
             knex.select("path").from("songs").where({id: id}).limit(1).asCallback(cb);
+            knex("plays").insert({
+                user: userid,
+                song: id
+            }).asCallback(function(err){
+                if(err)
+                    app.warn("Error adding play for song "+id+": "+err);
+            });
         },
         /**
          * Gets the artist name from a song ID

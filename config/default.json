@@ -52,7 +52,7 @@
       "removeEmptyAttributes": true,
       "minifyJS": true
     },
-    "bodyParser": {
+    "bodyparser": {
       "extended": false
     },
     "session": {

@@ -56,4 +56,8 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     $scope.playPlaylist = function(id){
         $scope.showSongList("playlist/"+id);
     };
+
+    $scope.skipSong = function(){
+        ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed)
+    };
 });
