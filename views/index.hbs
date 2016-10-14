@@ -2,7 +2,7 @@
     NAVBAR
 }}
 <div id="titlebar">
-    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal" aria-hidden="true"></i>&nbsp;{{title}} {{#if developmentMode}}<div id="developmentMode" class="debug">DEVELOPMENT MODE</div>{{/if}}</span>
+    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal" aria-hidden="true"></i>&nbsp;{{title}} {{#if developmentMode}}<span id="developmentMode" class="debug">DEVELOPMENT MODE</span>{{/if}}</span>
     <input type="checkbox" class="hamburger" title="Menu">
     <div id="nav" ng-controller="TabController" role="menubar">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
