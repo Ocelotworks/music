@@ -59,7 +59,7 @@ app.initRoutes = function(){
     app.use(app.passport.session());
 
     app.use(minifyhtml({
-        htmlMinifier: config.get("Advanced.htmlMinifier")
+        htmlMinifier: JSON.parse(JSON.stringify(config.get("Advanced.htmlMinifier"))) //ayy lmao
     }));
 
     app.use('/',                    require('./routes/index')(app));
