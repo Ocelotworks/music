@@ -4,7 +4,7 @@
 
 
 var base = "https://unacceptableuse.com/petify/";
-var app = angular.module("music", ['rzModule']);
+var app = angular.module("music", ['rzModule', 'ngAria']);
 
 function debounce(func, wait, immediate) {
     var timeout;

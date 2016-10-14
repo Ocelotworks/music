@@ -2,9 +2,9 @@
     NAVBAR
 }}
 <div id="titlebar">
-    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal"></i>&nbsp;{{title}} {{#if developmentMode}}DEVELOPMENT MODE{{/if}}</span>
+    <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal" aria-hidden="true"></i>&nbsp;{{title}} {{#if developmentMode}}<div id="developmentMode" class="debug">DEVELOPMENT MODE</div>{{/if}}</span>
     <input type="checkbox" class="hamburger" title="Menu">
-    <div id="nav" ng-controller="TabController">
+    <div id="nav" ng-controller="TabController" role="menubar">
         <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
     </div>
     <span id="searchBar"><input class="search" type="search" placeholder="search" ng-model="text" ng-controller="TabController" ng-change="search()"></span><!--TODO: move search from TabController-->
@@ -25,8 +25,8 @@
             <div id="loginDropdown">
                 <img src="img/album.png" class="avatar">
                 <span class="username">Guest</span>
-                <a href="auth/google"><div class="login login-google"><i class="fa fa-google"></i> Sign In With Google</div></a>
-                <a href="auth/twitter"><div class="login login-twitter"><i class="fa fa-twitter"></i> Sign In With Twitter</div></a>
+                <a href="auth/google"><div class="login login-google"><i aria-hidden="true" class="fa fa-google"></i> Sign In With Google</div></a>
+                <a href="auth/twitter"><div class="login login-twitter"><i aria-hidden="true" class="fa fa-twitter"></i> Sign In With Twitter</div></a>
             </div>
         {{/if}}
 
@@ -40,11 +40,11 @@
         There appears to be a connection issue.
     </div>
     <div id="albumArtContainer">
-        <img src="img/album.png" id="albumArt">
+        <img src="img/album.png" id="albumArt" title="Album Art" aria-label="Album Art">
         <div id="albumOverlay">
-            <span title="Rate Up" class="songRate"><i class="fa fa-thumbs-up"></i></span>
-            <span title="Song Info" class="songRate"><i class="fa fa-ellipsis-h" ng-click="$emit('openModal', 'songInfo/'+nowPlaying.id);"></i></span>
-            <span title="Rate Down" class="songRate"><i class="fa fa-thumbs-down"></i></span>
+            <span title="Rate Up" aria-label="Rate Up" class="songRate"><i aria-hidden="true" class="fa fa-thumbs-up"></i></span>
+            <span title="Song Info" aria-label="Song Info" class="songRate"><i aria-hidden="true" class="fa fa-ellipsis-h" ng-click="$emit('openModal', 'songInfo/'+nowPlaying.id);"></i></span>
+            <span title="Rate Down" aria-label="Rate Down" class="songRate"><i aria-hidden="true" class="fa fa-thumbs-down"></i></span>
         </div>
     </div>
     <span id="nowPlayingLabel" class="secondaryText">Now Playing</span>
@@ -58,19 +58,19 @@
                 <br>A: {[{nowPlaying.artistID}]}
             {{/if}}
     </span>
-    <div id="controls" class="weeBox">
-        <i class="control fa fa-backward" title="Backward"></i>
-        <i class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>
-        <i class="control fa fa-forward" title="Forward" ng-click="playNext()"></i>
+    <div id="controls" class="weeBox" role="menu">
+        <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward"></i>
+        <i role="menuitem" aria-label="Play/Pause" class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>
+        <i role="menuitem" aria-label="Forward" class="control fa fa-forward" title="Forward" ng-click="playNext()"></i>
         <div id="lesserControls">
-            <i class="control fa fa-random" title="Shuffle" ng-class="{'enabled': settings.shuffle}" ng-click="settings.shuffle = !settings.shuffle"></i>
-            <i class="control fa fa-play-circle" title="Auto-play" ng-class="{'enabled': settings.autoplay}" ng-click="settings.autoplay = !settings.autoplay"></i>
-            <i class="control fa fa-retweet" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
+            <i role="menuitemcheckbox" class="control fa fa-random" aria-label="Shuffle" title="Shuffle" ng-class="{'enabled': settings.shuffle}" ng-click="settings.shuffle = !settings.shuffle"></i>
+            <i role="menuitemcheckbox" class="control fa fa-play-circle" aria-label="Auto-play" title="Auto-play" ng-class="{'enabled': settings.autoplay}" ng-click="settings.autoplay = !settings.autoplay"></i>
+            <i role="menuitemcheckbox" class="control fa fa-retweet" aria-label="Repeat" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
         </div>
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
     </div>
     <div id="queue" class="weeBox">
-        <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" title="Save Queue as Playlist"></i></span></span>
+        <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>
         <div id="songListQueue" class="songList">
             <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}" data-album="{[{song.album}]}">{[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}</span>
         </div>
@@ -79,13 +79,13 @@
 {{!
     Song context menu
 }}
-<ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController">
-    <li ng-click="ctxAddToQueue($event)"><i class="fa fa-fw fa-plus"></i> Add to Queue</li>
-    <li ng-click="ctxPlayNext($event)"><i class="fa fa-fw fa-fast-forward"></i> Play Next</li>
-    <li ng-click="ctxAddToPlaylist($event)"><i class="fa fa-fw fa-plus"></i> Add to Playlist</li>
-    <li ng-click="ctxViewAlbum($event)"><i class="fa fa-fw fa-square"></i> Go to Album</li>
-    <li ng-click="ctxViewArtist($event)"><i class="fa fa-fw fa-user"></i> Go to Artist</li>
-    <li ng-click="ctxSongInfo($event)"><i class="fa fa-fw fa-info-circle"></i> Song Info</li>
+<ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController" role="menu">
+    <li role="menuitem" ng-click="ctxAddToQueue($event)"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Queue</li>
+    <li role="menuitem" ng-click="ctxPlayNext($event)"><i aria-hidden="true" class="fa fa-fw fa-fast-forward"></i> Play Next</li>
+    <li role="menuitem" ng-click="ctxAddToPlaylist($event)"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Playlist</li>
+    <li role="menuitem" ng-click="ctxViewAlbum($event)"><i aria-hidden="true" class="fa fa-fw fa-square"></i> Go to Album</li>
+    <li role="menuitem" ng-click="ctxViewArtist($event)"><i aria-hidden="true" class="fa fa-fw fa-user"></i> Go to Artist</li>
+    <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
 </ul>
 {{!
     Main container
@@ -113,7 +113,7 @@
     Templates
 }}
 <script type="text/ng-template" id="loading">
-    <i class="fa fa-shekel fa-spin fa-3x fa-flip-horizontal loading"></i>
+    <i class="fa fa-shekel fa-spin fa-3x fa-flip-horizontal loading" aria-hidden="true"></i>
 </script>
 <script type="text/ng-template" id="error">
     <div id="errorBox">An error occurred loading this page.<br>Please wait a few seconds and try again.<br><span class="secondaryText">{[{message}]}</span></div>
