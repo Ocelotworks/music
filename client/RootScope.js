@@ -179,6 +179,7 @@ app.run(['$rootScope', function($rootScope){
 
     $rootScope.playByElement = function playByElement(element){
         if(!element)return console.warn("Warning: playByElement called with a null element! Bad ID somewhere?");
+        $(".songRate").removeClass("rated");
         var info = element.outerText.split("\u00A0-\u00A0");
         $rootScope.nowPlaying.id = element.attributes["data-id"].value;
         $rootScope.nowPlaying.artistID = element.attributes["data-artist"].value;

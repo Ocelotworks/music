@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile){
+app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http){
 
     $scope.playSong = function(event){
         $rootScope.playByElement(event.target);
@@ -58,7 +58,25 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     };
 
     $scope.skipSong = function(){
-        ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed)
+        ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed);
         $scope.playNext();
     };
+
+    $scope.rateSongUp = debounce(function(){
+        $http({
+            method: 'PUT',
+            url: 'song/'+$rootScope.nowPlaying.id+"/vote/up"
+        });
+        $(".songRate").removeClass("rated");
+        $("#songRateUp").addClass("rated");
+    }, 1000);
+
+    $scope.rateSongDown = debounce(function(){
+        $http({
+            method: 'PUT',
+            url: 'song/'+$rootScope.nowPlaying.id+"/vote/down"
+        });
+        $(".songRate").removeClass("rated");
+        $("#songRateDown").addClass("rated");
+    }, 1000);
 });

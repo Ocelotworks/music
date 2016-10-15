@@ -40,6 +40,14 @@ module.exports = function(app){
         res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', loadPage: types["playlist"]+req.params.id});
     });
 
+    router.put('/song/:id/vote/:direction', function(req, res){
+        app.database.addSongVote(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", req.params.direction == "up", function(err){
+            if(err){
+                res.header(500).json(err);
+            }else
+                res.header(204).json({});
+        });
+    });
 
     router.get("/song/:id", function(req, res){
        app.database.getSongPathToPlay(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, resp){

@@ -168,11 +168,17 @@
   cursor: pointer;
   transition: @transition-time;
 
-  &:hover{
+  &:not(.rated):hover{
     border-color: @background-highlight;
     color: white;
     transition: @transition-time;
+
   }
+}
+
+.rated{
+  border-color: @accent-color;
+  transition: @transition-time;
 }
 
 .rz-bubble {

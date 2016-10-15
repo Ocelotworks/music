@@ -496,6 +496,20 @@ module.exports = function(app){
          */
         getUserFromApiKey: function(key, cb){
             knex.select("owner").from("api_keys").where({id: key, revoked: 0}).limit(1).asCallback(cb);
+        },
+        /**
+         * Adds a vote for a song
+         * @param song The UUID of the song
+         * @param user The UUID of the user
+         * @param up bool, true if upvote, false if downvote
+         * @param cb function(err)
+         */
+        addSongVote: function(song, user, up, cb){
+            knex("votes").insert({
+                owner: user,
+                song: song,
+                up: up ? 1 : 0
+            }).asCallback(cb);
         }
     };
 
