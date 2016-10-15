@@ -1,3 +1,18 @@
-<h1>{{message}}</h1>
-<h2>{{error.status}}</h2>
-<pre>{{error.stack}}</pre>
+<div id="errorContainer">
+    <div id="errorLogo"><i class="fa fa-shekel fa-flip-horizontal"></i></div>
+    <h1 id="errorTitle">{{message}}</h1>
+    <span id="obnoxiousErrorText">
+        golly gee willikers, looks like you've taken a wrong turn!!!!,<wbr>
+        looks like our army of busy little worker bees must have filed the page you were looking for<wbr>
+        in the wrong filing cabinet!!!! mayhaps you could try looking at one of our other many pages? ?? i<wbr>
+        am sure you would find something else you would like instead?? SO sorry you did not find what you were<wbr>
+        looking for!! may the force be with you fellow geek! :3 :3 :3
+    </span>
+</div>
+{{#if error.stack}}
+    <footer>{{error.stack}}</footer>
+{{else}}
+    {{#if error.message}}
+        <footer>{{error.message}}</footer>
+    {{/if}}
+{{/if}}
