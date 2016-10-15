@@ -118,9 +118,9 @@ app.initRoutes = function(){
             res.status(err.status || 500);
             app.error("Error at "+req.url);
             res.render('error', {
+                title: "Error",
                 message: err.message+" ("+req.url+")",
-                error: err,
-                layout: false
+                error: err
             });
         });
     }
@@ -131,18 +131,18 @@ app.initRoutes = function(){
         res.status(err.status || 500);
         console.log(err);
         res.render('error', {
+            title: "Error",
             message: err.message,
-            error: {},
-            layout: false
+            error: {}
         });
     });
 
     app.renderError = function(err, res){
         res.status(err.status || 500);
         res.render('error', {
+            title: "Error",
             message: err.message,
-            error: app.get('env') === 'development' ? err : {},
-            layout: false
+            error: app.get('env') === 'development' ? err : {}
         });
     };
 };
