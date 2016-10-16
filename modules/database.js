@@ -547,6 +547,20 @@ module.exports = function(app){
         },
         putGenreImage: function(genre, image, cb){
             knex("genres").update({image: image}).where({id: genre}).limit(1).asCallback(cb);
+        },
+        /**
+         * Logs an error
+         * @param type ENUM('PAGE_ERROR','APP_ERROR','DATABASE_ERROR','SECURITY','OTHER')
+         * @param detail MAX 128 CHARS
+         * @param trace MAX 128 CHARS
+         * @param cb function(err)
+         */
+        logError: function(type, detail, trace, cb){
+            knex("log").insert({
+                event: type,
+                detail: detail,
+                trace: trace
+            }).asCallback(cb);
         }
     };
 

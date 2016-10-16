@@ -31,6 +31,8 @@ app.log = function(message, caller){
 
 app.error = function(message){
     app.log(message.red, caller_id.getData());
+    if(app.database)
+        app.database.logError("APP_ERROR", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName);
 };
 
 app.warn = function(message){
@@ -71,6 +73,10 @@ app.initRoutes = function(){
     app.use('/templates',           require('./routes/templates.js')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
+    app.use('/templates/songs',     require('./routes/templates/songs.js')(app));
+    app.use('/templates/settings',  require('./routes/templates/settings.js')(app));
+    app.use('/templates/delete',    require('./routes/templates/delete.js')(app));
+    app.use('/templates/add',       require('./routes/templates/add.js')(app));
     app.use('/ws',                  require('./routes/websocket')(app));
 
     //Rate limiting
@@ -137,6 +143,7 @@ app.initRoutes = function(){
             message: err.message,
             error: {}
         });
+        app.database.logError("PAGE_ERROR", err.message.length > 128 ? err.message.substring(0, 128) : err.message, caller_id.getData().functionName);
     });
 
     app.renderError = function(err, res){
@@ -146,6 +153,7 @@ app.initRoutes = function(){
             message: err.message,
             error: app.get('env') === 'development' ? err : {}
         });
+        app.database.logError("PAGE_ERROR", err.message.length > 128 ? err.message.substring(0, 128) : err.message, caller_id.getData().functionName);
     };
 };
 
