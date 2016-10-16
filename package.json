@@ -7,6 +7,7 @@
     "start-dev": "export NODE_ENV=development; node ./bin/www"
   },
   "dependencies": {
+    "async": "^2.1.1",
     "body-parser": "^1.15.2",
     "caller-id": "^0.1.0",
     "colors": "^1.1.2",
@@ -15,10 +16,12 @@
     "dateformat": "^1.0.12",
     "debug": "^2.2.0",
     "express": "^4.13.4",
+    "express-minify-html": "^0.6.0",
     "express-rate-limit": "^2.5.0",
     "express-session": "^1.14.1",
     "express-ws": "^2.0.0",
     "fluent-ffmpeg": "^2.1.0",
+    "gm": "^1.23.0",
     "hbs": "~4.0.0",
     "htmlencode": "0.0.4",
     "knex": "0.11.10",

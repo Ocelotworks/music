@@ -34,6 +34,15 @@ module.exports = function(app){
        });
     });
 
+    router.get('/songs/genre/:id', function(req, res){
+        app.database.getSongsByGenre(req.params.id, function(err, songs){
+            if(err)
+                app.renderError(err, res);
+            else
+                res.render('templates/songList', {songs: songs, layout: false});
+        });
+    });
+
     router.get('/songs/playlist/:id', function(req, res){
        app.database.getPlaylistInfo(req.params.id, function(err, playlist){
           if(err)
@@ -96,6 +105,16 @@ module.exports = function(app){
                 app.renderError(err, res);
             else
                 res.render('templates/albums', {albums: result, layout: false});
+
+        });
+    });
+
+    router.get('/genres', function(req, res){
+        app.database.getAllGenres(function(err, result){
+            if(err)
+                app.renderError(err, res);
+            else
+                res.render('templates/genres', {genres: result, layout: false});
 
         });
     });

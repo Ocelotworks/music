@@ -78,6 +78,19 @@ module.exports = function(app){
        })
     });
 
+    router.get("/genre/:id", function(req, res){
+        app.database.getGenreArt(req.params.id, function(err, resp){
+            if(err || !resp[0] || !resp[0].image)
+                res.redirect("../img/album.png");
+            else{
+                res.header('Content-Type', 'image/png');
+                res.end(resp[0].image);
+            }
+
+        })
+    });
+
+
     return router;
 };
 

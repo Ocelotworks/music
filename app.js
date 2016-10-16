@@ -41,9 +41,11 @@ if(app.get('env') === 'development')
     app.warn("Started in DEVELOPMENT MODE! For better performance, set NODE_ENV to PRODUCTION");
 
 
-app.database = require('./modules/database.js')(app);
-app.downloader = require('./modules/downloader.js')(app);
-app.auth = require('./modules/auth.js')(app);
+app.database            = require('./modules/database.js')(app);
+app.downloader          = require('./modules/downloader.js')(app);
+app.auth                = require('./modules/auth.js')(app);
+app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
+
 app.downloader.processOneSong();
 
 app.initRoutes = function(){

@@ -14,3 +14,4 @@ Handlebars.registerPartial('playlist', '<div class="song" ng-click="playPlaylist
 Handlebars.registerPartial('radio', ' <div class="song" ng-click="playRadio($event)"> <span class="radioTitle">{{title}}</span> <span class="radioDesc">{{listeners}} listeners |{{desc}}</span> <span class="addedBy"> Added By <span class="addedByName"> {{>user user=addedBy}}</span> </span> </div>');
 Handlebars.registerPartial('artist', '<div class="song" ng-click="playArtist(\'{{id}}\')">{{name}}</div>');
 Handlebars.registerPartial('album', '<div class="album" ng-click="playAlbum(\'{{id}}\')">\n    <img src="album/{{id}}">\n    <span>{{name}}</span>\n</div>');
+Handlebars.registerPartial('genre', '<div class="album" ng-click="playGenre(\'{{id}}\')">\n    <img src="genre/{{id}}">\n    <span>{{name}}</span>\n</div>');

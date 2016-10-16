@@ -41,7 +41,8 @@
     }
   },
   "General": {
-    "baseURL": ""
+    "baseURL": "",
+    "tempDir": "temp/"
   },
   "Advanced": {
     "htmlMinifier": {

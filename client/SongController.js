@@ -48,13 +48,16 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         $scope.showSongList("artist/"+id);
     };
 
-
     $scope.playAlbum = function(id){
         $scope.showSongList("album/"+id);
     };
 
     $scope.playPlaylist = function(id){
         $scope.showSongList("playlist/"+id);
+    };
+
+    $scope.playGenre = function(id){
+        $scope.showSongList("genre/"+id);
     };
 
     $scope.skipSong = function(){

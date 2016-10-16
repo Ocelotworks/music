@@ -43,6 +43,13 @@ module.exports = function(app){
             knex.select("name", "id").from("albums").distinct("name").orderBy("name", "desc").asCallback(cb);
         },
         /**
+         * Gets every genre in name order
+         * @param cb
+         */
+        getAllGenres: function(cb){
+            knex.select("name", "id").from("genres").distinct("name").orderBy("name", "desc").asCallback(cb);
+        },
+        /**
          * Gets every song by a specific artist ID
          * @param artist the UUID of the artist
          * @param cb
@@ -57,6 +64,14 @@ module.exports = function(app){
          */
         getSongsByAlbum: function(album, cb){
             knex.from("songs").where({album: album}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
+        },
+        /**
+         * Gets every song by a specific genre ID
+         * @param genre the UUID of the genre
+         * @param cb
+         */
+        getSongsByGenre: function(genre, cb){
+            knex.from("songs").where({genre: genre}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
         },
         /**
          * Gets a list of songs, including artist and album name, sorted by artist
@@ -181,12 +196,13 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateGenre: function(genre, cb){
-            knex.select("id").from("genres").where({name: genre}).limit(1).asCallback(function getOrCreateGenre(err, res){
+            knex.select("id", "image IS NULL as needsImage").from("genres").where({name: genre}).limit(1).asCallback(function getOrCreateGenre(err, res){
                 if(err)
                     cb(err);
                 else{
                     if(res.length === 1){
                         app.log("Genre "+genre+" already exists");
+                        if(res[0].needsImage)app.genreImageGenerator.generateImageForGenre(res[0].id);
                         cb(null, res[0].id);
                     }else{
                         app.log("Creating new genre "+genre);
@@ -200,6 +216,14 @@ module.exports = function(app){
                     }
                 }
             });
+        },
+        /**
+         * Get the generated image for a genre
+         * @param genre
+         * @param cb
+         */
+        getGenreArt: function(genre, cb){
+            knex.select("image").from("genres").where({id: genre}).limit(1).asCallback(cb);
         },
         /**
          * Gets the songs currently queued for download
@@ -510,6 +534,19 @@ module.exports = function(app){
                 song: song,
                 up: up ? 1 : 0
             }).asCallback(cb);
+        },
+        getAlbumArtForGenreImage: function(genre, cb){
+            knex.select("image")
+                .from("songs")
+                .where({genre: genre})
+                .whereNotNull("albums.image")
+                .innerJoin("albums", "songs.album", "albums.id")
+                .orderByRaw("RAND()")
+                .limit(4)
+                .asCallback(cb);
+        },
+        putGenreImage: function(genre, image, cb){
+            knex("genres").update({image: image}).where({id: genre}).limit(1).asCallback(cb);
         }
     };
 
