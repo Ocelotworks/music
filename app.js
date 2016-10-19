@@ -39,6 +39,10 @@ app.error = function(message){
 
 app.warn = function(message){
     app.log(message.orange, caller_id.getData());
+    if(app.database)
+        app.database.logError("APP_WARNING", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName, function(err){
+            if(err)console.error("Error logging app warning: "+err);
+        });
 };
 
 if(app.get('env') === 'development')
