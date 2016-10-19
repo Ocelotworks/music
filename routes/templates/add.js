@@ -44,6 +44,28 @@ module.exports = function(app){
 
     });
 
+    router.post('/playlist/:playlist/addSong/:song', function(req, res){
+       if(!req.user){
+           res.header(401).send("You need to be logged in to do that.");
+       } else{
+           app.database.canUserEditPlaylist(req.params.playlist, req.user.id, function(err, canEdit){
+               if(err){
+                   app.renderError(err, res);
+               }else{
+                   if(!canEdit){
+                       res.header(401).send("You need to be logged in to do that.");
+                   }else{
+                       app.database.addSongToPlaylist(req.params.playlist, req.params.song, function(err){
+                            if(err)
+                                app.error(`Error adding song ${req.params.song} to playlist ${req.params.playlist} for user ${req.user.id}: ${err}`);
+                       });
+                       res.header(204).send("");
+                   }
+               }
+           });
+       }
+    });
+
     router.get('/song', function(req, res, next) {
         app.database.getSongQueue(function(err, queue){
             if(err)

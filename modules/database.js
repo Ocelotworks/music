@@ -86,7 +86,7 @@ module.exports = function(app){
          * @param cb
          */
         getSongInfo: function(id, cb){
-            knex.select("uuid", "artist", "album", "plays", "genre", "duration").from("songs").where({id: id}).asCallback(cb);
+            knex.select("*").from("songs").where({id: id}).asCallback(cb);
         },
         /**
          * Gets the path of a song, and logs the play
@@ -409,7 +409,7 @@ module.exports = function(app){
          * @param cb function(err, canEdit)
          */
         canUserEditPlaylist: function(id, user, cb){
-          knex.select("count(*)").from("playlists").where({id: id, owner: user}).limit(1).asCallback(function(err, res){
+          knex.select(knex.raw("count(*)")).from("playlists").where({id: id, owner: user}).limit(1).asCallback(function(err, res){
                   if(err){
                       cb(err, false);
                   }else{
@@ -428,6 +428,17 @@ module.exports = function(app){
                 .where("private", 1)
                 .andWhere("owner", id)
                 .join("users", "playlists.owner", "users.id")
+                .asCallback(cb);
+        },
+        /**
+         * Get all playlists owned by a certain user, regardless of visibility status
+         * @param id User UUID
+         * @param cb
+         */
+        getOwnedPlaylists: function(id, cb){
+            knex.select("name", "private", "playlists.id AS id")
+                .from("playlists")
+                .where("owner", id)
                 .asCallback(cb);
         },
         /**
@@ -456,6 +467,13 @@ module.exports = function(app){
                 .where({playlist_id: id})
                 .orderBy("position", "DESC")
                 .asCallback(cb);
+        },
+        addSongToPlaylist: function(playlist, song, cb){
+            knex("playlist_data").insert({
+                song_id: song,
+                playlist_id: playlist,
+                position: 999 //TODO: Positioning
+            }).asCallback(cb);
         },
         /**
          * Gets information about who added a song, it's album, it's duration, etc

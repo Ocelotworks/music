@@ -15,10 +15,15 @@ app.controller("ContextMenuController", function($scope, $rootScope){
         contextMenu.toggle(100);
     };
 
-    $scope.ctxSongInfo = function(event){
-        //console.log("Opening a wee modal");
+    $scope.ctxAddToPlaylist = function(event){
         var contextMenu = $("#songContextMenu");
-        $rootScope.$emit("openModal", "songInfo/"+contextMenu.data("id"), false);
+        $rootScope.$emit("openModal", "modals/addToPlaylist/"+contextMenu.data("id"), false);
+        contextMenu.toggle(100);
+    };
+
+    $scope.ctxSongInfo = function(event){
+        var contextMenu = $("#songContextMenu");
+        $rootScope.$emit("openModal", "modals/songInfo/"+contextMenu.data("id"), false);
         contextMenu.toggle(100);
     };
 });

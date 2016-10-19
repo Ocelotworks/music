@@ -1,0 +1,20 @@
+<div ng-controller="AddToPlaylistController">
+    <h1>Select playlist</h1>
+    <h2>Select the playlist you wish to add '{{song.title}}' to:</h2>
+    <div class="songList fancyScroll formInputGroup" id="addSongToPlaylist">
+        {{#each playlists}}
+            <span class="song">
+                <input type="radio" class="songSelect" ng-click="selectPlaylist('{{id}}')" name="selectedPlaylist">
+                <span class="songSelectName">
+                    {{#if private}}
+                        <i class="fa fa-lock" title="Private"></i>&nbsp;
+                    {{/if}}
+                    {{name}}
+                </span>
+            </span>
+        {{/each}}
+    </div>
+    <div class="formInputGroup">
+        <button class="happyButton" ng-click="addSongToPlaylist('{{song.id}}')"><i class="fa fa-plus"></i>&nbsp;Add to Playlist</button>
+    </div>
+</div>
