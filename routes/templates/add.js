@@ -54,6 +54,7 @@ module.exports = function(app){
                }else{
                    if(!canEdit){
                        res.header(401).send("You need to be logged in to do that.");
+                       app.warn(`User ${req.user.id} attempted to add song ${req.params.song} to playlist ${req.params.playlist} that they do not own.`);
                    }else{
                        app.database.addSongToPlaylist(req.params.playlist, req.params.song, function(err){
                             if(err)
@@ -69,7 +70,7 @@ module.exports = function(app){
     router.get('/song', function(req, res, next) {
         app.database.getSongQueue(function(err, queue){
             if(err)
-                console.error("WARNING: Unable to retrieve song queue.");
+                app.error("Unable to retrieve song queue: "+err);
             res.render('templates/addScreens/addSong', {folders: config.get("folders"), queue: queue, layout: false});
         });
 
