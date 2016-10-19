@@ -32,7 +32,9 @@ app.log = function(message, caller){
 app.error = function(message){
     app.log(message.red, caller_id.getData());
     if(app.database)
-        app.database.logError("APP_ERROR", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName);
+        app.database.logError("APP_ERROR", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName, function(err){
+            if(err)console.error("Error logging app error: "+err);
+        });
 };
 
 app.warn = function(message){
