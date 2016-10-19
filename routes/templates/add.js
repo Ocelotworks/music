@@ -5,6 +5,7 @@
 var express = require('express');
 var router = express.Router();
 var config = require('config').get("Folders");
+var path = require('path');
 
 module.exports = function(app){
 
@@ -26,7 +27,7 @@ module.exports = function(app){
     router.post('/playlist', function(req, res, next){
         var playlist = {};
         playlist.name = req.body.name;
-        playlist.private = req.body.private == "on" || req.body.private == true;
+        playlist["private"] = req.body.private == "on" || req.body.private == true;
         playlist.addedby = req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a";
         playlist.songs = [];
         for(var k in req.body)
