@@ -42,7 +42,7 @@ module.exports = function(app){
                 if(bool){
                     app.database.deletePlaylist(req.params.id, function(err){
                         if(err)
-                            app.warn("Error deleting playlist "+req.params.id+": "+err);
+                            app.error("Error deleting playlist "+req.params.id+": "+err);
                         else
                             app.log("Playlist "+req.params.id+" deleted.");
                         res.header(204).send("");
