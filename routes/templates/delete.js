@@ -54,5 +54,14 @@ module.exports = function(app){
         }
     });
 
+    router.get('/downloadQueue/allFailed', function(req, res){
+        app.database.clearFailedDownloads(function clearFailedDownloads(err){
+           if(err) {
+               app.error("Error clearing failed downloads: " + err);
+           }
+        });
+        res.header(204).send("");
+    });
+
     return router;
 };

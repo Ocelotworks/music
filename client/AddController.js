@@ -38,6 +38,15 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
             });
     };
 
+    $scope.clearFailed = function(){
+        $http.get(base+"templates/delete/downloadQueue/allFailed").then(function(){
+            var templateUrl = $sce.getTrustedResourceUrl("templates/add/song#"+Math.random());
+            $templateRequest(templateUrl).then(function(template){
+                $compile($("#tabContainer").html(template).contents())($scope);
+            }, $scope.showErrorScreen);
+        })
+    };
+
 
     $scope.createAddView = function(type){
         $templateRequest("loading").then(function(template){

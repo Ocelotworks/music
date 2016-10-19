@@ -561,6 +561,13 @@ module.exports = function(app){
                 detail: detail,
                 trace: trace
             }).asCallback(cb);
+        },
+        /**
+         * Clears all failed downloads from the download queue
+         * @param cb function(err)
+         */
+        clearFailedDownloads: function(cb){
+            knex("queue").delete().where({status: 'FAILED'}).asCallback(cb);
         }
     };
 
