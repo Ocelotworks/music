@@ -8,7 +8,7 @@ var ytdl   = require('youtube-dl');
 var ffmpeg = require('fluent-ffmpeg');
 var path   = require('path');
 var uuid   = require('uuid').v4;
-var songRegex = /\{*.\)|lyrics|official/g;
+var songRegex = /\(.*\)|lyrics|official/g;
 
 module.exports = function(app){
     var object = {
