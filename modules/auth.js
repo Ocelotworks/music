@@ -39,9 +39,5 @@ module.exports = function(app){
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
 
-    var obj = {
-
-    };
-
-    return obj;
+    return {};
 };
