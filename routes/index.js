@@ -1,8 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var config = require('config');
-
-
+var os = require('os');
+var child_process = require('child_process');
 
 module.exports = function(app){
 
@@ -22,6 +22,21 @@ module.exports = function(app){
     /* GET home page. */
     router.get('/', function(req, res) {
         res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', startTab: 0});
+    });
+
+    router.get("/stats-collect", function(req, res){
+        child_process.exec(" df | sed -n 8p | awk '{print $5}' | tr --delete %", function(err, stdout) {
+            res.json({
+                earth_cpu: os.loadavg()[0],
+                earth_mem: os.freemem(),
+                earth_storage: stdout | 0,
+                petify_errors: app.errorCount,
+                petify_requests: app.requestCount
+            });
+            app.errorCount = 0;
+            app.requestCount = 0;
+        });
+
     });
 
     router.get('/:tab', function(req, res){
@@ -89,6 +104,8 @@ module.exports = function(app){
 
         })
     });
+
+
 
 
     return router;

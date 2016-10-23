@@ -16,6 +16,9 @@ var config          = require('config');
 
 var app = express();
 
+app.errorCount = 0;
+app.requestCount = 0;
+
 app.log = function(message, caller){
     if(!caller)
         caller = caller_id.getData();
@@ -31,6 +34,7 @@ app.log = function(message, caller){
 
 app.error = function(message){
     app.log(message.red, caller_id.getData());
+    app.errorCount++;
     if(app.database)
         app.database.logError("APP_ERROR", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName, function(err){
             if(err)console.error("Error logging app error: "+err);
@@ -71,6 +75,11 @@ app.initRoutes = function(){
     app.use(minifyhtml({
         htmlMinifier: JSON.parse(JSON.stringify(config.get("Advanced.htmlMinifier"))) //ayy lmao
     }));
+
+    app.use(function(req, res, next){
+        app.requestCount++;
+        next();
+    });
 
     app.use('/',                    require('./routes/index')(app));
     app.use('/auth',                require('./routes/auth')(app));
