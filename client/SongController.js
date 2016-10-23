@@ -72,7 +72,7 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         });
         $(".songRate").removeClass("rated");
         $("#songRateUp").addClass("rated");
-    }, 1000);
+    }, 1000, true);
 
     $scope.rateSongDown = debounce(function(){
         $http({
@@ -81,5 +81,5 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         });
         $(".songRate").removeClass("rated");
         $("#songRateDown").addClass("rated");
-    }, 1000);
+    }, 1000, true);
 });
