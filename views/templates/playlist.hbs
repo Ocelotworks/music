@@ -3,7 +3,7 @@
         <button class="happyButton" ng-click=""><i class="fa fa-pencil"></i> Edit</button><button class="happyButton" ng-click="deletePlaylist('{{info.id}}')"><i class="fa fa-trash"></i> Delete</button>
     {{/if}}
 </h1>
-<h2>{{info.count}} songs </h2>
+<h2>{{info.count}} songs </h2> <button class="happyButton"><i class="fa fa-play"></i>&nbsp;Play Playlist</button>
 <span class="inline addedBy" style="top: 10px;">Added By<span class="addedByName">
     {{> user user=info}}
 </span></span>
