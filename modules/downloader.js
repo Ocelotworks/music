@@ -3,11 +3,12 @@
  */
 
 
-var config = require('config');
-var ytdl   = require('youtube-dl');
-var ffmpeg = require('fluent-ffmpeg');
-var path   = require('path');
-var uuid   = require('uuid').v4;
+var config      = require('config');
+var ytdl        = require('youtube-dl');
+var ffmpeg      = require('fluent-ffmpeg');
+var path        = require('path');
+var uuid        = require('uuid').v4;
+var ffprobe     = require('node-ffprobe');
 var songRegex = /\(.*\)|lyrics|official/g;
 
 module.exports = function(app){
@@ -66,26 +67,32 @@ module.exports = function(app){
                                         });
                                         app.database.getOrCreateGenre(info.destination, function createGenre(err, genreID){
                                             if(err)app.warn("Error creating genre: "+err);
-                                            app.database.addSong({
-                                                id: songUUID,
-                                                path: path.join(info.destination, songUUID + ".mp3"),
-                                                artist: info.artist,
-                                                album: info.album,
-                                                addedby: info.addedby,
-                                                title: info.title,
-                                                duration: 0,
-                                                genre: genreID
-                                            }, function addSong(err) {
-                                                if (err) {
-                                                    app.error("Error adding song to database: "+err);
-                                                    app.database.updateQueuedSong(info.id, {
-                                                        status: "FAILED"
-                                                    }, updateErrorHandler);
-                                                } else {
-                                                    app.database.removeQueuedSong(info.id, updateErrorHandler);
-                                                }
-                                                object.songsProcessing--;
-                                                object.processOneSong();
+                                            var path = path.join(info.destination, songUUID + ".mp3");
+                                            ffprobe(path, function ffprobe(err, data){
+                                               if(err){
+                                                   app.warn("Error probing file: "+path+": "+data);
+                                               }
+                                                app.database.addSong({
+                                                    id: songUUID,
+                                                    path: path,
+                                                    artist: info.artist,
+                                                    album: info.album,
+                                                    addedby: info.addedby,
+                                                    title: info.title,
+                                                    duration: data.format.duration | 0,
+                                                    genre: genreID
+                                                }, function addSong(err) {
+                                                    if (err) {
+                                                        app.error("Error adding song to database: "+err);
+                                                        app.database.updateQueuedSong(info.id, {
+                                                            status: "FAILED"
+                                                        }, updateErrorHandler);
+                                                    } else {
+                                                        app.database.removeQueuedSong(info.id, updateErrorHandler);
+                                                    }
+                                                    object.songsProcessing--;
+                                                    object.processOneSong();
+                                                });
                                             });
                                         });
                                     });
@@ -179,6 +186,12 @@ module.exports = function(app){
                     });
                 });
             }
+        },
+        findAlbumArt: function(){
+
+        },
+        findArtistImage: function(){
+
         }
     };
 
