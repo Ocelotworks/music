@@ -194,6 +194,7 @@ new Compressor.minify({
         "client/ModalController.js",
         "client/SongController.js",
         "client/TabController.js",
+        "client/SongInfoTabController.js",
         "client/SettingsController.js"
     ],
     fileOut: 'public/js/music.js',
