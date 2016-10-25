@@ -200,7 +200,7 @@ new Compressor.minify({
     fileOut: 'public/js/music.js',
     callback: function(err){
         if(err){
-            console.error("CRIT: Error minifying javascript, client WILL NOT WORK! "+err);
+            app.error("CRIT: Error minifying javascript, client WILL NOT WORK! "+err);
         }
     }
 });
