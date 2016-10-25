@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http){
+app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http, $location){
 
     $scope.playSong = function(event){
         $rootScope.playByElement(event.target);
@@ -53,6 +53,7 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     };
 
     $scope.playPlaylist = function(id){
+        $location.path("/playlist/"+id);
         $scope.showSongList("playlist/"+id);
     };
 
