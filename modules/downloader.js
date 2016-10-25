@@ -67,14 +67,14 @@ module.exports = function(app){
                                         });
                                         app.database.getOrCreateGenre(info.destination, function createGenre(err, genreID){
                                             if(err)app.warn("Error creating genre: "+err);
-                                            var path = path.join(info.destination, songUUID + ".mp3");
-                                            ffprobe(path, function ffprobe(err, data){
+                                            var filePath = path.join(info.destination, songUUID + ".mp3");
+                                            ffprobe(filePath, function ffprobe(err, data){
                                                if(err){
                                                    app.warn("Error probing file: "+path+": "+data);
                                                }
                                                 app.database.addSong({
                                                     id: songUUID,
-                                                    path: path,
+                                                    path: filePath,
                                                     artist: info.artist,
                                                     album: info.album,
                                                     addedby: info.addedby,
