@@ -65,7 +65,8 @@ module.exports = function(app){
                                             body: `${info.title} has downloaded successfully.`,
                                             image: "album/"+info.album
                                         });
-                                        app.database.getOrCreateGenre(info.destination, function createGenre(err, genreID){
+                                        var pathSplit = info.destination.split("/");
+                                        app.database.getOrCreateGenre(pathSplit[info.destination.endsWith("/") ? pathSplit.length-2 : pathSplit.length-1], function createGenre(err, genreID){
                                             if(err)app.warn("Error creating genre: "+err);
                                             var filePath = path.join(info.destination, songUUID + ".mp3");
                                             ffprobe(filePath, function ffprobe(err, data){
