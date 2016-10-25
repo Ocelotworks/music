@@ -75,6 +75,11 @@ module.exports = function(app){
     });
 
 
+    router.get('/about', function(req, res){
+       res.render('templates/modals/about', {layout: false});
+    });
+
+
 
 
     return router;

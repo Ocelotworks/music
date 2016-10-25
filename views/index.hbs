@@ -15,8 +15,9 @@
             <div id="loginDropdown">
                 {{>user}}
                 <ul>
-                    <li><a href="#" ng-click="$emit('openModal', 'settings')">Settings</a></li>
+                    <li><a href="javascript:void(0);" ng-click="$emit('openModal', 'settings')">Settings</a></li>
                     <li><a href="auth/logout">Log out</a></li>
+                    <li><a href="javascript:void(0);" ng-click="$emit('openModal', 'modals/about')">About</a></li>
                 </ul>
             </div>
         {{else}}
