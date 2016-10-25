@@ -2,8 +2,9 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope, $location){
+app.controller("SongInfoTabController", function($scope, $templateRequest, $sce, $compile, $rootScope){
 
+    $scope.songId = $("#songInfoContainer").data("id");
 
     $scope.tabs = [
         {
@@ -38,28 +39,17 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     }
 
     $templateRequest("loading").then(function(template){
-        $compile($("#tabContainer").html(template).contents())($scope);
+        $compile($("#modalTabContainer").html(template).contents())($scope);
     }, $scope.showErrorScreen);
 
 
     $scope.showErrorScreen = function(error){
         $scope.error = error;
         $templateRequest("error").then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $compile($("#modalTabContainer").html(template).contents())($scope);
         }, function(error){
             console.error("Well shit "+error);
         });
-    };
-
-    $scope.showAddPlaylist = function(){
-        $templateRequest("loading").then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
-        }, $scope.showErrorScreen);
-
-        var templateUrl = $sce.getTrustedResourceUrl("templates/add/playlist");
-        $templateRequest(templateUrl).then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
-        }, $scope.showErrorScreen);
     };
 
     $scope.switchTab = function(tab){
@@ -68,12 +58,12 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
                 $scope.tabs[i].mode = null;
         tab.mode = "selected";
         $templateRequest("loading").then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $compile($("#modalTabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
-        var templateUrl = $sce.getTrustedResourceUrl("templates/modals/songInfoTabs/"+tab.template+(tab.nocache ? "#"+Math.random() : ""));
+        var templateUrl = $sce.getTrustedResourceUrl("templates/modals/songInfo/"+$scope.songId+"/"+tab.template+(tab.nocache ? "#"+Math.random() : ""));
         $templateRequest(templateUrl).then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $compile($("#modalTabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
     };
@@ -85,6 +75,8 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $rootScope.$on("switchSongInfoTab", function(evt, tab){
         $scope.switchTab($scope.tabs[tab]);
     });
+
+    $scope.switchTab($scope.tabs[0]);
 
     //$rootScope.$emit("songInfoTabControllerReady");
 });

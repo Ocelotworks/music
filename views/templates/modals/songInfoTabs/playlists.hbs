@@ -1,0 +1,10 @@
+{{#if playlists}}
+<h3>Song is in the following playlists:</h3>
+<div class="songList fancyScroll" ng-controller="SongController">
+    {{#each playlists}}
+        {{>playlist}}
+    {{/each}}
+</div>
+{{else}}
+    This song is not in any playlists yet.
+{{/if}}

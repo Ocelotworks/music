@@ -14,7 +14,40 @@ module.exports = function(app){
             else
                 res.render('templates/modals/songInfo', {layout: false, info: resp[0]})
         });
+    });
 
+    router.get('/songInfo/:id/playlists', function(req, res){
+        app.database.getPlaylistsBySong(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, playlists){
+            if(err){
+                app.error("Error getting playlists from song: "+err);
+                app.renderError(err, res);
+            }else{
+                res.render('templates/modals/songInfoTabs/playlists', {layout: false, playlists: playlists});
+            }
+        });
+    });
+
+    router.get('/songInfo/:id/edit', function(req, res){
+        app.database.getDetailedSongInfo(req.params.id, function(err, resp){
+            res.render('templates/modals/songInfoTabs/edit', {layout: false, song: resp[0]});
+        });
+    });
+
+    router.get('/songInfo/:id/replace', function(req, res){
+        res.render('templates/modals/songInfoTabs/replace', {layout: false});
+    });
+
+    router.get('/songInfo/:id/delete', function(req, res){
+        res.render('templates/modals/genericConfirmation', {
+            layout: false,
+            title: `Are you sure you want to delete?`,
+            desc: "Deleted things tend to be gone forever! They cannot be brought back like dead people or bad memories can.",
+            yes: {
+                name: "Delete Forever",
+                critical: true,
+                action: `deleteSong('${req.params.id}')`
+            }
+        });
     });
 
     router.get('/addToPlaylist/:song', function(req, res){
@@ -40,5 +73,9 @@ module.exports = function(app){
             });
         }
     });
+
+
+
+
     return router;
 };

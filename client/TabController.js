@@ -130,6 +130,4 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     });
 
     $rootScope.$emit("tabControllerReady");
-
-
 });

@@ -468,6 +468,22 @@ module.exports = function(app){
                 .orderBy("position", "DESC")
                 .asCallback(cb);
         },
+        /**
+         * Get all playlists that contain a certain song
+         * @param id The UUID of the song
+         * @param user The UUID of the user
+         * @param cb
+         */
+        getPlaylistsBySong: function(id, user, cb){
+            knex.select("name", "private", "playlists.id", "owner", knex.raw("(SELECT count(*) FROM playlist_data WHERE playlist_id = playlists.id) AS count"), "users.username", "users.avatar", "users.userlevel")
+                .from("playlist_data")
+                .innerJoin("playlists", "playlist_data.playlist_id", "playlists.id")
+                .innerJoin("users", "playlists.owner", "users.id")
+                .where({song_id: id})
+                .andWhere(function(){
+                    this.where({"playlists.private": 0}).orWhere({"playlists.owner": user})
+                }).asCallback(cb);
+        },
         addSongToPlaylist: function(playlist, song, cb){
             knex("playlist_data").insert({
                 song_id: song,

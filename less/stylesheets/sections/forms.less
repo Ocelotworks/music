@@ -33,9 +33,10 @@
   border: 1px solid black;
   border-radius: 10px;
   color: white;
+  min-width: 30%;
 
-  &:valid{
-    border: 1px solid @accent-color;
+  &:not(.defaultValid):valid{
+    border: 1px solid @red;
   }
 
   &.ng-dirty:invalid{

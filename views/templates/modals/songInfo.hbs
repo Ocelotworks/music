@@ -1,5 +1,5 @@
 {{#if info.duration}}
-<div id="songInfoContainer">
+<div id="songInfoContainer" data-id="{{info.song_id}}">
     <img id="songInfoAlbumArt" src="album/{{info.album_id}}" alt="{{info.album_name}}">
     <div id="songInfoTitle">
         <h1>{{info.title}}</h1>
@@ -14,17 +14,11 @@
         </span>
     </span>
 </div>
-<div id="songInfoTabContainer">
+<div id="songInfoTabContainer" ng-controller="SongInfoTabController">
     <div id="songInfoTabs" class="modalTabBar">
-        <a class="modalTab"><i class="fa fa-list"></i>&nbsp;Playlists</a>
-        <a class="modalTab userlevel-2"><i class="fa fa-copy"></i>&nbsp;Replace</a>
-        <a class="modalTab userlevel-2"><i class="fa fa-pencil"></i>&nbsp;Edit</a>
-        <a class="modalTab userlevel-3"><i class="fa fa-trash"></i>&nbsp;Delete</a>
-
+        <a ng-repeat="tab in tabs" class="modalTab {[{tab.mode}]} {[{tab.cssClass}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
     </div>
-    <div id="modalTabContainer">
-
-    </div>
+    <div id="modalTabContainer"></div>
 </div>
 {{else}}
     I don't know what you just did but whatever song you clicked on doesn't exist. I'll fix it eventually.
