@@ -49,17 +49,21 @@ module.exports = function(app){
             if(err)
                 app.renderError(err, res);
             else{
-                playlist = playlist[0];
-                if(!playlist.private  || (playlist.private && req.user && req.user.id == playlist.owner)){
-                    app.database.getSongsByPlaylist(req.params.id, function(err, songs){
-                        if(err)
-                            app.renderError(err, res);
-                        else {
-                            res.render('templates/playlist', {songs: songs, info: playlist, isOwner: req.user && playlist.owner == req.user.id, layout: false});
-                        }
-                    });
+                if(!playlist || !playlist[0]){
+                    res.send('The playlist you requested does not exist or is private.');
                 }else{
-                    res.status(403).json({});
+                    playlist = playlist[0];
+                    if(!playlist.private  || (playlist.private && req.user && req.user.id == playlist.owner)){
+                        app.database.getSongsByPlaylist(req.params.id, function(err, songs){
+                            if(err)
+                                app.renderError(err, res);
+                            else {
+                                res.render('templates/playlist', {songs: songs, info: playlist, isOwner: req.user && playlist.owner == req.user.id, layout: false});
+                            }
+                        });
+                    }else{
+                        res.send('The playlist you requested does not exist or is private.');
+                    }
                 }
             }
         });
