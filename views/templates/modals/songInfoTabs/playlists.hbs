@@ -1,7 +1,7 @@
 <button class="happyButton" ng-click='$emit("openModal", "templates/modals/addToPlaylist/"+songId)'><i class="fa fa-plus"></i>Add to Playlist</button>
 {{#if playlists}}
 <h3>Song is in the following playlists:</h3>
-<div class="songList fancyScroll" ng-controller="SongController">
+<div id="playlistSongList" class="songList fancyScroll" ng-controller="SongController">
     {{#each playlists}}
         {{>playlist}}
     {{/each}}
