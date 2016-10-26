@@ -1,4 +1,4 @@
-{{#if info.title}}
+{{#if info}}
 <div id="songInfoContainer" data-id="{{info.song_id}}">
     <img id="songInfoAlbumArt" src="album/{{info.album_id}}" alt="{{info.album_name}}">
     <div id="songInfoTitle">
@@ -22,8 +22,5 @@
 </div>
 {{else}}
     I don't know what you just did but whatever song you clicked on doesn't exist. I'll fix it eventually.<br>
-    Here's some information to send to peter so he can fix this:<br>
-    Song ID: {{info.song_id}}<br>
-    Album ID: {{info.album_id}}
 {{/if}}
 
