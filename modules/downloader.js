@@ -66,7 +66,7 @@ module.exports = function(app){
                                             image: "album/"+info.album
                                         });
                                         var pathSplit = info.destination.split("/");
-                                        app.database.getOrCreateGenre(pathSplit[info.destination.endsWith("/") ? pathSplit.length-2 : pathSplit.length-1], function createGenre(err, genreID){
+                                        app.database.getOrCreateGenre((pathSplit[info.destination.endsWith("/") ? pathSplit.length-2 : pathSplit.length-1]).trim(), function createGenre(err, genreID){
                                             if(err)app.warn("Error creating genre: "+err);
                                             var filePath = path.join(info.destination, songUUID + ".mp3");
                                             ffprobe(filePath, function ffprobe(err, data){
@@ -79,7 +79,7 @@ module.exports = function(app){
                                                     artist: info.artist,
                                                     album: info.album,
                                                     addedby: info.addedby,
-                                                    title: info.title,
+                                                    title: info.title.trim(),
                                                     duration: data.format.duration | 0,
                                                     genre: genreID
                                                 }, function addSong(err) {
@@ -154,7 +154,7 @@ module.exports = function(app){
                                 if (info.alt_title)
                                     title = info.alt_title;
 
-                                app.database.getOrCreateArtist(artist.replace(" Listen ad-free with YouTube Red", ""), function createArtist(err, artistId){
+                                app.database.getOrCreateArtist(artist.replace(" Listen ad-free with YouTube Red", "").trim(), function createArtist(err, artistId){
                                     if(!err){
                                         app.database.updateQueuedSong(id, {
                                             artist: artistId,
