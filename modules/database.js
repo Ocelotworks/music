@@ -239,7 +239,7 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateGenre: function getOrCreateGenre(genre, cb){
-            knex.raw("select `id`, image IS NULL as needsImage from `genres` where `name` = '"+genre+"'").asCallback(function getOrCreateGenre(err, res){ //DANGER!
+            knex.raw("select `id`, image IS NULL as needsImage from `genres` where `name` = '"+genre+"' LIMIT 1").asCallback(function getOrCreateGenre(err, res){ //DANGER!
                 if(err)
                     cb(err);
                 else{
