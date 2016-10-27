@@ -1,6 +1,8 @@
+{{#if loggedIn}}
 <div class="formInputGroup">
     <button id="addToPlaylistFromSongInfoModal" class="happyButton" ng-click='$emit("openModal", "modals/addToPlaylist/"+songId)'><i class="fa fa-plus"></i>Add to Playlist</button><br>
 </div>
+{{/if}}
 {{#if playlists}}
     <h3>Song is in the following playlists:</h3>
     <div class="songList fancyScroll" ng-controller="SongController">

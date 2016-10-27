@@ -65,6 +65,7 @@ module.exports = function(app){
                             res.render('templates/modals/addToPlaylist', {
      /*It's free real*/         layout: false,
      /*    estate    */         playlists: playlists,
+                                loggedIn: req.user != null,
                                 song: song[0]
                             });
                         }
