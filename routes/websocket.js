@@ -11,13 +11,6 @@ module.exports = function(app){
     router.ws('/updates/', function updateWebsocketConnect(ws, req){
         app.log((req.user ? req.user.username : "A client")+" connected to the websocket");
         ws.user = req.user;
-        if(req.user)
-            app.broadcastUpdate("alert", {
-                lifetime: 5,
-                title: "Sexy Test Alert",
-                body: `${req.user.username} just logged in to petify.`,
-                image: req.user.avatar
-            });
     });
 
     app.broadcastUpdate = function(type, message){
