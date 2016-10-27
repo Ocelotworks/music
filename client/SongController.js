@@ -45,20 +45,20 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     };
 
     $scope.playArtist = function(id){
-        $scope.showSongList("artist/"+id);
+        $scope.showSongList("artist/"+id+"#"+Math.random());
     };
 
     $scope.playAlbum = function(id){
-        $scope.showSongList("album/"+id);
+        $scope.showSongList("album/"+id+"#"+Math.random());
     };
 
     $scope.playPlaylist = function(id){
         $location.path("/playlist/"+id);
-        $scope.showSongList("playlist/"+id);
+        $scope.showSongList("playlist/"+id+"#"+Math.random());
     };
 
     $scope.playGenre = function(id){
-        $scope.showSongList("genre/"+id);
+        $scope.showSongList("genre/"+id+"#"+Math.random());
     };
 
     $scope.skipSong = function(){
