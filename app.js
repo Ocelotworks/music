@@ -42,7 +42,7 @@ app.error = function(message){
 };
 
 app.warn = function(message){
-    app.log(message.orange, caller_id.getData());
+    app.log(message.yellow, caller_id.getData());
     if(app.database)
         app.database.logError("APP_WARNING", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName, function(err){
             if(err)console.error("Error logging app warning: "+err);
@@ -120,7 +120,7 @@ app.initRoutes = function(){
     app.use(require('less-middleware')(path.join(__dirname, 'less'), {
         debug: app.get('env') === 'development',
         dest: path.join(__dirname, 'public'),
-        force: app.get('env') === 'development'
+        force: false
     }));
     app.use(express.static(path.join(__dirname, 'public')));
 
