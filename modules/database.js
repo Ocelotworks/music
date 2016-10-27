@@ -89,6 +89,49 @@ module.exports = function(app){
             knex.select("*").from("songs").where({id: id}).asCallback(cb);
         },
         /**
+         * Returns the UUID of the user who added a song
+         * @param id The song UUID
+         * @param cb function(err, userID)
+         */
+        getSongOwner: function getSongOwner(id, cb){
+            knex.select("addedby").from("songs").where({id: id}).limit(1).asCallback(function getSongOwnerCB(err, resp){
+               cb(err, resp ? resp[0].addedby : null);
+            });
+        },
+        /**
+         * Deletes a song, and triggers cleanup
+         * @param id The song UUID
+         * @param cb function(err)
+         */
+        deleteSong: function deleteSong(id, cb){
+            //knex.delete()
+            //    .from("songs")
+            //    .where({id: id})
+            //    .limit(1)
+            //    .asCallback(cb);
+            cb(null);
+            object.cleanupAll(function cleanupAllCB(err){
+                if(err)
+                    app.error("Error cleaning up: "+err);
+            });
+        },
+        cleanupAll: function cleanupAll(cb){
+            app.log("Starting cleanup");
+            object.cleanupPlaylists(cb);
+        },
+        cleanupAlbums: function cleanupAlbums(cb){
+
+        },
+        cleanupPlaylists: function cleanupPlaylists(cb){
+            knex.delete()
+                .from("playlist_data")
+                .whereNotIn('song_id', knex.select("id").from("songs").whereRaw("id = playlist_data.song_id")).asCallback(cb);
+
+        },
+        cleanupArtists: function cleanupArtists(cb){
+
+        },
+        /**
          * Gets the path of a song, and logs the play
          * @param id the song UUID
          * @param userid the UUID of the user playing the song
@@ -99,7 +142,7 @@ module.exports = function(app){
             knex("plays").insert({
                 user: userid,
                 song: id
-            }).asCallback(function(err){
+            }).asCallback(function getSongPathToPlayCB(err){
                 if(err)
                     app.warn("Error adding play for song "+id+": "+err);
             });
@@ -196,7 +239,7 @@ module.exports = function(app){
          * @param cb
          */
         getOrCreateGenre: function getOrCreateGenre(genre, cb){
-            knex.raw("select `id`, image IS NULL as `needsImage` from `genres` where `name` = '"+genre+"'").asCallback(function getOrCreateGenre(err, res){ //DANGER!
+            knex.raw("select `id`, image IS NULL as needsImage from `genres` where `name` = '"+genre+"'").asCallback(function getOrCreateGenre(err, res){ //DANGER!
                 if(err)
                     cb(err);
                 else{

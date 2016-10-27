@@ -2,7 +2,7 @@
  * Copyright Ocelotworks 2016
  */
 
-app.controller("SongInfoTabController", function($scope, $templateRequest, $sce, $compile, $rootScope){
+app.controller("SongInfoTabController", function($scope, $templateRequest, $sce, $compile, $rootScope, $http){
 
     $scope.songId = $("#songInfoContainer").data("id");
 
@@ -78,5 +78,9 @@ app.controller("SongInfoTabController", function($scope, $templateRequest, $sce,
 
     $scope.switchTab($scope.tabs[0]);
 
-    //$rootScope.$emit("songInfoTabControllerReady");
+    $scope.deleteSong = function(id){
+        $http.get(base+"templates/delete/song/"+id).then(function(resp) {
+            if(resp.data.error)$scope.error = error;
+        });
+    };
 });

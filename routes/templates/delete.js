@@ -63,5 +63,34 @@ module.exports = function(app){
         res.header(204).send("");
     });
 
+    router.get('/song/:id', function(req, res){
+        if(!req.user){
+            res.header(401).json({error: "You need to be logged in to do that"});
+        }else{
+            if(req.user.userlevel > 2){
+                app.database.deleteSong(req.params.id, function deleteSongCB(err){
+                   if(err) app.error("Error deleting song: "+err);
+                    res.header(204);
+                });
+            }else{
+                app.database.getSongOwner(req.params.id, function getSongOwnerCB(err, user){
+                   if(err){
+                        app.error("Error getting song owner: "+err);
+                        res.header(500).json({error: "A server error occurred."})
+                   }else{
+                        if(user != req.user.id){
+                            res.header(401).json({error: "You can't delete that song!"});
+                        }else{
+                            app.database.deleteSong(req.params.id, function deleteSongCB(err){
+                                if(err) app.error("Error deleting song: "+err);
+                                res.header(204);
+                            });
+                        }
+                   }
+                });
+            }
+        }
+    });
+
     return router;
 };
