@@ -6,8 +6,9 @@
         <span id="mockAlertTitle">{[{alert.title}]}</span>
         <span id="mockAlertBody">{[{alert.body}]}</span>
     </div>
+    <div class="red">{[{error}]}</div>
     <div class="formInputGroup">
-        <input type="url" class="fancyInput" placeholder="img/album.png" ng-model="alert.url">
+        <input type="url" class="fancyInput" placeholder="Image URL" ng-model="alert.url" value="https://unacceptableuse.com/petify/img/album.png">
     </div>
     <div class="formInputGroup">
         <input type="text" class="fancyInput" required placeholder="Alert Title" ng-model="alert.title">
@@ -16,27 +17,29 @@
         <input type="text" class="fancyInput" required placeholder="Alert Body" ng-model="alert.body">
     </div>
     <div class="formInputGroup">
-        <code>{[{alert | json}]}</code><br>
-        <input type="checkbox" ng-model="alert.global" id="globalAlert" name="alertScope" checked><label for="globalAlert">Send to All</label>
         <input type="checkbox" ng-model="alert.specificUsers" id="globalAlert" name="alertScope"><label for="globalAlert">Send to specific User(s)</label>
     </div>
     <div class="formInputGroup">
-        <div ng-if="alert.specificUsers">
+        <div ng-if="alert.specificUsers" id="alertUserList">
             <h2 class="inline">Online Users</h2> <input type="checkbox" ng-model="alertSettings.showUserIds" id="showUserIds"><label for="showUserIds">Show User IDs</label>
             <div class="songList fancyScroll" id="playlistAddSongs">
                 {{#each onlineUsers}}
                     <span class="song" data-id="{{id}}">
-                        <input type="checkbox" class="songSelect" ng-model="users['{{@index}}']">
+                        <input type="checkbox" class="songSelect" ng-model="alert.users['{{@index}}']">
                         <span class="songSelectName">
                             {{#if user.username}}
                                 <span ng-if="alertSettings.showUserIds">({{user.id}})</span> {{user.username}}
                             {{else}}
-                                Guest
+                                <span ng-if="alertSettings.showUserIds">({{@index}})</span> Guest
                             {{/if}}
                         </span>
                     </span>
                 {{/each}}
             </div>
         </div>
+    </div>
+    <div class="formInputGroup">
+        <label for="alertLifetime">Lifetime (seconds): </label>
+        <input id="alertLifetime" class="fancyInput" ng-model="alert.lifetime" required min="1" type="number">&nbsp;<input type="submit" class="happyButton" value="Send Alert">
     </div>
 </form>

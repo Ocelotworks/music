@@ -36,7 +36,7 @@
   min-width: 30%;
 
   &:not(.defaultValid):valid{
-    border: 1px solid @red;
+    border: 1px solid @accent-color;
   }
 
   &.ng-dirty:invalid{
@@ -161,18 +161,30 @@ td .addedBy {
   width: 150px;
   height: 150px;
   border: 1px solid black;
-  left: 14vw;
+  left: 28vw;
 }
 
 #mockAlertTitle {
   position: absolute;
-  left: 23vw;
+  left: 36.5vw;
   font-size: 22pt;
 }
 
 #mockAlertBody {
   position: absolute;
   top: 16vh;
-  left: 23vw;
+  left: 36.5vw;
   width: 25%;
+}
+
+#alertUserList {
+  max-height: 55vh;
+  min-height: 13vh;
+  position: relative;
+}
+
+#alertLifetime {
+  min-width: 10px;
+  margin-left: 0.5%;
+  margin-right: 1%;
 }
