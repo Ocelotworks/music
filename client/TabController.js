@@ -79,7 +79,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $scope.search = debounce(function(){
         var query = $("#searchBar").find(".search").val();
         if(query && query.length > 0) {
-            var templateUrl = $sce.getTrustedResourceUrl("search/template/" + query);
+            var templateUrl = $sce.getTrustedResourceUrl("search/template/" + query+"#"+Math.random());
             $templateRequest(templateUrl).then(function (template) {
                 $compile($("#tabContainer").html(template).contents())($scope);
             }, $scope.showErrorScreen);
