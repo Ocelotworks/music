@@ -21,8 +21,10 @@ module.exports = function(app){
 
 
     router.get('/logout', function(req, res){
-        app.log(req.user.id+" logged out");
-        req.logout();
+        if(req.user){
+            app.log(req.user.id+" logged out");
+            req.logout();
+        }
         res.redirect(base);
     });
 
