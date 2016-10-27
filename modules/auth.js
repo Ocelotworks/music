@@ -10,11 +10,11 @@ var config = require('config');
 module.exports = function(app){
     app.passport = require('passport');
 
-    app.passport.serializeUser(function(user, done) {
+    app.passport.serializeUser(function serializeUser(user, done) {
         done(null, user.id);
     });
 
-    app.passport.deserializeUser(function(id, done) {
+    app.passport.deserializeUser(function deserializeUser(id, done) {
         app.database.getUserInfo(id, done);
     });
 
@@ -25,7 +25,7 @@ module.exports = function(app){
         clientID: keys.get("Google.clientID"),
         clientSecret: keys.get("Google.clientSecret"),
         callbackURL: baseURL+"auth/google/callback"
-    }, function(accessToken, refreshToken, profile, cb){
+    }, function googleStrategySuccess(accessToken, refreshToken, profile, cb){
         app.log("Logging in Google user "+profile.id);
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
@@ -34,7 +34,7 @@ module.exports = function(app){
         consumerKey: keys.get("Twitter.consumerKey"),
         consumerSecret: keys.get("Twitter.consumerSecret"),
         callbackURL: baseURL+"auth/twitter/callback"
-    }, function(token, tokenSecret, profile, cb){
+    }, function twitterStrategySuccess(token, tokenSecret, profile, cb){
         app.log("Logging in Twitter user "+profile.id);
         app.database.getOrCreateUser(profile.id, profile.displayName, profile.photos[0] ? profile.photos[0].value : "https://placekitten.com/32/32", "GOOGLE", cb);
     }));
