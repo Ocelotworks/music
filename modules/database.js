@@ -105,11 +105,11 @@ module.exports = function(app){
          * @param cb function(err)
          */
         deleteSong: function deleteSong(id, cb){
-            //knex.delete()
-            //    .from("songs")
-            //    .where({id: id})
-            //    .limit(1)
-            //    .asCallback(cb);
+            knex.delete()
+                .from("songs")
+                .where({id: id})
+                .limit(1)
+                .asCallback(cb);
             cb(null);
             object.cleanupAll(function cleanupAllCB(err){
                 if(err)
