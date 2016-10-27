@@ -87,6 +87,5 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
-    console.log("fucking listening and shit");
   app.initRoutes();
 }
