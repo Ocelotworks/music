@@ -4,6 +4,7 @@
 
 app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope, $location){
 
+    console.log("TAB CONTROLLER STARTED");
 
     $scope.tabs = [
         {
@@ -62,7 +63,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         });
 
     $templateRequest("loading").then(function(template){
-        $compile($("#tabContainer").html(template).contents())($scope);
+       $("#tabContainer").html(template);
     }, $scope.showErrorScreen);
 
 
@@ -98,19 +99,25 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
         }, $scope.showErrorScreen);
     };
 
+    $scope.tabSwitching = false;
+
     $scope.switchTab = function(tab){
+        console.trace();
+        if($scope.tabSwitching)return console.warn("Tried to switch tab whilst tab was switching");
+        $scope.tabSwitching = true;
         //TODO: Angular if statement for this?
         for(var i in $scope.tabs)
             if($scope.tabs.hasOwnProperty(i))
                 $scope.tabs[i].default = null;
         tab.default = "selected";
         $templateRequest("loading").then(function(template){
-            $compile($("#tabContainer").html(template).contents())($scope);
+            $("#tabContainer").html(template);
         }, $scope.showErrorScreen);
 
         var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.nocache ? "#"+Math.random() : ""));
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
+            $scope.tabSwitching = false;
         }, $scope.showErrorScreen);
 
         console.log("Setting location "+$location.path());
@@ -118,7 +125,6 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
 
         if(window.innerWidth <= 1111)
            $(".hamburger").prop("checked", false);
-
     };
 
     $scope.$on("switchTab", function(evt, tab){
