@@ -5,6 +5,7 @@
 var config  = require('config').get("Database");
 var knex    = require('knex')(config);
 var uuid    = require('uuid').v4;
+var async   = require('async');
 
 
 module.exports = function(app){
@@ -115,21 +116,59 @@ module.exports = function(app){
                     app.error("Error cleaning up: "+err);
             });
         },
+        /**
+         * Calls cleanupAlbums, cleanupPlaylists, cleanupArtists
+         * @see cleanupAlbums
+         * @see cleanupPlaylists
+         * @see cleanupArtists
+         * @see cleanupGenres
+         * @param cb
+         */
         cleanupAll: function cleanupAll(cb){
             app.log("Starting cleanup");
-            object.cleanupPlaylists(cb);
+            async.series([
+                object.cleanupAlbums,
+                object.cleanupPlaylists,
+                object.cleanupArtists,
+                object.cleanupGenres
+            ], cb);
         },
+        /**
+         * Removes all orphaned albums
+         * @param cb
+         */
         cleanupAlbums: function cleanupAlbums(cb){
-
+            knex.delete()
+                .from("albums")
+                .whereNotIn("id", knex.select("album").from("songs")).asCallback(cb);
         },
+        /**
+         * Removes all orphaned playlist data
+         * @param cb
+         */
         cleanupPlaylists: function cleanupPlaylists(cb){
             knex.delete()
                 .from("playlist_data")
                 .whereNotIn('song_id', knex.select("id").from("songs").whereRaw("id = playlist_data.song_id")).asCallback(cb);
 
         },
+        /**
+         * Removes all orphaned artists (excluding Louis Armstrong)
+         * @param cb
+         */
         cleanupArtists: function cleanupArtists(cb){
-
+            knex.delete()
+                .from("artists")
+                .whereNotIn("id", knex.select("artist").from("songs")).asCallback(cb);
+        },
+        /**
+         * Removes all orphaned genres
+         * @param cb
+         */
+        cleanupGenres: function cleanupGenres(cb){
+            knex.delete()
+                .from("genres")
+                .whereNotIn("id", knex.select("genre").from("songs")).asCallback(cb);
         },
         /**
          * Gets the path of a song, and logs the play
