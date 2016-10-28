@@ -37,7 +37,7 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
 
-        var templateUrl = $sce.getTrustedResourceUrl("templates/songs/"+template);
+        var templateUrl = $sce.getTrustedResourceUrl("templates/songs/"+template+"#"+Math.random());
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
         }, $scope.showErrorScreen);
@@ -45,20 +45,20 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     };
 
     $scope.playArtist = function(id){
-        $scope.showSongList("artist/"+id+"#"+Math.random());
+        $scope.showSongList("artist/"+id);
     };
 
     $scope.playAlbum = function(id){
-        $scope.showSongList("album/"+id+"#"+Math.random());
+        $scope.showSongList("album/"+id);
     };
 
     $scope.playPlaylist = function(id){
         $location.path("/playlist/"+id);
-        $scope.showSongList("playlist/"+id+"#"+Math.random());
+        $scope.showSongList("playlist/"+id);
     };
 
     $scope.playGenre = function(id){
-        $scope.showSongList("genre/"+id+"#"+Math.random());
+        $scope.showSongList("genre/"+id);
     };
 
     $scope.skipSong = function(){
