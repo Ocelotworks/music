@@ -22,7 +22,11 @@ module.exports = function(app){
                 app.error("Error getting playlists from song: "+err);
                 app.renderError(err, res);
             }else{
-                res.render('templates/modals/songInfoTabs/playlists', {layout: false, playlists: playlists});
+                res.render('templates/modals/songInfoTabs/playlists', {
+                    layout: false,
+                    playlists: playlists,
+                    loggedIn: req.user != null
+                });
             }
         });
     });
@@ -65,7 +69,6 @@ module.exports = function(app){
                             res.render('templates/modals/addToPlaylist', {
      /*It's free real*/         layout: false,
      /*    estate    */         playlists: playlists,
-                                loggedIn: req.user != null,
                                 song: song[0]
                             });
                         }
