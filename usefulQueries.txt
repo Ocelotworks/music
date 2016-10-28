@@ -1,0 +1,15 @@
+Get most played songs:
+    SELECT COUNT(*),songs.title,artists.name FROM petify.plays INNER JOIN songs ON plays.song=songs.id INNER JOIN artists ON songs.artist=artists.id GROUP BY song ORDER BY COUNT(*) DESC;
+
+Merge genres:
+    UPDATE songs SET genre='6fe0d616-2f05-40e5-8f9f-a2ecd8052543' WHERE genre IN (SELECT id FROM genres WHERE name='pop')
+
+Get plays by user:
+    SELECT COUNT(*), users.username FROM petify.plays INNER JOIN users ON plays.user=users.id GROUP BY user ORDER BY COUNT(*) DESC;
+
+Get songs added by user:
+    SELECT users.username,COUNT(*) AS count FROM songs INNER JOIN users ON songs.addedby=users.id GROUP BY addedby ORDER BY COUNT(*) DESC;
+
+Add all songs with no plays into a playlist:
+    DELETE FROM playlist_data WHERE playlist_id = "173ffb5b-9caf-11e6-a6a9-00224dae0d2a";
+    INSERT INTO playlist_data (song_id,playlist_id, position) SELECT id as song_id, "173ffb5b-9caf-11e6-a6a9-00224dae0d2a" as playlist_id, 999 as position FROM songs WHERE songs.id NOT IN (SELECT song FROM plays)
