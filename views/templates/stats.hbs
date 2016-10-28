@@ -1,6 +1,16 @@
-<table class="fancyTable">
-    <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td></tr>
-    {{#each stats.mostPlayed}}
-        <tr><td>{{@index}}</td><td>{{name}} - {{title}}</td><td>{{plays}}</td><td>{{mins}}</td></tr>
-    {{/each}}
-</table>
+<div class="formInputGroup">
+    <h1>Most Played Songs</h1>
+    <table class="fancyTable">
+        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td></tr>
+        {{#each stats.mostPlayed}}
+            <tr><td>{{@index}}</td><td>{{name}} - {{title}}</td><td>{{plays}}</td><td>
+                {{#if mins}}
+                    {{mins}}
+                {{else}}
+                    Unknown
+                {{/if}}
+
+            </td></tr>
+        {{/each}}
+    </table>
+</div>
