@@ -152,6 +152,7 @@ app.initRoutes = function(){
                 message: err.message+" ("+req.url+")",
                 error: err
             });
+            app.database.logError("PAGE_ERROR", err.message.length > 128 ? err.message.substring(0, 128) : err.message, caller_id.getData().functionName);
         });
     }
 
