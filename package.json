@@ -12,6 +12,7 @@
     "caller-id": "^0.1.0",
     "colors": "^1.1.2",
     "config": "^1.21.0",
+    "connect-session-knex": "^1.2.0",
     "cookie-parser": "^1.4.3",
     "dateformat": "^1.0.12",
     "debug": "^2.2.0",

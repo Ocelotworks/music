@@ -15,6 +15,13 @@ module.exports = function(app){
 
         },
         /**
+         * Returns the knex instance
+         * @returns {*}
+         */
+        getKnex: function getKnex(){
+            return knex;
+        },
+        /**
          * Inserts a song into the song table
          * @param song A song object, containing the mandatory fields at minimum (See the database structure)
          * @param cb A callback, returning err as the first argument if the insert failed.
@@ -690,12 +697,12 @@ module.exports = function(app){
          * @param cb
          */
         getMostPlayedStats: function getMostPlayedStats(cb){
-            knex.select("COUNT(*) AS plays", "songs.title", "artists.name", "(COUNT(*)*songs.duration)/60 AS mins")
+            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration)/60 AS mins"))
                 .from("plays")
                 .innerJoin("songs", "plays.song", "songs.id")
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .groupBy("song")
-                .orderBy("COUNT(*)", "DESC")
+                .orderBy(knex.raw("COUNT(*)"), "DESC")
                 .limit(10)
                 .asCallback(cb);
         }

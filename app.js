@@ -5,6 +5,7 @@ var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
+var KnexSessionStore= require('connect-session-knex')(session);
 var RateLimit       = require('express-rate-limit');
 var Compressor      = require('node-minify');
 var caller_id       = require('caller-id');
@@ -66,7 +67,12 @@ app.initRoutes = function(){
     app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     //app.use(logger('dev'));
     app.use(bodyParser.json());
-    app.use(session(config.get("Advanced.session")));
+    var sessionConfig = JSON.parse(JSON.stringify(config.get("Advanced.session")));
+    sessionConfig.store = new KnexSessionStore({
+        knex: app.database.getKnex(),
+        createtable: true
+    });
+    app.use(session(sessionConfig));
     app.use(bodyParser.urlencoded(config.get("Advanced.bodyparser")));
     app.use(cookieParser());
     app.use(app.passport.initialize());
