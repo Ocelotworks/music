@@ -26,4 +26,16 @@ app.controller("ContextMenuController", function($scope, $rootScope){
         $rootScope.$emit("openModal", "modals/songInfo/"+contextMenu.data("id"), false);
         contextMenu.toggle(100);
     };
+
+    $scope.ctxViewAlbum = function(){
+        var contextMenu = $("#songContextMenu");
+        $rootScope.$emit("showSongList", "album/"+contextMenu.data("album"), false);
+        contextMenu.toggle(100);
+    };
+
+    $scope.ctxViewArtist = function(){
+        var contextMenu = $("#songContextMenu");
+        $rootScope.$emit("showSongList", "artist/"+contextMenu.data("artist"), false);
+        contextMenu.toggle(100);
+    };
 });

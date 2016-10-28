@@ -10,7 +10,10 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
 
     $scope.showSongContextMenu = function(event){
-        $("#songContextMenu").finish().toggle(100).css({left: event.pageX, top: event.pageY, display: "absolute"}).data("id", event.target.attributes["data-id"].value);
+        $("#songContextMenu").finish().toggle(100).css({left: event.pageX, top: event.pageY, display: "absolute"})
+            .data("id", event.target.attributes["data-id"].value)
+            .data("artist", event.target.attributes["data-artist"].value)
+            .data("album", event.target.attributes["data-album"].value);
     };
 
 
@@ -83,4 +86,8 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         $(".songRate").removeClass("rated");
         $("#songRateDown").addClass("rated");
     }, 1000, true);
+
+    $rootScope.$on("showSongList", function(evt, arg){
+       $scope.showSongList(arg);
+    });
 });
