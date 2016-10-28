@@ -282,7 +282,7 @@ module.exports = function(app){
                 if(err)
                     cb(err);
                 else{
-                    if(res.length === 1){
+                    if(res.length > 0){
                         app.log("Genre "+genre+" already exists");
                         if(res[0].needsImage)app.genreImageGenerator.generateImageForGenre(res[0].id);
                         cb(null, res[0].id);
@@ -684,6 +684,20 @@ module.exports = function(app){
          */
         clearFailedDownloads: function clearFailedDownloads(cb){
             knex("queue").delete().where({status: 'FAILED'}).asCallback(cb);
+        },
+        /**
+         * Returns a table of total plays, title, artist, minutes listened, sorted by plays
+         * @param cb
+         */
+        getMostPlayedStats: function getMostPlayedStats(cb){
+            knex.select("COUNT(*) AS plays", "songs.title", "artists.name", "(COUNT(*)*songs.duration)/60 AS mins")
+                .from("plays")
+                .innerJoin("songs", "plays.song", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .groupBy("song")
+                .orderBy("COUNT(*)", "DESC")
+                .limit(10)
+                .asCallback(cb);
         }
     };
 

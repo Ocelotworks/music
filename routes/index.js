@@ -15,6 +15,7 @@ module.exports = function(app){
         "playlists",
         "radio",
         "add",
+        "stats",
         "admin"
     ];
 

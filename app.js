@@ -92,6 +92,7 @@ app.initRoutes = function(){
     app.use('/templates/settings',  require('./routes/templates/settings.js')(app));
     app.use('/templates/delete',    require('./routes/templates/delete.js')(app));
     app.use('/templates/add',       require('./routes/templates/add.js')(app));
+    app.use('/templates/stats',     require('./routes/templates/stats.js')(app));
     app.use('/ws',                  require('./routes/websocket')(app));
 
     //Rate limiting

@@ -13,3 +13,7 @@ Get songs added by user:
 Add all songs with no plays into a playlist:
     DELETE FROM playlist_data WHERE playlist_id = "173ffb5b-9caf-11e6-a6a9-00224dae0d2a";
     INSERT INTO playlist_data (song_id,playlist_id, position) SELECT id as song_id, "173ffb5b-9caf-11e6-a6a9-00224dae0d2a" as playlist_id, 999 as position FROM songs WHERE songs.id NOT IN (SELECT song FROM plays)
+
+
+Get songs by total duration listened:
+    SELECT COUNT(*)*songs.duration,songs.title FROM plays INNER JOIN songs ON plays.song=songs.id GROUP BY song ORDER BY COUNT(*)*songs.duration DESC

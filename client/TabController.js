@@ -51,6 +51,12 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             icon: "fa-plus",
             location: "add",
             template: "add"
+        },
+        {
+            name: "Stats",
+            icon: "fa-area-chart",
+            location: "stats",
+            template: "stats"
         }
     ];
 
