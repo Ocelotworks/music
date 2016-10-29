@@ -53,7 +53,7 @@ app.warn = function(message){
 if(app.get('env') === 'development')
     app.warn("Started in DEVELOPMENT MODE! For better performance, set NODE_ENV to PRODUCTION");
 
-
+app.log("Loading modules...");
 app.database            = require('./modules/database.js')(app);
 app.downloader          = require('./modules/downloader.js')(app);
 app.auth                = require('./modules/auth.js')(app);
@@ -61,9 +61,9 @@ app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
 
 app.downloader.processOneSong();
 
-app.initRoutes = function(){
+app.initRoutes = function initRoutes(){
 
-
+    app.log("Loading middleware...");
     app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     //app.use(logger('dev'));
     app.use(bodyParser.json());
@@ -87,6 +87,8 @@ app.initRoutes = function(){
         next();
     });
 
+    app.log("Loading routes...");
+
     app.use('/',                    require('./routes/index')(app));
     app.use('/auth',                require('./routes/auth')(app));
     app.use('/search',              require('./routes/search')(app));
@@ -101,6 +103,7 @@ app.initRoutes = function(){
     app.use('/templates/stats',     require('./routes/templates/stats.js')(app));
     app.use('/ws',                  require('./routes/websocket')(app));
 
+    app.log("Loading some more middleware...");
     //Rate limiting
     app.enable('trust proxy');
     app.use(new RateLimit({
@@ -186,7 +189,7 @@ app.set('view engine', 'hbs');
 
 //Object setup
 require('./handlebarsHelpers.js');
-
+app.log("Compiling clientside javascript...");
 new Compressor.minify({
     type: 'uglifyjs',
     fileIn:  [
