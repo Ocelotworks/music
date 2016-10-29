@@ -82,9 +82,10 @@
 }
 
 #songListQueue {
-  border-radius: 10px;
+  border-radius: 0 0 10px 10px;
   display: inline-block;
   width: 100%;
+  height: 85%;
 }
 
 #queueTitle {
@@ -103,6 +104,24 @@
     width: 95.8%; //Kill me
   }
 }
+.queueControls{
+  cursor: pointer;
+  display: none;
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  color: #bdbdbd;
+  transition: @transition-time;
+  .song:hover > &{
+    display: inline;
+  }
+
+  & i:hover{
+    color: white;
+    transition: @transition-time;
+  }
+}
+
 
 #timeElapsedBar {
   margin-left: @timeElapsedBar-margin;

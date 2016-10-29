@@ -73,7 +73,14 @@
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>
         <div id="songListQueue" class="songList">
-            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}" data-album="{[{song.album}]}">{[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}</span>
+            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artist}]}" data-album="{[{song.album}]}">
+                {[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}
+                <span class="queueControls">
+                    <i class="fa fa-chevron-up" title="Move Up" ng-click="queueMoveUp($index)"></i>&nbsp;
+                    <i class="fa fa-chevron-down" title="Move Down" ng-click="queueMoveDown($index)"></i>&nbsp;
+                    <i class="fa fa-times" title="Remove" ng-click="removeFromQueue($index)"></i>&nbsp;
+                </span>
+            </span>
         </div>
     </div>
 </div>

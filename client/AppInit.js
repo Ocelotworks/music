@@ -44,6 +44,11 @@ function throttle(fn, threshhold, scope) {
     };
 }
 
+Array.prototype.move = function(from,to){
+    this.splice(to,0,this.splice(from,1)[0]);
+    return this;
+};
+
 document.head = document.head || document.getElementsByTagName('head')[0];
 
 function changeFavicon(src) {

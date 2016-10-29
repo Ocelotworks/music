@@ -76,7 +76,8 @@ app.run(['$rootScope', function($rootScope){
             artist:  info[0],
             title: info[1],
             id: element.attributes["data-id"].value,
-            album: element.attributes["data-album"].value
+            album: element.attributes["data-album"].value,
+            artistID: element.attributes["data-artist"].value
         };
         $rootScope.queue.push(songObject);
     };
@@ -91,11 +92,23 @@ app.run(['$rootScope', function($rootScope){
             artist:  info[0],
             title: info[1],
             id: element.attributes["data-id"].value,
-            album: element.attributes["data-album"].value
+            album: element.attributes["data-album"].value,
+            artistID: element.attributes["data-artist"].value
         };
         $rootScope.queue.unshift(songObject);
     };
 
+    $rootScope.removeFromQueue = function(index){
+        $rootScope.queue.splice(index);
+    };
+
+    $rootScope.queueMoveUp = function(index){
+        $rootScope.queue.move(index, index-1);
+    };
+
+    $rootScope.queueMoveDown = function(index){
+        $rootScope.queue.move(index, index+1);
+    };
 
     $rootScope.audioPlayer = new Audio();
 
@@ -110,9 +123,9 @@ app.run(['$rootScope', function($rootScope){
     };
 
     $rootScope.audioPlayer.oncanplay = function(){
-        $rootScope.audioPlayer.play();
         $rootScope.nowPlaying.normalPlay = false;
         console.log("Can play");
+        $rootScope.audioPlayer.play();
     };
 
 
@@ -170,6 +183,7 @@ app.run(['$rootScope', function($rootScope){
             var availableSongs = $(".songList.playable:visible .song");
             $rootScope.playByElement(availableSongs[parseInt(Math.random() * availableSongs.length)]);
         }
+        $rootScope.audioPlayer.play();
     };
 
 
