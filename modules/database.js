@@ -326,7 +326,7 @@ module.exports = function(app){
          * @param cb
          */
         getQueuedSong: function getQueuedSong(cb){
-          knex.select().from("queue").whereNot({status: 'FAILED'}).limit(1).asCallback(cb);
+          knex.select().from("queue").whereNot({status: 'FAILED'}).orWhereNot({status: 'DUPLICATE'}).limit(1).asCallback(cb);
         },
         /**
          * Removes a song from the download queue
@@ -704,6 +704,28 @@ module.exports = function(app){
                 .groupBy("song")
                 .orderBy(knex.raw("COUNT(*)"), "DESC")
                 .limit(10)
+                .asCallback(cb);
+        },
+        /**
+         * Checks if a song with artist artistName and song songName exists already
+         * @param artistName The exact name of the artist to look up
+         * @param songName The exact name of the song to look up
+         * @param cb function(err, exists)
+         */
+        doesSongExist: function doesSongExist(artistName, songName, cb){
+            knex.select(knex.raw("COUNT(*) AS 'exists'"))
+                .from("songs")
+                .innerJoin("artists", "artists.id", "songs.artist")
+                .where({"songs.title": songName, "artists.name": artistName})
+                .asCallback(function(err, result){
+                    cb(err, result && result[0] ? result[0].exists : null);
+                });
+        },
+        getQueuedSongInfo: function getQueuedSongInfo(id, cb){
+            knex.select("*")
+                .from("queue")
+                .where({id: id})
+                .limit(1)
                 .asCallback(cb);
         }
     };

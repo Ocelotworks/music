@@ -54,10 +54,10 @@
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
             {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
-            {{#if developmentMode}}
-                <br>S: {[{nowPlaying.id}]}
-                <br>A: {[{nowPlaying.artistID}]}
-            {{/if}}
+            {{!--{{#if developmentMode}}--}}
+                {{!--<br>S: {[{nowPlaying.id}]}--}}
+                {{!--<br>A: {[{nowPlaying.artistID}]}--}}
+            {{!--{{/if}}--}}
     </span>
     <div id="controls" class="weeBox" role="menu">
         <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward"></i>
@@ -72,7 +72,7 @@
     </div>
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>
-        <div id="songListQueue" class="songList">
+        <div id="songListQueue" class="songList fancyScroll">
             <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artistID}]}" data-album="{[{song.album}]}">
                 {[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}
                 <span class="queueControls">
