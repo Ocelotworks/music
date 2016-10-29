@@ -99,7 +99,7 @@ app.run(['$rootScope', function($rootScope){
     };
 
     $rootScope.removeFromQueue = function(index){
-        $rootScope.queue.splice(index);
+        $rootScope.queue.splice(index, 1);
     };
 
     $rootScope.queueMoveUp = function(index){
