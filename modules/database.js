@@ -554,7 +554,7 @@ module.exports = function(app){
                 .innerJoin("songs", "song_id", "songs.id")
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .where({playlist_id: id})
-                .orderBy("position", "DESC")
+                .orderBy("position", "ASC")
                 .asCallback(cb);
         },
         /**
