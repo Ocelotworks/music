@@ -89,3 +89,33 @@
 .rz-bar.rz-selection {
   background: repeating-linear-gradient(to right, #f00 5px, #008000 20px, red 40px) !important;
 }
+
+@brick-outline-colour: rgba(59, 18, 11, 0.8);
+@brick-colour: #782312;
+@brick-colour-2: #ddbaba;
+@brick-colour-3: #ddbaba;
+
+.fancyScroll {
+
+  &::-webkit-scrollbar {
+    background-image: -webkit-radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, @brick-outline-colour 100%),
+    -webkit-linear-gradient(top, @brick-colour 0%, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px),
+    -webkit-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%),
+    -webkit-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%),
+    -webkit-linear-gradient(left, @brick-colour 0px, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px),
+    -webkit-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%),
+    -webkit-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%);
+    background-image: -moz-radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, @brick-outline-colour 100%), -moz-linear-gradient(top, @brick-colour 0%, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -moz-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -moz-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%), -moz-linear-gradient(left, @brick-colour 0px, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -moz-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -moz-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%);
+    background-image: -ms-radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, @brick-outline-colour 100%), -ms-linear-gradient(top, @brick-colour 0%, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -ms-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -ms-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%), -ms-linear-gradient(left, @brick-colour 0px, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -ms-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -ms-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%);
+    background-image: -o-radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, @brick-outline-colour 100%), -o-linear-gradient(top, @brick-colour 0%, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -o-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -o-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%), -o-linear-gradient(left, @brick-colour 0px, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), -o-linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), -o-linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%);
+    background-image: radial-gradient(center center, ellipse farthest-corner, transparent 0%, transparent 10%, @brick-outline-colour 100%), linear-gradient(top, @brick-colour 0%, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%), linear-gradient(left, @brick-colour 0px, @brick-colour 1px, transparent 1px, transparent 14px, @brick-colour 14px, @brick-colour 16px, transparent 16px, transparent 29px, @brick-colour 29px, @brick-colour 30px), linear-gradient(45deg, @brick-colour-2 0%, @brick-colour-2 25%, transparent 25%, transparent 75%, @brick-colour-3 75%, @brick-colour-3 100%), linear-gradient(45deg, @brick-colour-3 0%, @brick-colour-3 25%, transparent 25%, transparent 75%, @brick-colour-2 75%, @brick-colour-2 100%);
+    background-position: 0 0, 0 0, 13px 0, 28px 15px, 0 0, 0 0, 15px 15px;
+    background-size: 600px 300px, 30px 30px, 30px 30px, 30px 30px, 30px 30px, 30px 30px, 30px 30px;
+    background-repeat: repeat;
+  }
+  &::-webkit-scrollbar-thumb{
+    background: transparent url('../img/santa.png');
+    background-size: contain;
+  }
+
+}
