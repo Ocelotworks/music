@@ -84,6 +84,7 @@ app.initRoutes = function initRoutes(){
 
     app.use(function(req, res, next){
         app.requestCount++;
+        res.locals.christmasMode = true;
         next();
     });
 

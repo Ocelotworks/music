@@ -68,6 +68,15 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             template: "admin"
         });
 
+    if($rootScope.christmas){
+        $scope.tabs.splice(4, 0, {
+           name: "Christmas",
+            icon: "fa-tree",
+            location: "",
+            template: "songs/genre/aeb54483-0fa8-4a52-b394-bc021fe01021"
+        });
+    }
+
     $templateRequest("loading").then(function(template){
        $("#tabContainer").html(template);
     }, $scope.showErrorScreen);

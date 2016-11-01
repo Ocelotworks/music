@@ -1,0 +1,91 @@
+//.song{
+//  color: white;
+//  transition: 0.5s;
+//  &:nth-of-type(even) {
+//    background: #1c401c;
+//    &:hover{
+//      background: #348534;
+//    }
+//  }
+//
+//  &:nth-of-type(odd) {
+//    background: #400404;
+//    &:hover{
+//      background: #850404;
+//    }
+//  }
+//}
+
+//body {
+//  background: #c7d2d6;
+//  color: #000;
+//}
+//
+//#queueTitle{
+//  color: white;
+//}
+//
+//.addedBy{
+//  color: #afa4a4;
+//}
+
+.fa-lock:before{
+  content: "\f06b" !important;
+}
+
+#titlebar:after {
+  background: url('https://unacceptableuse.com/petify/img/tinsel.png');
+  content: " ";
+  width: 100%;
+  left: 0;
+  top: 40px;
+  position: absolute;
+  height: 100%;
+  background-size: contain;
+  z-index: 10000;
+  pointer-events: none;
+}
+
+#allSongs {
+  padding-top: 30px;
+  height: ~"calc(100% - 30px)";
+}
+
+.song{
+  color: white;
+  transition: 0.5s;
+  &:nth-of-type(even):hover{
+      background: #348534;
+  }
+
+  &:nth-of-type(odd):hover{
+      background: #850404;
+  }
+}
+
+
+.rzslider {
+  & .rz-pointer:after, & .rz-pointer:hover:after{
+    background:transparent;
+  }
+  & .rz-pointer:after {
+    content: "\f06b";
+    font-family: "FontAwesome";
+    color: #1ed760;
+    top: -11px;
+    left: -7px;
+    font-size: 24pt;
+  }
+
+  & .rz-pointer {
+    background: red;
+  }
+
+  & .rz-bubble {
+    bottom: 17px;
+  }
+
+}
+.rz-bar.rz-selection {
+  background: repeating-linear-gradient(to right, #f00 5px, #008000 20px, red 40px) !important;
+}

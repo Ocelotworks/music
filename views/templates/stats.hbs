@@ -1,9 +1,9 @@
 <div class="formInputGroup">
     <h1>Most Played Songs</h1>
-    <table class="fancyTable">
+    <table class="fancyTable" ng-controller="SongController">
         <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td></tr>
         {{#each stats.mostPlayed}}
-            <tr><td>{{@index}}</td><td>{{name}} - {{title}}</td><td>{{plays}}</td><td>
+            <tr class="song" ng-click="playSong($event)" ng-right-click="showSongContextMenu($event)" data-id="{{id}}" data-artist="{{artist}}" data-album="{{album}}"><td>{{@index}}</td><td>{{name}}&nbsp;-&nbsp;{{title}}</td><td>{{plays}}</td><td>
                 {{#if mins}}
                     {{mins}}
                 {{else}}

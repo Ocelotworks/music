@@ -132,7 +132,9 @@
     {{#if loadPage}}
         app.run(['$rootScope', '$templateRequest', '$compile', '$sce', function($rootScope, $templateRequest, $compile, $sce) {
             $rootScope.userLevel = {{#if user}}{{user.userlevel}}{{else}}0{{/if}};
-
+            {{#if christmasMode}}
+                $rootScope["christmas"] = true;
+            {{/if}}
             var showErrorScreen = function(error){
                 $templateRequest("error").then(function(template){
                     $compile($("#tabContainer").html(template).contents())($rootScope);
@@ -151,11 +153,15 @@
                     $compile($("#tabContainer").html(template).contents())($rootScope);
                 }, showErrorScreen);
             });
+
         }]);
     {{else}}
         var tabControllerStarted = false;
         app.run(['$rootScope', function($rootScope) {
             $rootScope.userLevel = {{#if user}}{{user.userlevel}}{{else}}0{{/if}};
+            {{#if christmasMode}}
+                $rootScope["christmas"] = true;
+            {{/if}}
             $rootScope.$on("tabControllerReady", function(){
                 if(tabControllerStarted)return;
                 tabControllerStarted = true;
@@ -169,4 +175,5 @@
             $compileProvider.debugInfoEnabled(false);
         }]);
     {{/unless}}
+
 </script>
