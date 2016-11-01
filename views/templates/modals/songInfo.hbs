@@ -1,11 +1,12 @@
-{{#if info}}
 <div id="songInfoContainer" data-id="{{info.song_id}}">
     <img id="songInfoAlbumArt" src="album/{{info.album_id}}" alt="{{info.album_name}}">
     <div id="songInfoTitle">
         <h1>{{info.title}}</h1>
         <h2>{{info.artist_name}} ({{info.genre_name}})</h2>
         <h3>{{info.album_name}}</h3>
+        {{#if info.duration}}
         <h3>{[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]}</h3>
+        {{/if}}
     </div>
     <span class="addedBy">
         Added By
@@ -20,7 +21,5 @@
     </div>
     <div id="modalTabContainer"></div>
 </div>
-{{else}}
-    I don't know what you just did but whatever song you clicked on doesn't exist. I'll fix it eventually.<br>
-{{/if}}
+
 
