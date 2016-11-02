@@ -1,16 +1,22 @@
 <div class="formInputGroup">
     <h1>Most Played Songs</h1>
-    <table class="fancyTable" ng-controller="SongController">
-        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td></tr>
+    <table class="fancyTable graphedTable" ng-controller="SongController">
+        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td><td>
+            Percentage of total plays <span class="fiftyPercentMarker">50%</span> <span class="hundredPercentMarker">100%</span>
+        </td></tr>
         {{#each stats.mostPlayed}}
-            <tr class="song" ng-click="playSong($event)" ng-right-click="showSongContextMenu($event)" data-id="{{id}}" data-artist="{{artist}}" data-album="{{album}}"><td>{{@index}}</td><td>{{name}}&nbsp;-&nbsp;{{title}}</td><td>{{plays}}</td><td>
-                {{#if mins}}
-                    {{mins}}
-                {{else}}
-                    Unknown
-                {{/if}}
-
-            </td></tr>
+            <tr>
+                <td>{{@index}}</td>
+                <td>{{name}}&nbsp;-&nbsp;{{title}}</td>
+                <td>{{plays}}</td>
+                <td>
+                    {{#if mins}}
+                        {{mins}}
+                    {{else}}
+                        Unknown
+                    {{/if}}
+                </td>
+                <td style="width: {{percentage}}%; text-indent: calc({{percentage}}% + 10px);">{{percentage}}%</td></tr>
         {{/each}}
     </table>
 </div>

@@ -697,7 +697,7 @@ module.exports = function(app){
          * @param cb
          */
         getMostPlayedStats: function getMostPlayedStats(cb){
-            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration)/60 AS mins"))
+            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration)/60 AS mins"), knex.raw("(COUNT(*)/(SELECT COUNT(*) FROM plays))*100 AS percentage"))
                 .from("plays")
                 .innerJoin("songs", "plays.song", "songs.id")
                 .innerJoin("artists", "songs.artist", "artists.id")

@@ -12,6 +12,7 @@ module.exports = function(app){
         "artists",
         "albums",
         "genres",
+        "christmas",
         "playlists",
         "radio",
         "add",
@@ -85,7 +86,7 @@ module.exports = function(app){
     router.get("/album/:id", function(req, res){
        app.database.getAlbumArt(req.params.id, function(err, resp){
            if(err || !resp[0] || !resp[0].image)
-               res.redirect("../img/album.png");
+               res.redirect("../img/album-christmas.png");
            else{
                res.header('Content-Type', 'image/png');
                res.end(resp[0].image);

@@ -188,3 +188,67 @@ td .addedBy {
   margin-left: 0.5%;
   margin-right: 1%;
 }
+
+.graphedTable {
+  & tr{
+    &:not(:first-of-type){
+      & td:nth-last-child(1){
+        content: "";
+        position: absolute;
+        background: #4CAF50;
+        width: 0;
+        margin-top: 5px;
+        height: 10px;
+        color: rgba(0, 0, 0, 0);
+        line-height: 55%;
+        transition: @transition-time;
+        cursor: pointer;
+        &:hover{
+          background: grey;
+          transition: @transition-time;
+          color: @background-highlight;
+        }
+      }
+
+      & :nth-last-child(2){
+        border-right: 1px solid white;
+      }
+    }
+
+    &:first-of-type td:nth-last-child(1){
+      border-bottom: 1px solid white;
+    }
+
+    & :nth-last-child(1){
+      width: 50%;
+    }
+  }
+
+  & .hundredPercentMarker {
+    left: 97.7%;
+    position: absolute;
+
+    &:after{
+      left: 15px;
+    }
+  }
+
+  & .fiftyPercentMarker {
+    left: 75%;
+    position: absolute;
+    &:after{
+      left: 9px;
+    }
+  }
+
+  & .fiftyPercentMarker:after, .hundredPercentMarker:after {
+    content: "";
+    background: #fff;
+    width: 1px;
+    position: absolute;
+    height: 3px;
+    top: 17px;
+  }
+
+}
+

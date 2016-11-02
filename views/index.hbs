@@ -41,7 +41,7 @@
         There appears to be a connection issue.
     </div>
     <div id="albumArtContainer">
-        <img src="img/album.png" id="albumArt" title="Album Art" aria-label="Album Art">
+        <img src="img/album{{#if christmasMode}}-christmas{{/if}}.png" id="albumArt" title="Album Art" aria-label="Album Art">
         <div id="albumOverlay">
             <span id="songRateUp" title="Rate Up" aria-label="Rate Up" class="songRate" ng-click="rateSongUp()"><i aria-hidden="true" class="fa fa-thumbs-up"></i></span>
             <span title="Song Info" aria-label="Song Info" class="songRate" ng-click="$emit('openModal', 'modals/songInfo/'+nowPlaying.id);"><i aria-hidden="true" class="fa fa-ellipsis-h"></i></span>
