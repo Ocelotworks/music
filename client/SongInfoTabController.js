@@ -28,6 +28,13 @@ app.controller("SongInfoTabController", function($scope, $templateRequest, $sce,
             template: "edit",
             cssClass: "userlevel-2"
         });
+        $scope.tabs.push({
+            name: "Technical",
+            icon: "fa-code",
+            template: "technical",
+            cssClass: "userlevel-2"
+        });
+
     }
     if($rootScope.userLevel >= 3){
         $scope.tabs.push( {

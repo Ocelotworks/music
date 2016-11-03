@@ -32,8 +32,28 @@ module.exports = function(app){
     });
 
     router.get('/songInfo/:id/edit', function(req, res){
-        app.database.getDetailedSongInfo(req.params.id, function(err, resp){
-            res.render('templates/modals/songInfoTabs/edit', {layout: false, song: resp[0]});
+        if(!req.user){
+            res.header(401).send("You must be logged in to do that.");
+        }else{
+            app.database.getDetailedSongInfo(req.params.id, function(err, resp){
+                res.render('templates/modals/songInfoTabs/edit', {layout: false, song: resp[0]});
+            });
+        }
+    });
+
+    router.post('/songInfo/:id/edit', function(req, res){
+        if(!req.user){
+            res.header(401).json({error: "Your session has timed out. Please log back in."});
+        }else if(req.body){
+            res.header(501).json({error: "Not yet Implemented"});
+        }else{
+            res.header(406).json({error: "Malformed Request."});
+        }
+    });
+
+    router.get('/songInfo/:id/technical', function(req, res){
+        app.database.getSongInfo(req.params.id, function(err, resp){
+            res.render('templates/modals/songInfoTabs/technical', {layout: false, song: resp[0]});
         });
     });
 
