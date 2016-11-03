@@ -587,7 +587,7 @@ module.exports = function(app){
          */
         getDetailedSongInfo: function getDetailedSongInfo(id, cb){
             knex.select("songs.id AS song_id", "genres.id AS genre_id",
-                "albums.id AS album_id", "artists.id AS artist_id", "songs.plays",
+                "albums.id AS album_id", "artists.id AS artist_id",
                 "songs.duration", "songs.title", "artists.name AS artist_name",
                 "albums.name AS album_name", "genres.name AS genre_name", "username", "avatar", "userlevel")
                 .from("songs")
