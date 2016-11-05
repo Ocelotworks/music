@@ -190,6 +190,7 @@ module.exports = function(app){
                     ffmpeg()
                         .input(downloader)
                         .audioCodec(downloaderConfig.get("audioCodec"))
+                        .audioFilters("silenceremove=0:0:0:-1:1:-50dB")
                         .save(path.join(info.destination, songUUID + ".mp3"))
                         .on('error', function songDownloadError(err) {
                             app.error("Error downloading video: " + err);
