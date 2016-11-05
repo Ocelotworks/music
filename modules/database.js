@@ -621,14 +621,6 @@ module.exports = function(app){
             })
         },
         /**
-         * Get the settings for a user
-         * @param id The User UUID
-         * @param cb
-         */
-        getSettingsForUser: function getSettingsForUser(id, cb){
-            knex.select().from("settings").where({owner: id}).asCallback(cb);
-        },
-        /**
          * Get the current valid API key for a user
          * @param id The user UUID
          * @param cb

@@ -11,9 +11,9 @@ module.exports = function(app){
         if(!req.user){
             res.header(401);
         }else{
-            app.database.getSettingsForUser(req.user.id, function(err, data){
-                res.render('templates/modals/settings', {layout: false, settings: data[0]});
-            });
+            //app.database.getSettingsForUser(req.user.id, function(err, data){
+                res.render('templates/modals/settings', {layout: false, settings: req.user});
+            //});
 
         }
     });

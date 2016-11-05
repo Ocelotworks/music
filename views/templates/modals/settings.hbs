@@ -1,8 +1,20 @@
 <h1>User Settings</h1>
 <form id="userSettings" ng-controller="SettingsController">
     <div class="formInputGroup">
-        <input type="checkbox" id="showSongInUrl" ng-model="settings.showSongInUrl" {{#if settings.showSongInUrl}}checked{{/if}}><label for="showSongInUrl">Show song ID in URL bar</label><br>
-        <input type="checkbox" id="showSongInTitle" ng-model="settings.showSongInTitle" {{#if settings.showSongInUrl}}checked{{/if}}><label for="showSongInTitle">Show song name in page title</label>
+        <input type="checkbox" id="showSongInUrl" {{#if settings.showSongInUrl}}checked{{/if}}>
+        <label for="showSongInUrl">Show song ID in URL bar</label><br>
+        <input type="checkbox" id="showSongInTitle" {{#if settings.showSongInTitle}}checked{{/if}}>
+        <label for="showSongInTitle">Show song name in page title</label><br>
+        <input type="checkbox" id="debugMode" {{#if settings.debugMode}}checked{{/if}}>
+        <label for="debugMode">Show debug information</label><br>
+    </div>
+    <div class="formInputGroup">
+        <label for="shuffleMode">Shuffle Mode</label><br>
+        <select id="shuffleMode">
+            <option selected>Random</option>
+            <option>Favour liked songs</option>
+            <option>Favour unheard songs</option>
+        </select>
     </div>
     <div class="formInputGroup">
         <h2>API Access</h2>
