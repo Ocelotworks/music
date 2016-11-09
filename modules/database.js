@@ -689,7 +689,7 @@ module.exports = function(app){
          * @param cb
          */
         getMostPlayedStats: function getMostPlayedStats(cb){
-            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration)/60 AS mins"), knex.raw("(COUNT(*)/(SELECT COUNT(*) FROM plays))*100 AS percentage"))
+            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration) AS seconds"), knex.raw("(COUNT(*)/(SELECT COUNT(*) FROM plays))*100 AS percentage"))
                 .from("plays")
                 .innerJoin("songs", "plays.song", "songs.id")
                 .innerJoin("artists", "songs.artist", "artists.id")
@@ -697,6 +697,12 @@ module.exports = function(app){
                 .orderBy(knex.raw("COUNT(*)"), "DESC")
                 .limit(10)
                 .asCallback(cb);
+        },
+        getOverallStats: function getOverallStats(cb){
+          knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"))
+              .from("plays")
+              .innerJoin("songs", "plays.song", "songs.id")
+              .asCallback(cb);
         },
         /**
          * Checks if a song with artist artistName and song songName exists already

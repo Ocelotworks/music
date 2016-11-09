@@ -1,9 +1,8 @@
 <div class="formInputGroup">
     <h1>Most Played Songs</h1>
-    <h3><span class="bigWord">{{stats.mostPlayedTotal.total}}</span> total songs played.</h3>
-    <h3><span class="bigWord">{{stats.mostPlayedTotal.minutes}}</span> minutes of listening.</h3>
+    <h3><span class="bigWord">{{stats.mostPlayedTotal.total}}</span> total plays. <span class="bigWord">{{prettyParseDuration stats.mostPlayedTotal.seconds}}</span> of listening.</h3>
     <table class="fancyTable graphedTable" ng-controller="SongController">
-        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened (Minutes)</td><td>
+        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened</td><td>
             Percentage of total plays <span class="fiftyPercentMarker">50%</span> <span class="hundredPercentMarker">100%</span>
         </td></tr>
         {{#each stats.mostPlayed}}
@@ -12,8 +11,8 @@
                 <td>{{name}}&nbsp;-&nbsp;{{title}}</td>
                 <td>{{plays}}</td>
                 <td>
-                    {{#if mins}}
-                        {{mins}}
+                    {{#if seconds}}
+                        {{prettyParseDuration seconds}}
                     {{else}}
                         Unknown
                     {{/if}}

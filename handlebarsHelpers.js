@@ -12,3 +12,23 @@ Handlebars.registerPartial('radio', ' <div class="song" ng-click="playRadio($eve
 Handlebars.registerPartial('artist', '<div class="song" ng-click="playArtist(\'{{id}}\')">{{name}}</div>');
 Handlebars.registerPartial('album', '<div class="album" ng-click="playAlbum(\'{{id}}\')">\n    <img src="album/{{id}}">\n    <span>{{name}}</span>\n</div>');
 Handlebars.registerPartial('genre', '<div class="album" ng-click="playGenre(\'{{id}}\')">\n    <img src="genre/{{id}}">\n    <span>{{name}}</span>\n</div>');
+
+
+Handlebars.registerHelper('prettyParseDuration', function(seconds){
+    if(seconds < 60)return seconds+" seconds"; //< 1 minute
+    if(seconds < 3600)return (seconds/60).toFixed(2)+" minutes"; //< 1 hour
+    if(seconds < 86400)return (seconds/3600).toFixed(2)+" hours"; //< 1 day
+    if(seconds < 604800)return (seconds/86400).toFixed(2)+" days"; //< 1 week
+    if(seconds < 2.628e+6)return (seconds/604800).toFixed(2)+" weeks"; //< 1 year
+    if(seconds < 3.154e+7)return (seconds/2.628e+6).toFixed(2)+" months"; //< 1 year
+    return (seconds/3.154e+7).toFixed(2)+" years";
+});
+
+Handlebars.registerHelper('prettyParseMemory', function(bytes){
+    if(bytes < 1000)return bytes+" bytes"; //< 1kb
+    if(bytes < 1000000)return parseInt(bytes/1000)+"KB"; //<1mb
+    if(bytes < 1e+9)return parseInt(bytes/1000000)+"MB"; //<1gb
+    if(bytes < 1e+12)return parseInt(bytes/1e+9)+"GB"; //<1tb
+    if(bytes < 1e+15)return parseInt(bytes/1e+12)+"TB"; //<1pb
+    return parseInt(bytes/1e+15)+"PB";
+});
