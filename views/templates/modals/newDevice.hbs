@@ -1,0 +1,13 @@
+<div class="modalPadding">
+    <h1>Add Device</h1>
+    <h3>It doesn't look like you've visited from this device before. You can give it a friendly name below, or leave it as it is.</h3>
+
+    <form ng-controller="AddDeviceController" ng-submit="addDevice()">
+        <div class="formInputGroup">
+            <input type="text" required ng-model="device.name" placeholder="Device Name" class="fancyInput">
+        </div>
+        <div class="formInputGroup">
+            <input type="button" ng-click="goAwayForever()" value="Go away forever" class="happyButton leftmost"> <input type="submit" class="happyButton rightmost" value="Save">
+        </div>
+    </form>
+</div>

@@ -6,6 +6,7 @@ var express = require('express');
 var router = express.Router();
 var config = require('config').get("Folders");
 var path = require('path');
+var uuid = require('uuid').v4;
 
 module.exports = function(app){
 
@@ -88,6 +89,43 @@ module.exports = function(app){
 
     router.get('/radio', function(req, res, next) {
         res.render('templates/addScreens/addRadio', {layout: false});
+    });
+
+    /** @namespace req.body.isMobile */
+    /**
+     * {
+     *  deviceName: "", isMobile: false, userAgent: ""
+     * }
+     */
+    router.post('/device', function(req, res){
+
+        if(req.user){
+            if(req.body && req.body.name && req.body.isMobile !== undefined && req.body.userAgent){
+                var device = {
+                    id: uuid(),
+                    name: req.body.name,
+                    userAgent: req.body.userAgent,
+                    mobile: req.body.isMobile,
+                    browser: req.body.browser,
+                    os: req.body.os,
+                    owner: req.user.id
+                };
+                app.database.addDevice(device, function createDeviceCB(err){
+                   if(err){
+                       app.error("Error adding device: "+err);
+                       app.error(JSON.stringify(req.body));
+                       res.header(500).json({err: "Internal Error."});
+                   }else{
+                       app.log(`Created new device for user ${req.user.username} (${req.user.id}): ${JSON.stringify(req.body)}`);
+                       res.json({id: device.id});
+                   }
+                });
+            }else{
+                res.header(406).json({err: "Incomplete Data."});
+            }
+        }else{
+            res.header(401).json({err: "You need to be logged in to do that."});
+        }
     });
 
     return router;

@@ -199,6 +199,7 @@ new Compressor.minify({
         "client/RootScope.js",
         "client/admin/AdminController.js",
         "client/AddController.js",
+        "client/AddDeviceController.js",
         "client/AddPlaylistController.js",
         "client/AddToPlaylistController.js",
         "client/ContextMenuController.js",

@@ -103,6 +103,10 @@ module.exports = function(app){
        res.render('templates/modals/about', {layout: false});
     });
 
+    router.get('/newDevice', function(req, res){
+        res.render('templates/modals/newDevice', {layout: false});
+    });
+
 
 
 

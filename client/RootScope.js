@@ -13,6 +13,7 @@ app.run(['$rootScope', function($rootScope){
             $(".contextMenu").hide(100);
     });
 
+
     $rootScope.progressBar = {
         options: {
             showSelectionBar: true,
@@ -41,8 +42,11 @@ app.run(['$rootScope', function($rootScope){
     $rootScope.settings = {
         shuffle: true,
         repeat: false,
-        autoplay: true
+        autoplay: true,
+        connectedDevices: []
     };
+
+
 
     $rootScope.nowPlaying =  {
         artist: "Nobody",
@@ -209,5 +213,23 @@ app.run(['$rootScope', function($rootScope){
 
     };
 
-    initialiseWebsocket($rootScope);
+    $rootScope.$on("modalControllerReady", function(){
+        if(localStorage) {
+            if($rootScope.loggedIn){
+                if(localStorage.getItem("deviceID")){
+                    console.log("Found valid device ID");
+                    $rootScope.settings.deviceID = localStorage.getItem("deviceID");
+                }else{
+                    console.log("Nagging for deviceID...");
+                    $rootScope.$emit("openModal", "modals/newDevice");
+                }
+            }else{
+                console.log("Not logged in");
+            }
+        }else{
+            incompatibleBrowser();
+        }
+        initialiseWebsocket($rootScope);
+    });
+
 }]);

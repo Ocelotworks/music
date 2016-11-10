@@ -725,6 +725,18 @@ module.exports = function(app){
                 .where({id: id})
                 .limit(1)
                 .asCallback(cb);
+        },
+        addDevice: function addDevice(device, cb){
+            knex("devices").insert(device).asCallback(cb);
+        },
+        updateDeviceLastSeen: function updateDeviceLastSeen(device, cb){
+            knex("devices").update({lastSeen: "CURRENT_TIMESTAMP"}).where({id: device}).limit(1).asCallback(cb);
+        },
+        getDevicesByUser: function getDevicesByUser(user, cb){
+            knex.select("*").from("devices").where({owner: user}).asCallback(cb);
+        },
+        getDeviceInfo: function(device, cb){
+            knex.select("*").from("devices").where({id: device}).limit(1).asCallback(cb);
         }
     };
 

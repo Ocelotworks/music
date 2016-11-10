@@ -69,6 +69,7 @@
             <i role="menuitemcheckbox" class="control fa fa-retweet" aria-label="Repeat" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
         </div>
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
+        <span id="connectedDevices" ng-if="settings.connectedDevices.length > 0" ng-click="$emit('openModal', 'modals/devices');"><i class="fa fa-wifi"></i> Connected Devices</span>
     </div>
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>
@@ -132,6 +133,11 @@
     {{#if loadPage}}
         app.run(['$rootScope', '$templateRequest', '$compile', '$sce', function($rootScope, $templateRequest, $compile, $sce) {
             $rootScope.userLevel = {{#if user}}{{user.userlevel}}{{else}}0{{/if}};
+            {{#if user}}
+                $rootScope.loggedIn = true;
+            {{else}}
+                $rootScope.loggedIn = false;
+            {{/if}}
             {{#if christmasMode}}
                 $rootScope["christmas"] = true;
             {{/if}}
@@ -159,6 +165,11 @@
         var tabControllerStarted = false;
         app.run(['$rootScope', function($rootScope) {
             $rootScope.userLevel = {{#if user}}{{user.userlevel}}{{else}}0{{/if}};
+            {{#if user}}
+                $rootScope.loggedIn = true;
+            {{else}}
+                $rootScope.loggedIn = false;
+            {{/if}}
             {{#if christmasMode}}
                 $rootScope["christmas"] = true;
             {{/if}}

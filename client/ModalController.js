@@ -45,5 +45,7 @@ app.controller("ModalController", function($scope, $rootScope, $sce, $templateRe
         $scope.closeModal();
     });
 
+    $rootScope.$emit("modalControllerReady");
+
 
 });

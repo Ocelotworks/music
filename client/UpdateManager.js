@@ -35,9 +35,16 @@ function initialiseWebsocket($rootScope){
         }, 2000);
     };
 
+    $rootScope.sendSocketMessage = function(type, payload){
+        $rootScope.updateSocket.send(JSON.stringify({type: type, message: payload}));
+    };
+
     $rootScope.updateSocket.onopen = function(){
         console.log("Connected");
         $rootScope.serverIssues = false;
+        if($rootScope.settings.deviceID && $rootScope.settings.deviceID !== "gtfo"){
+            $rootScope.sendSocketMessage("registerDevice", $rootScope.settings.deviceID);
+        }
     };
 
     $rootScope.updateSocket.onmessage = function(message){
@@ -45,7 +52,18 @@ function initialiseWebsocket($rootScope){
         if(data && data.type && data.message){
             switch(data.type){
                 case "alert":
-                    $rootScope.messages.push(data.message)
+                    $rootScope.messages.push(data.message);
+                    break;
+                case "rejectDevice":
+                    if(data.message == "INVALID_DEVICE")
+                        localStorage.removeItem("deviceID");
+                    break;
+                case "updateDevices":
+                    $rootScope.settings.connectedDevices = data.message;
+                    break;
+                default:
+                    console.warn("Unknown message type: "+data.type);
+
             }
         }
     };
