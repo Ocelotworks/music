@@ -1,0 +1,21 @@
+<div class="modalPadding">
+    <h1>Devices</h1>
+    <table id="deviceList">
+        {{#each devices}}
+            <tr>
+                <td class="deviceIcon">
+                    <i class="fa {{#if mobile}}fa-mobile{{else}}fa-desktop{{/if}}"></i>
+                </td>
+                <td class="deviceName {{#if online}}online{{/if}}">
+                    <span class="deviceTitle">{{name}}</span>
+                    {{#if online}}
+                        <span class="deviceLastSeen">Online now.</span>
+                    {{else}}
+                        <span class="deviceLastSeen">Last seen {{prettyParseIntegerDuration lastSeenAt}} ago.</span>
+                    {{/if}}
+                </td>
+            </tr>
+        {{/each}}
+
+    </table>
+</div>

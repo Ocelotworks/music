@@ -24,6 +24,16 @@ Handlebars.registerHelper('prettyParseDuration', function(seconds){
     return (seconds/3.154e+7).toFixed(2)+" years";
 });
 
+Handlebars.registerHelper('prettyParseIntegerDuration', function(seconds){
+    if(seconds < 60)return seconds+" seconds"; //< 1 minute
+    if(seconds < 3600)return parseInt(seconds/60)+" minutes"; //< 1 hour
+    if(seconds < 86400)return parseInt(seconds/3600)+" hours"; //< 1 day
+    if(seconds < 604800)return parseInt(seconds/86400)+" day"; //< 1 week
+    if(seconds < 2.628e+6)return parseInt(seconds/604800)+" weeks"; //< 1 year
+    if(seconds < 3.154e+7)return parseInt(seconds/2.628e+6)+" months"; //< 1 year
+    return parseInt(seconds/3.154e+7)+" years";
+});
+
 Handlebars.registerHelper('prettyParseMemory', function(bytes){
     if(bytes < 1000)return bytes+" bytes"; //< 1kb
     if(bytes < 1000000)return parseInt(bytes/1000)+"KB"; //<1mb

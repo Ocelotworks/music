@@ -129,8 +129,25 @@
   background: white url('../img/ocelotworks.png') no-repeat;
   background-size: contain;
 }
-span#owLesserText {
+#owLesserText {
   display: block;
   font-size: 12pt;
   color: #808080;
+}
+
+.deviceIcon {
+  font-size: 24pt;
+}
+
+.deviceTitle {
+  display: block;
+}
+
+.deviceName:not(.online) .deviceLastSeen:not(.online) {
+  color: @text-dark;
+  font-style: italic;
+}
+
+.deviceName.online .deviceTitle {
+  color: @accent-color;
 }

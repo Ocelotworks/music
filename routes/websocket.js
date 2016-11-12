@@ -9,8 +9,8 @@ var router = express.Router();
 
 module.exports = function(app){
 
-    var connectedDevices = {};
-    var deviceClients = {};
+    app.connectedDevices = {};
+    app.deviceClients = {};
 
     router.ws('/updates/', function updateWebsocketConnect(client, req){
         app.log((req.user ? req.user.username : "A client")+" connected to the websocket");
@@ -32,15 +32,15 @@ module.exports = function(app){
                                         app.sendUpdate(client, "rejectDevice", "INVALID_DEVICE");
                                     }else{
                                         var device = result[0];
-                                        deviceClients[device.id] = client;
+                                        app.deviceClients[device.id] = client;
                                         if(device.owner == client.user.id){
                                             client.device = device;
-                                            if(connectedDevices[client.user.id]){
-                                                connectedDevices[client.user.id].push(device);
+                                            if(app.connectedDevices[client.user.id]){
+                                                app.connectedDevices[client.user.id].push(device);
                                             }else{
-                                                connectedDevices[client.user.id] = [device];
+                                                app.connectedDevices[client.user.id] = [device];
                                             }
-                                            app.broadcastUpdateToUser(client.user.id, "updateDevices", connectedDevices[client.user.id]);
+                                            app.broadcastUpdateToUser(client.user.id, "updateDevices", app.connectedDevices[client.user.id]);
                                         }else{
                                             app.warn("User "+req.user.id+" ("+req.user.username+") tried to register a device that didn't belong to them, "+device.id);
                                             app.warn("Device belongs to "+device.owner);
@@ -64,8 +64,8 @@ module.exports = function(app){
         });
 
         client.on('close', function websocketClose(){
-            if(client.user && connectedDevices[client.user.id]){
-                var devices = connectedDevices[client.user.id];
+            if(client.user && app.connectedDevices[client.user.id]){
+                var devices = app.connectedDevices[client.user.id];
                 var index = devices.indexOf(client.device);
                 if(index > -1){
                     devices.splice(index, 1);

@@ -107,6 +107,20 @@ module.exports = function(app){
         res.render('templates/modals/newDevice', {layout: false});
     });
 
+    router.get('/devices', function(req, res){
+        if(req.user){
+            app.database.getDevicesForSettings(req.user.id, function(err, result){
+                console.log("RETURN ARGS");
+                console.log(arguments);
+                res.render('templates/modals/devices', {layout: false, devices: result});
+            });
+        }else{
+            res.header(401).text("You need to be logged in to do that.");
+        }
+
+
+    });
+
 
 
 

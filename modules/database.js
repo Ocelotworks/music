@@ -735,6 +735,26 @@ module.exports = function(app){
         getDevicesByUser: function getDevicesByUser(user, cb){
             knex.select("*").from("devices").where({owner: user}).asCallback(cb);
         },
+        getDevicesForSettings: function getDevicesForSettings(user, cb){
+            knex.select(knex.raw("TIMESTAMPDIFF(SECOND, lastSeen, CURRENT_TIMESTAMP()) as lastSeenAt"), "name", "mobile", "id")
+                .from("devices")
+                .where({owner: user})
+                .asCallback(function(err, res){
+                    console.log("CB ARGS");
+                    console.log(arguments);
+                    if(err)cb(err);
+                    else{
+                        async.forEach(res, function(device, callback){
+                            console.log("LOOP ARGS");
+                            console.log(arguments);
+                            device.online = app.deviceClients[device.id] != null;
+                            callback();
+                        }, function(err){
+                            cb(err, res);
+                        });
+                    }
+                })
+        },
         getDeviceInfo: function(device, cb){
             knex.select("*").from("devices").where({id: device}).limit(1).asCallback(cb);
         }
