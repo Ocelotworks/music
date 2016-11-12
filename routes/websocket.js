@@ -41,6 +41,9 @@ module.exports = function(app){
                                                 app.connectedDevices[client.user.id] = [device];
                                             }
                                             app.broadcastUpdateToUser(client.user.id, "updateDevices", app.connectedDevices[client.user.id]);
+                                            app.database.updateDeviceLastSeen(device.id, function updateDeviceLastSeenCB(err){
+                                               if(err)app.warn("Error updating last seen for device: "+err);
+                                            });
                                         }else{
                                             app.warn("User "+req.user.id+" ("+req.user.username+") tried to register a device that didn't belong to them, "+device.id);
                                             app.warn("Device belongs to "+device.owner);
@@ -64,12 +67,16 @@ module.exports = function(app){
         });
 
         client.on('close', function websocketClose(){
-            if(client.user && app.connectedDevices[client.user.id]){
-                var devices = app.connectedDevices[client.user.id];
-                var index = devices.indexOf(client.device);
-                if(index > -1){
-                    devices.splice(index, 1);
-                    app.log("Removed device");
+            if(client.device){
+                app.deviceClients.splice(app.deviceClients.indexOf(client.device), 1);
+                if(client.user && app.connectedDevices[client.user.id]){
+                    var devices = app.connectedDevices[client.user.id];
+                    var index = devices.indexOf(client.device);
+                    if(index > -1){
+
+                        devices.splice(index, 1);
+                        app.log("Removed device");
+                    }
                 }
             }
             app.log((req.user ? req.user.username : "A client")+" disconnected from the websocket");
