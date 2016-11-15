@@ -701,7 +701,7 @@ module.exports = function(app){
                 .asCallback(cb);
         },
         getOverallStats: function getOverallStats(cb){
-          knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"))
+          knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"), knex.raw("(SELECT AVG(duration) FROM songs) AS averageDuration"))
               .from("plays")
               .innerJoin("songs", "plays.song", "songs.id")
               .asCallback(cb);
