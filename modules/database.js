@@ -732,7 +732,7 @@ module.exports = function(app){
             knex("devices").insert(device).asCallback(cb);
         },
         updateDeviceLastSeen: function updateDeviceLastSeen(device, cb){
-            knex("devices").update({lastSeen: "CURRENT_TIMESTAMP"}).where({id: device}).limit(1).asCallback(cb);
+            knex("devices").update({lastSeen: knex.raw("CURRENT_TIMESTAMP()")}).where({id: device}).limit(1).asCallback(cb);
         },
         getDevicesByUser: function getDevicesByUser(user, cb){
             knex.select("*").from("devices").where({owner: user}).asCallback(cb);

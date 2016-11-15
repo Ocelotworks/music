@@ -2,7 +2,7 @@
 * Copyright Ocelotworks 2016
  */
 
-app.run(['$rootScope', function($rootScope, $http){
+app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $("#albumArt").error(function(){
         $(this).attr('src', "img/album.png");
