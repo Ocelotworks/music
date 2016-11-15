@@ -2,7 +2,7 @@
 * Copyright Ocelotworks 2016
  */
 
-app.run(['$rootScope', function($rootScope){
+app.run(['$rootScope', function($rootScope, $http){
 
     $("#albumArt").error(function(){
         $(this).attr('src', "img/album.png");
@@ -170,6 +170,7 @@ app.run(['$rootScope', function($rootScope){
     };
 
     $rootScope.audioPlayer.onended = function(){
+        $http.put(base+"add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
         if($rootScope.settings.autoplay){
             if($rootScope.settings.repeat)
                 $rootScope.audioPlayer.currentTime = 0;

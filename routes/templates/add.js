@@ -91,6 +91,15 @@ module.exports = function(app){
         res.render('templates/addScreens/addRadio', {layout: false});
     });
 
+    router.put('/play/:id', function(req, res){
+        res.headers(204).send("");
+        if(!req.user){
+            app.database.addPlayForSong(req.params.id, req.user.id, function addPlayForSongCB(err){
+                if(err)app.error("Error adding play for "+req.params.id+" by user "+req.user.id+": "+err);
+            });
+        }
+    });
+
     /** @namespace req.body.isMobile */
     /**
      * {

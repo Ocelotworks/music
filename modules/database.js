@@ -185,6 +185,8 @@ module.exports = function(app){
          */
         getSongPathToPlay: function getSongPathToPlay(id, userid, cb){
             knex.select("path").from("songs").where({id: id}).limit(1).asCallback(cb);
+        },
+        addPlayForSong: function addPlayForSong(id, userid, cb){
             knex("plays").insert({
                 user: userid,
                 song: id
