@@ -15,23 +15,56 @@ Handlebars.registerPartial('genre', '<div class="album" ng-click="playGenre(\'{{
 
 
 Handlebars.registerHelper('prettyParseDuration', function(seconds){
-    if(seconds < 60)return seconds+" seconds"; //< 1 minute
-    if(seconds < 3600)return (seconds/60).toFixed(2)+" minutes"; //< 1 hour
-    if(seconds < 86400)return (seconds/3600).toFixed(2)+" hours"; //< 1 day
-    if(seconds < 604800)return (seconds/86400).toFixed(2)+" days"; //< 1 week
-    if(seconds < 2.628e+6)return (seconds/604800).toFixed(2)+" weeks"; //< 1 year
-    if(seconds < 3.154e+7)return (seconds/2.628e+6).toFixed(2)+" months"; //< 1 year
-    return (seconds/3.154e+7).toFixed(2)+" years";
+
+
+    var duration = seconds;
+    var prefix = "second";
+    if(seconds >= 3.154e+7){
+        duration    = (seconds/3.154e+7).toFixed(2);
+        prefix      = "year";
+    }else if(seconds >= 2.628e+6){
+        duration    = (seconds/2.628e+6).toFixed(2);
+        prefix      = "month";
+    }else if(seconds >= 604800){
+        duration    = (seconds/604800).toFixed(2);
+        prefix      = "week";
+    }else if(seconds >= 86400){
+        duration    = (seconds/86400).toFixed(2);
+        prefix      = "day";
+    }else if(seconds >= 3600){
+        duration    = (seconds/3600).toFixed(2);
+        prefix      = "hour";
+    }else if(seconds >= 60){
+        duration    = (seconds/60).toFixed(2);
+        prefix      = "minute";
+    }
+    return duration+" "+prefix+(duration > 1 ? "s" : "");
+
 });
 
 Handlebars.registerHelper('prettyParseIntegerDuration', function(seconds){
-    if(seconds < 60)return seconds+" seconds"; //< 1 minute
-    if(seconds < 3600)return parseInt(seconds/60)+" minutes"; //< 1 hour
-    if(seconds < 86400)return parseInt(seconds/3600)+" hours"; //< 1 day
-    if(seconds < 604800)return parseInt(seconds/86400)+" day"; //< 1 week
-    if(seconds < 2.628e+6)return parseInt(seconds/604800)+" weeks"; //< 1 year
-    if(seconds < 3.154e+7)return parseInt(seconds/2.628e+6)+" months"; //< 1 year
-    return parseInt(seconds/3.154e+7)+" years";
+    var duration = seconds;
+    var prefix = "second";
+    if(seconds >= 3.154e+7){
+        duration    = (seconds/3.154e+7).toFixed(0);
+        prefix      = "year";
+    }else if(seconds >= 2.628e+6){
+        duration    = (seconds/2.628e+6).toFixed(0);
+        prefix      = "month";
+    }else if(seconds >= 604800){
+        duration    = (seconds/604800).toFixed(0);
+        prefix      = "week";
+    }else if(seconds >= 86400){
+        duration    = (seconds/86400).toFixed(0);
+        prefix      = "day";
+    }else if(seconds >= 3600){
+        duration    = (seconds/3600).toFixed(0);
+        prefix      = "hour";
+    }else if(seconds >= 60){
+        duration    = (seconds/60).toFixed(0);
+        prefix      = "minute";
+    }
+    return duration+" "+prefix+(duration > 1 ? "s" : "");
 });
 
 Handlebars.registerHelper('prettyParseMemory', function(bytes){
@@ -41,4 +74,45 @@ Handlebars.registerHelper('prettyParseMemory', function(bytes){
     if(bytes < 1e+12)return parseInt(bytes/1e+9)+"GB"; //<1tb
     if(bytes < 1e+15)return parseInt(bytes/1e+12)+"TB"; //<1pb
     return parseInt(bytes/1e+15)+"PB";
+});
+
+function quantify(data, unit, value) {
+    if (value) {
+        if (value > 1 || value < -1)
+            unit += 's';
+
+        data.push(value + ' ' + unit);
+    }
+
+    return data;
+}
+
+
+Handlebars.registerHelper("longDuration", function(seconds){
+    var prettyString = '',
+        data = [];
+
+    if (typeof seconds === 'number') {
+
+        data = quantify(data, 'day',    parseInt(seconds / 86400));
+        data = quantify(data, 'hour',   parseInt((seconds % 86400) / 3600));
+        data = quantify(data, 'minute', parseInt((seconds % 3600) / 60));
+        data = quantify(data, 'second', Math.floor(seconds % 60));
+
+        var length = data.length,
+            i;
+
+        for (i = 0; i < length; i++) {
+
+            if (prettyString.length > 0)
+                if (i == length - 1)
+                    prettyString += ' and ';
+                else
+                    prettyString += ', ';
+
+            prettyString += data[i];
+        }
+    }
+
+    return prettyString;
 });
