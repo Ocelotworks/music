@@ -1,21 +1,21 @@
-var express         = require('express');
-var path            = require('path');
-var favicon         = require('serve-favicon');
-var logger          = require('morgan');
-var cookieParser    = require('cookie-parser');
-var bodyParser      = require('body-parser');
-var session         = require('express-session');
-var KnexSessionStore= require('connect-session-knex')(session);
-var RateLimit       = require('express-rate-limit');
-var Compressor      = require('node-minify');
-var caller_id       = require('caller-id');
-var colors          = require('colors');
-var dateFormat      = require('dateformat');
-var minifyhtml      = require('express-minify-html');
-var config          = require('config');
+let express         = require('express');
+let path            = require('path');
+let favicon         = require('serve-favicon');
+let logger          = require('morgan');
+let cookieParser    = require('cookie-parser');
+let bodyParser      = require('body-parser');
+let session         = require('express-session');
+let KnexSessionStore= require('connect-session-knex')(session);
+let RateLimit       = require('express-rate-limit');
+let Compressor = require('node-minify');
+let caller_id       = require('caller-id');
+let colors          = require('colors');
+let dateFormat      = require('dateformat');
+let minifyhtml      = require('express-minify-html');
+let config          = require('config');
 
 
-var app = express();
+let app = express();
 
 app.errorCount = 0;
 app.requestCount = 0;
@@ -72,11 +72,15 @@ app.initRoutes = function initRoutes(){
         knex: app.database.getKnex(),
         createtable: true
     });
+    sessionConfig.cookie = {
+        maxAge: 1e100
+    };
     app.use(session(sessionConfig));
     app.use(bodyParser.urlencoded(config.get("Advanced.bodyparser")));
     app.use(cookieParser());
     app.use(app.passport.initialize());
     app.use(app.passport.session());
+    app.use(app.passport.authenticate('remember-me'));
 
     app.use(minifyhtml({
         htmlMinifier: JSON.parse(JSON.stringify(config.get("Advanced.htmlMinifier"))) //ayy lmao

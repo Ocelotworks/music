@@ -2,20 +2,20 @@
 * Copyright 2016 Ocelotworks
  */
 
-var express = require('express');
-var router = express.Router();
-var base = require('config').get("General.baseURL");
+const express = require('express');
+const router = express.Router();
+const base = require('config').get("General.baseURL");
 
 module.exports = function(app){
 
 
-    var correctLogin = function(req, res){
-        app.log(req.user.id+" logged in");
-
+    const correctLogin = function(req, res){
+        app.log(req.user.username+" logged in");
         res.redirect(base);
     };
 
-    var options = {
+
+    const options = {
         failureRedirect: '/?loginFail'
     };
 
@@ -24,6 +24,7 @@ module.exports = function(app){
         if(req.user){
             app.log(req.user.id+" logged out");
             req.logout();
+            //TODO: Purge devices for this user here
         }
         res.redirect(base);
     });
@@ -32,9 +33,10 @@ module.exports = function(app){
     router.get('/google', app.passport.authenticate('google', {scope: ['profile']}));
     router.get('/google/callback', app.passport.authenticate('google', options), correctLogin);
 
-
+    //Twitter Auth routes
     router.get('/twitter', app.passport.authenticate('twitter'));
     router.get('/twitter/callback', app.passport.authenticate('twitter', options), correctLogin);
+
 
 
     ////Facebook Auth routes

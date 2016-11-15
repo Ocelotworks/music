@@ -3,9 +3,9 @@
  */
 
 
-var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy.Strategy;
-var TwitterStrategy = require('passport-twitter').Strategy;
-var config = require('config');
+const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy.Strategy;
+const TwitterStrategy = require('passport-twitter').Strategy;
+const config = require('config');
 
 module.exports = function(app){
     app.passport = require('passport');
@@ -18,8 +18,8 @@ module.exports = function(app){
         app.database.getUserInfo(id, done);
     });
 
-    var baseURL = config.get("General.baseURL");
-    var keys = config.get("Keys");
+    const baseURL = config.get("General.baseURL");
+    const keys = config.get("Keys");
 
     app.passport.use(new GoogleStrategy({
         clientID: keys.get("Google.clientID"),
