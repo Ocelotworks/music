@@ -68,7 +68,7 @@ module.exports = function(app){
 
         client.on('close', function websocketClose(){
             if(client.device){
-                app.deviceClients.splice(client.device.id, 1);
+                app.deviceClients[client.device.id] = null;
                 if(client.user && app.connectedDevices[client.user.id]){
                     var devices = app.connectedDevices[client.user.id];
                     var index = devices.indexOf(client.device);
