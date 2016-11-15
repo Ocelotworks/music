@@ -68,13 +68,11 @@ module.exports = function(app){
 
         client.on('close', function websocketClose(){
             if(client.device){
-
                 app.deviceClients.splice(client.device.id, 1);
                 if(client.user && app.connectedDevices[client.user.id]){
                     var devices = app.connectedDevices[client.user.id];
                     var index = devices.indexOf(client.device);
                     if(index > -1){
-
                         devices.splice(index, 1);
                         app.log("Removed device");
                     }
