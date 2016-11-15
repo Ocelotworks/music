@@ -21,7 +21,7 @@ module.exports = function(app){
     });
 
     router.get('/', function(req, res){
-        res.render('templates/admin', {layout: false});
+        res.render('templates/admin', {layout: false, uptime: process.uptime()});
     });
 
     router.get('/alerts', function(req, res){
