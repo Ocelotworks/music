@@ -54,6 +54,7 @@ Array.prototype.move = function(from,to){
     return this;
 };
 
+//noinspection JSAnnotator
 document.head = document.head || document.getElementsByTagName('head')[0];
 
 function changeFavicon(src) {
