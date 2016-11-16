@@ -170,7 +170,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.audioPlayer.onended = function(){
-        $http.put(base+"add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
+        $http.put(base+"templates/add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
         if($rootScope.settings.autoplay){
             if($rootScope.settings.repeat)
                 $rootScope.audioPlayer.currentTime = 0;
