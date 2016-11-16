@@ -220,4 +220,10 @@ new Compressor.minify({
     }
 });
 
+process.on('uncaughtException', function (err) {
+    console.log(arguments);
+    app.error("Application error:");
+    app.error(err);
+});
+
 module.exports = app;
