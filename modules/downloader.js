@@ -124,6 +124,10 @@ module.exports = function(app){
                                         }, function updateQueuedSongCB(err){
                                             if(err)app.warn(`Error updating queued song: ${err}`);
                                         });
+                                        object.songsProcessing--;
+                                        if(object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")){
+                                            object.processOneSong();
+                                        }
                                     }else{
                                         app.database.getOrCreateArtist(artist, function createArtist(err, artistId){
                                             if(!err){
