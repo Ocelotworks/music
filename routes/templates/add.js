@@ -92,12 +92,10 @@ module.exports = function(app){
     });
 
     router.put('/play/:id', function(req, res){
-        res.headers(204).send("");
-        if(!req.user){
-            app.database.addPlayForSong(req.params.id, req.user.id, function addPlayForSongCB(err){
-                if(err)app.error("Error adding play for "+req.params.id+" by user "+req.user.id+": "+err);
-            });
-        }
+        res.send("");
+        app.database.addPlayForSong(req.params.id, req.user ? req.user.id :"c999f4ab-72a6-11e6-839f-00224dae0d2a" , function addPlayForSongCB(err){
+            if(err)app.error("Error adding play for "+req.params.id+" by user "+req.user.id+": "+err);
+        });
     });
 
     /** @namespace req.body.isMobile */
