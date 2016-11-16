@@ -187,6 +187,9 @@
   border-radius: 200px;
   cursor: pointer;
   transition: @transition-time;
+  &:focus{
+    outline: none;
+  }
 
   &:not(.rated):hover{
     border-color: @background-highlight;
@@ -264,6 +267,10 @@
     transition: @transition-time;
     background: @background-dark;
   }
+}
+
+.shuffleQueueSong{
+  color: grey !important;
 }
 
 

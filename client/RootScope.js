@@ -63,8 +63,22 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
 
+    $rootScope.shuffleQueue = [];
     $rootScope.queue = [];
 
+
+    $rootScope.replenishShuffleQueue = function(){
+        $http.get(base+"templates/songs/shuffleQueue").then(function(response){
+            console.log(response);
+           if(!response.data || response.data.err){
+               console.error("Error replenishing shuffle queue: ");
+               console.error(response);
+           } else{
+               Array.prototype.push.apply($rootScope.shuffleQueue, response.data);
+           }
+        });
+
+    };
 
     $rootScope.getSongById = function(id){
         return $(".song[data-id='"+id+"']").get(0);
@@ -75,6 +89,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.addToQueue = function(element){
+        console.log(element);
         var info = element.outerText.split("\u00A0-\u00A0");
         var songObject = {
             artist:  info[0],
@@ -179,18 +194,42 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         }
     };
 
+    $rootScope.replenishShuffleQueue();
+
     $rootScope.playNext = function playNext(){
         $rootScope.nowPlaying.normalPlay = false;
-        if($rootScope.queue.length > 0){
-            var nextSong = $rootScope.queue.shift();
+        var nextSong;
+        if($rootScope.queue.length > 0) {
+            nextSong = $rootScope.queue.shift();
             $rootScope.playById(nextSong.id);
         }else{
-            var availableSongs = $(".songList.playable:visible .song");
-            $rootScope.playByElement(availableSongs[parseInt(Math.random() * availableSongs.length)]);
+            if($rootScope.shuffleQueue.length > 0){
+                nextSong = $rootScope.shuffleQueue.shift();
+                $rootScope.playByData(nextSong);
+                if($rootScope.shuffleQueue.length == 1)
+                    $rootScope.replenishShuffleQueue();
+            }else{
+                var availableSongs = $(".songList.playable:visible .song");
+                $rootScope.playByElement(availableSongs[parseInt(Math.random() * availableSongs.length)]);
+            }
         }
         $rootScope.audioPlayer.play();
     };
 
+    $rootScope.playByData = function playByData(data){
+        $(".songRate").removeClass("rated");
+        $rootScope.nowPlaying.id = data.id;
+        $rootScope.nowPlaying.artistID = data.artistID;
+        $rootScope.nowPlaying.artist = data.artist;
+        $rootScope.nowPlaying.title = data.title;
+        $rootScope.nowPlaying.buffering = true;
+        $rootScope.audioPlayer.src = base+"song/"+data.id;
+        $("#albumArt").attr("src", base+"album/"+data.album);
+        if(window.innerWidth <= 1111){
+            changeFavicon(base+"album/"+data.album);
+            document.title =  data.artist + " - " + data.title;
+        }
+    };
 
     $rootScope.playById = function playById(id){
         $rootScope.playByElement($rootScope.getSongById(id));

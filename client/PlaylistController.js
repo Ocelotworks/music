@@ -13,4 +13,26 @@ app.controller("PlaylistController", function($scope, $rootScope, $http){
         $rootScope.$emit("switchTab", 4);
 
     };
+
+    $scope.queuePlaylist = function(){
+        var songs = $(".songList.playable:visible .song");
+
+        for(var songElem in songs)
+            if(songs.hasOwnProperty(songElem))
+                $rootScope.addToQueue(songs[songElem]);
+
+
+    };
+
+    $scope.shufflePlaylist = function(){
+        var songs = $(".songList.playable:visible .song");
+
+        shuffle(songs);
+
+        for(var songElem in songs)
+            if(songs.hasOwnProperty(songElem))
+                $rootScope.addToQueue(songs[songElem]);
+
+
+    };
 });

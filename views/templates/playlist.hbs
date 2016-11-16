@@ -2,8 +2,10 @@
     {{#if isOwner}}
         <button class="happyButton" ng-click=""><i class="fa fa-pencil"></i> Edit</button><button class="happyButton" ng-click="deletePlaylist('{{info.id}}')"><i class="fa fa-trash"></i> Delete</button>
     {{/if}}
+    <button class="happyButton" ng-click="queuePlaylist()"><i class="fa fa-play"></i>&nbsp;Play Playlist</button>
+    <button class="happyButton" ng-click="shufflePlaylist()"><i class="fa fa-random"></i>&nbsp;Shuffle Play</button>
 </h1>
-<h2>{{info.count}} songs </h2> <button class="happyButton"><i class="fa fa-play"></i>&nbsp;Play Playlist</button>
+<h2>{{info.count}} songs </h2>
 <span class="inline addedBy" style="top: 10px;">Added By<span class="addedByName">
     {{> user user=info}}
 </span></span>

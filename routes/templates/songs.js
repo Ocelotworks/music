@@ -69,5 +69,17 @@ module.exports = function(app){
         });
     });
 
+    router.get('/shuffleQueue', function(req, res){
+        app.database.getShuffleQueue(req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, data){
+            console.log(err);
+            console.log(data);
+           if(err){
+               res.header(500).json({err: err});
+           } else {
+               res.json(data);
+           }
+        });
+    });
+
     return router;
 };

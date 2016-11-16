@@ -82,6 +82,9 @@
                     <i class="fa fa-times" title="Remove" ng-click="removeFromQueue($index)"></i>&nbsp;
                 </span>
             </span>
+            <span ng-repeat="song in shuffleQueue" class="song shuffleQueueSong" data-id="{[{song.id}]}" data-artist="{[{song.artistID}]}" data-album="{[{song.album}]}">
+                {[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}
+            </span>
         </div>
     </div>
 </div>
