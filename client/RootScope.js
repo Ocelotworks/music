@@ -90,7 +90,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $rootScope.addToQueue = function(element){
         console.log(element);
-        var info = element.outerText.split("\u00A0-\u00A0");
+        var info = (element.outerText || element.textContent).split("\u00A0-\u00A0");
         var songObject = {
             artist:  info[0],
             title: info[1],
@@ -106,7 +106,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.queueNext = function(element){
-        var info = element.outerText.split("\u00A0-\u00A0");
+        var info = (element.outerText || element.textContent).split("\u00A0-\u00A0");
         var songObject = {
             artist:  info[0],
             title: info[1],
