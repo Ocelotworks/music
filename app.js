@@ -74,9 +74,7 @@ app.initRoutes = function initRoutes(){
         knex: app.database.getKnex(),
         createtable: true
     });
-    sessionConfig.cookie = {
-        maxAge: 1e100
-    };
+    sessionConfig.cookie = config.get("Cookies");
     app.use(session(sessionConfig));
     app.use(bodyParser.urlencoded(config.get("Advanced.bodyparser")));
     app.use(cookieParser());
@@ -89,7 +87,7 @@ app.initRoutes = function initRoutes(){
 
     app.use(function(req, res, next){
         app.requestCount++;
-        res.locals.christmasMode = true;
+        res.locals.christmasMode = config.get("General.christmasMode");
         next();
     });
 
@@ -139,7 +137,7 @@ app.initRoutes = function initRoutes(){
         dest: path.join(__dirname, 'public'),
         force: false
     }));
-    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 86400000}));
+    app.use(express.static(path.join(__dirname, 'public'), config.get("Static")));
 
 
     // catch 404 and forward to error handler
@@ -228,6 +226,11 @@ process.on('uncaughtException', function (err) {
     console.log(arguments);
     app.error("Application error:");
     app.error(err);
+});
+
+process.on('SIGINT', function(){
+   app.log("Received shutdown signal");
+   process.exit(0);
 });
 
 module.exports = app;

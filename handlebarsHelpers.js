@@ -3,7 +3,8 @@
 */
 
 
-var Handlebars = require('hbs');
+const Handlebars = require('hbs');
+const config = require('config');
 
 Handlebars.registerPartial('user', '<img src="{{user.avatar}}" class="avatar userlevel-{{user.userlevel}}" id="userAvatar"><span class="username userlevel-{{user.userlevel}}">{{user.username}}</span>');
 Handlebars.registerPartial('song', '<span class="song" ng-click="playSong($event)" ng-right-click="showSongContextMenu($event)" data-id="{{song_id}}" data-artist="{{artist_id}}" data-album="{{album}}">{{name}}&nbsp;-&nbsp;{{title}}</span>');
@@ -115,4 +116,12 @@ Handlebars.registerHelper("longDuration", function(seconds){
     }
 
     return prettyString;
+});
+
+Handlebars.registerHelper("config", function(key){
+   return config.get(key);
+});
+
+Handlebars.registerHelper("isObject", function(data, options){
+    return typeof data === "object" ? options.fn(this) :  options.inverse(this);
 });

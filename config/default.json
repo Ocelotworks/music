@@ -4,7 +4,7 @@
     "connection": {
       "host": "localhost",
       "port": 3306,
-      "username": "",
+      "user": "",
       "password": "",
       "database": "music"
     },
@@ -42,7 +42,15 @@
   },
   "General": {
     "baseURL": "",
-    "tempDir": "temp/"
+    "tempDir": "temp/",
+    "christmasMode": true,
+    "shuffleQueueSize": 100
+  },
+  "Cookies": {
+    "maxAge": 1e100
+  },
+  "Static": {
+    "maxAge": 345600000
   },
   "Advanced": {
     "htmlMinifier": {
