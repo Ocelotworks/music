@@ -206,7 +206,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             if($rootScope.shuffleQueue.length > 0){
                 nextSong = $rootScope.shuffleQueue.shift();
                 $rootScope.playByData(nextSong);
-                if($rootScope.shuffleQueue.length == 1)
+                if($rootScope.shuffleQueue.length <= 5)
                     $rootScope.replenishShuffleQueue();
             }else{
                 var availableSongs = $(".songList.playable:visible .song");

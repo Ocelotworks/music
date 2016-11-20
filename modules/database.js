@@ -763,7 +763,7 @@ module.exports = function(app){
                 .whereNotIn("songs.id", knex.select("song").from("plays").where({user: user}).andWhereRaw("`timestamp` > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)"))
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .orderByRaw("-LOG(1.0 - RAND()) / (weight+1/5)")
-                .limit(100).asCallback(cb);
+                .limit(10).asCallback(cb);
         }
     };
 
