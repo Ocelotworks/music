@@ -4,6 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
+const config = require('config');
 
 module.exports = function(app){
 
@@ -22,6 +23,10 @@ module.exports = function(app){
 
     router.get('/', function(req, res){
         res.render('templates/admin', {layout: false, uptime: process.uptime()});
+    });
+
+    router.get('/settings', function(req, res){
+        res.render('templates/admin/settings', {layout: false, settings: config});
     });
 
     router.get('/alerts', function(req, res){

@@ -1,0 +1,25 @@
+<h1>Settings</h1>
+<form id="settingsForm" method="POST" class="fancyScroll">
+    {{#each settings}}
+        <div class="formInputGroup">
+            <h2>{{@key}}</h2>
+            <table class="settingTable">
+            {{#each this}}
+                {{#isObject this}}
+                    <table class="settingTable subTree">
+                        <h3>{{@key}}</h3>
+                        {{#each this}}
+                            <tr><td><label>{{@key}}</label></td><td><input name="{{@../../key}}.{{@../key}}.{{@key}}" class="fancyInput" value="{{this}}"></td></tr>
+                        {{/each}}
+                    </table>
+                {{else}}
+                    <tr><td><label>{{@key}}</label></td><td><input name="{{@../key}}.{{@key}}" class="fancyInput" value="{{this}}"></td></tr>
+                {{/isObject}}
+            {{/each}}
+            </table>
+        </div>
+    {{/each}}
+    <div id="settingsButtonContainer">
+        <input type="submit" class="happyButton" value="Save" id="saveSettings">
+    </div>
+</form>
