@@ -7,12 +7,13 @@ var bodyParser      = require('body-parser');
 var session         = require('express-session');
 var KnexSessionStore= require('connect-session-knex')(session);
 var RateLimit       = require('express-rate-limit');
-var Compressor = require('node-minify');
+var Compressor      = require('node-minify');
 var caller_id       = require('caller-id');
 var colors          = require('colors');
 var dateFormat      = require('dateformat');
 var minifyhtml      = require('express-minify-html');
 var config          = require('config');
+var compression     = require('compression');
 
 var app = express();
 
@@ -63,6 +64,8 @@ app.downloader.processOneSong();
 app.initRoutes = function initRoutes(){
 
     app.log("Loading middleware...");
+    app.use(compression());
+
     app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
     //app.use(logger('dev'));
     app.use(bodyParser.json());
@@ -106,6 +109,7 @@ app.initRoutes = function initRoutes(){
     app.use('/templates/stats',     require('./routes/templates/stats.js')(app));
     app.use('/ws',                  require('./routes/websocket')(app));
 
+
     app.log("Loading some more middleware...");
     //Rate limiting
     app.enable('trust proxy');
@@ -135,7 +139,7 @@ app.initRoutes = function initRoutes(){
         dest: path.join(__dirname, 'public'),
         force: false
     }));
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 86400000}));
 
 
     // catch 404 and forward to error handler

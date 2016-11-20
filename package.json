@@ -2,15 +2,16 @@
   "name": "music",
   "version": "2.0.0",
   "private": true,
+  "main": "bin/www",
   "scripts": {
-    "start": "export NODE_ENV=production; node ./bin/www",
-    "start-dev": "export NODE_ENV=development; node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "async": "^2.1.1",
     "body-parser": "^1.15.2",
     "caller-id": "^0.1.0",
     "colors": "^1.1.2",
+    "compression": "^1.6.2",
     "config": "^1.21.0",
     "connect-session-knex": "^1.2.0",
     "cookie-parser": "^1.4.3",
