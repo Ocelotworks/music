@@ -43,6 +43,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         shuffle: true,
         repeat: false,
         autoplay: true,
+        showShuffleQueue: false,
         connectedDevices: []
     };
 

@@ -7,6 +7,8 @@
         <label for="showSongInTitle">Show song name in page title</label><br>
         <input type="checkbox" id="debugMode" {{#if settings.debugMode}}checked{{/if}}>
         <label for="debugMode">Show debug information</label><br>
+        <input type="checkbox" id="showShuffleQueue" ng-model="settings.showShuffleQueue" {{#if settings.showShuffleQueue}}checked{{/if}}>
+        <label for="debugMode">Show shuffle items in queue</label><br>
     </div>
     <div class="formInputGroup">
         <label for="shuffleMode">Shuffle Mode</label><br>
