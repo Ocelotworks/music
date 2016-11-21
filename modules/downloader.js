@@ -68,104 +68,124 @@ module.exports = function(app){
         },
         getYoutubeInfoForSong: function getYoutubeInfoForSong(id){
             object.songsProcessing++;
-            app.database.getQueuedSongInfo(id, function getQueuedSongInfoCB(err, queuedSong){
-                queuedSong = queuedSong[0];
-                if(err){
-                    app.warn("Error getting queued song info for ID "+id);
-                    object.songsProcessing--;
-                }else{
-                    var options = ["--ignore-errors"];
-                    if(proxy)
-                        options.push("--proxy="+proxy);
+                app.database.getQueuedSongInfo(id, function getQueuedSongInfoCB(err, queuedSong) {
+                    try {
+                        queuedSong = queuedSong[0];
+                        if (err) {
+                            app.warn("Error getting queued song info for ID " + id);
+                            object.songsProcessing--;
+                        } else {
+                            var options = ["--ignore-errors"];
+                            if (proxy)
+                                options.push("--proxy=" + proxy);
 
-                    if(downloaderConfig.get("forceIpv4"))
-                        options.push("--force-ipv4");
+                            if (downloaderConfig.get("forceIpv4"))
+                                options.push("--force-ipv4");
 
-                    if(downloaderConfig.get("allowPlaylists")) {
-                        options.push("--yes-playlist");
-                        options.push("--flat-playlist");
-                    } else
-                        options.push("--no-playlist");
+                            if (downloaderConfig.get("allowPlaylists")) {
+                                options.push("--yes-playlist");
+                                options.push("--flat-playlist");
+                            } else
+                                options.push("--no-playlist");
 
-                    ytdl.getInfo(queuedSong.url, options, function getYTInfo(err, info){
-                        app.log("Pre-processing song "+id);
-                        if(info) {
-                            if(info[0]){
-                                app.database.removeQueuedSong(id, function removeSongFromQueue(err){
-                                    if(err)app.error("Failed to remove queued song "+id+" from database: "+err);
-                                    for(var i in info)
-                                        if(info.hasOwnProperty(i))
-                                            object.queue(info[i].url, queuedSong.destination, true, queuedSong.addedby);
-                                });
-                            }else{
-                                var fixedTitle = info.fulltitle.replace(songRegex, "");
-
-                                var titleSplit = fixedTitle.split(fixedTitle.indexOf(":") > -1 ? ":" : "-");
-                                var artist = titleSplit[0].trim();
-                                var title = titleSplit[1].trim();
-                                if(titleSplit.length < 2){
-                                    title = titleSplit[0];
-                                    artist = info.uploader;
-                                }
-                                if (info.creator)
-                                    artist = info.creator;
-
-                                if (info.alt_title)
-                                    title = info.alt_title;
-
-                                artist = artist.replace(" Listen ad-free with YouTube Red", "").trim();
-
-                                app.database.doesSongExist(artist, title, function doesSongExistCB(err, exists){
-                                    if(err)app.warn(`Error checking if song exists: ${err}`);
-                                    if(exists){
-                                        app.log(`Queued download ${id} already exists.`);
-                                        app.database.updateQueuedSong(id, {
-                                            status: 'DUPLICATE'
-                                        }, function updateQueuedSongCB(err){
-                                            if(err)app.warn(`Error updating queued song: ${err}`);
+                            ytdl.getInfo(queuedSong.url, options, function getYTInfo(err, info) {
+                                app.log("Pre-processing song " + id);
+                                if (info) {
+                                    if (info[0]) {
+                                        app.database.removeQueuedSong(id, function removeSongFromQueue(err) {
+                                            if (err) app.error("Failed to remove queued song " + id + " from database: " + err);
+                                            for (var i in info)
+                                                if (info.hasOwnProperty(i))
+                                                    object.queue(info[i].url, queuedSong.destination, true, queuedSong.addedby);
                                         });
-                                        object.songsProcessing--;
-                                        if(object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")){
-                                            object.processOneSong();
+                                    } else {
+                                        var fixedTitle = info.fulltitle.replace(songRegex, "");
+
+                                        var titleSplit = fixedTitle.split(fixedTitle.indexOf(":") > -1 ? ":" : "-");
+                                        var artist = (titleSplit[0] || "Unknown").trim();
+                                        var title = (titleSplit[1] || "Unknown").trim();
+                                        if (titleSplit.length < 2) {
+                                            title = titleSplit[0];
+                                            artist = info.uploader;
                                         }
-                                    }else{
-                                        app.database.getOrCreateArtist(artist, function createArtist(err, artistId){
-                                            if(!err){
+                                        if (info.creator)
+                                            artist = info.creator;
+
+                                        if (info.alt_title)
+                                            title = info.alt_title;
+
+                                        artist = artist.replace(" Listen ad-free with YouTube Red", "").trim();
+
+                                        app.database.doesSongExist(artist, title, function doesSongExistCB(err, exists) {
+                                            if (err) app.warn(`Error checking if song exists: ${err}`);
+                                            if (exists) {
+                                                app.log(`Queued download ${id} already exists.`);
                                                 app.database.updateQueuedSong(id, {
-                                                    artist: artistId,
-                                                    title: title,
-                                                    status: 'WAITING'
-                                                }, function(err){
-                                                    if(err){
-    /* ?/ This is bob. Copy and Paste him so */         app.error("Error updating queued song: "+err);
-    /* /?  he can take over callback hell!   */     }else{
-    /* /\                                    */          app.log(`Successfully got youtube info for ${id}.`);
-                                                    }
-                                                    object.songsProcessing--;
-                                                    if(object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")){
-                                                        object.processOneSong();
+                                                    status: 'DUPLICATE'
+                                                }, function updateQueuedSongCB(err) {
+                                                    if (err) app.warn(`Error updating queued song: ${err}`);
+                                                });
+                                                object.songsProcessing--;
+                                                if (object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")) {
+                                                    object.processOneSong();
+                                                }
+                                            } else {
+                                                app.database.getOrCreateArtist(artist, function createArtist(err, artistId) {
+                                                    if (!err) {
+                                                        app.database.updateQueuedSong(id, {
+                                                            artist: artistId,
+                                                            title: title,
+                                                            status: 'WAITING'
+                                                        }, function (err) {
+                                                            if (err) {
+                                                                /* ?/ This is bob. Copy and Paste him so */
+                                                                app.error("Error updating queued song: " + err);
+                                                                /* /?  he can take over callback hell!   */
+                                                            } else {
+                                                                /* /\                                    */
+                                                                app.log(`Successfully got youtube info for ${id}.`);
+                                                            }
+                                                            object.songsProcessing--;
+                                                            if (object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")) {
+                                                                object.processOneSong();
+                                                            }
+                                                        });
+                                                    } else {
+                                                        app.error(`Error creating artist '${artist}': ${err}`);
                                                     }
                                                 });
-                                            }else{
-                                                app.error(`Error creating artist '${artist}': ${err}`);
                                             }
                                         });
                                     }
-                                });
-                            }
-                        }else{
-                            app.error(`Error getting info from youtube for ${id}: ${err}`);
-                            app.database.updateQueuedSong(id, {
-                                status: "FAILED"
-                            },function updateQueuedSong(err){
-                                if(err)
-                                    app.error(`Failed to set failure status of ${id}: ${err}`);
-                                object.songsProcessing--;
+                                } else {
+                                    app.error(`Error getting info from youtube for ${id}: ${err}`);
+                                    app.database.updateQueuedSong(id, {
+                                        status: "FAILED"
+                                    }, function updateQueuedSong(err) {
+                                        if (err)
+                                            app.error(`Failed to set failure status of ${id}: ${err}`);
+                                        object.songsProcessing--;
+                                        if (object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")) {
+                                            object.processOneSong();
+                                        }
+                                    });
+                                }
                             });
                         }
-                    });
-                }
-            });
+                    }catch(e){
+                        app.error(`Error processing ${id}: ${e}`);
+                        app.database.updateQueuedSong(id, {
+                            status: "FAILED"
+                        }, function updateQueuedSong(err) {
+                            if (err)
+                                app.error(`Failed to set failure status of ${id}: ${err}`);
+                            object.songsProcessing--;
+                            if (object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")) {
+                                object.processOneSong();
+                            }
+                        });
+                    }
+                });
         },
         downloadSong: function downloadSong(info){
             var updateErrorHandler = function updateErrorHandler(err){
