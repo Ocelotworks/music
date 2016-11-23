@@ -186,7 +186,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.audioPlayer.onended = function(){
-        $http.put(base+"templates/add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
         if($rootScope.settings.autoplay){
             if($rootScope.settings.repeat)
                 $rootScope.audioPlayer.currentTime = 0;
@@ -199,6 +198,9 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $rootScope.playNext = function playNext(){
         $rootScope.nowPlaying.normalPlay = false;
+        if($rootScope.nowPlaying.id !== null && $rootScope.nowPlaying.elapsed/$rootScope.nowPlaying.duration > 0.5){
+            $http.put(base+"templates/add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
+        }
         var nextSong;
         if($rootScope.queue.length > 0) {
             nextSong = $rootScope.queue.shift();
