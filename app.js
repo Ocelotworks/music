@@ -97,14 +97,14 @@ app.initRoutes = function initRoutes(){
     app.use('/auth',                require('./routes/auth')(app));
     app.use('/search',              require('./routes/search')(app));
     app.use('/api',                 require('./routes/api')(app));
-    app.use('/templates',           require('./routes/templates.js')(app));
+    app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
-    app.use('/templates/songs',     require('./routes/templates/songs.js')(app));
-    app.use('/templates/settings',  require('./routes/templates/settings.js')(app));
-    app.use('/templates/delete',    require('./routes/templates/delete.js')(app));
-    app.use('/templates/add',       require('./routes/templates/add.js')(app));
-    app.use('/templates/stats',     require('./routes/templates/stats.js')(app));
+    app.use('/templates/songs',     require('./routes/templates/songs')(app));
+    app.use('/templates/settings',  require('./routes/templates/settings')(app));
+    app.use('/templates/delete',    require('./routes/templates/delete')(app));
+    app.use('/templates/add',       require('./routes/templates/add')(app));
+    app.use('/templates/stats',     require('./routes/templates/stats')(app));
     app.use('/ws',                  require('./routes/websocket')(app));
 
 
@@ -222,11 +222,7 @@ new Compressor.minify({
     }
 });
 
-process.on('uncaughtException', function (err) {
-    console.log(arguments);
-    app.error("Application error:");
-    app.error(err);
-});
+
 
 process.on('SIGINT', function(){
    app.log("Received shutdown signal");
