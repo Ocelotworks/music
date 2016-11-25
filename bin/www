@@ -6,7 +6,30 @@
 
 var app = require('../app');
 var debug = require('debug')('music:server');
-var http = require('http');
+var config = require('config');
+
+var http;
+var options = null;
+if(config.get("Server.protocol").toString() == "spdy"){
+    http = require('spdy');
+    var fs = require('fs');
+    options = {
+        key: fs.readFileSync(config.get("Server.key")),
+        cert: fs.readFileSync(config.get("Server.cert")),
+        spdy: {
+            protocols: ['h2', 'spdy/3.1', 'http/1.1'],
+            plain: config.get("Server.plain"),
+            'x-forwarded-for': config.get("Server.behindProxy"),
+            connection: {
+                windowSize: config.get("Server.windowSize"),
+                autoSpdy31: false
+            }
+        }
+    }
+}else{
+    http = require('http');
+}
+
 
 /**
  * Get port from environment and store in Express.
@@ -19,7 +42,13 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+var server;
+if(options){
+    server = http.createServer(options, app);
+}else{
+    server = http.createServer(app);
+}
+
 app.expressWs = require('express-ws')(app, server);
 /**
  * Listen on provided port, on all network interfaces.
