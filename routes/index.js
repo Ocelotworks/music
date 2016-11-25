@@ -20,6 +20,9 @@ module.exports = function(app){
         "admin"
     ];
 
+    //TODO: TEMP
+    app.nowPlayings = {};
+
 
     /* GET home page. */
     router.get('/', function(req, res) {
@@ -75,9 +78,12 @@ module.exports = function(app){
                if(resp.length > 0){
                    var path = resp[0].path;
                    res.sendFile(path);
+                   if(req.user){
+                       app.nowPlayings[req.user.id] = req.params.id;
+                   }
                }else{
                    app.warn("Received request for unknown song: "+req.param.id);
-                   res.header(404).json({error: "Not Found"});
+                   res.sendFile("/home/peter/doot/doot me up inside.mp3");
                }
            }
        });

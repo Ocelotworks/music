@@ -97,6 +97,7 @@ app.initRoutes = function initRoutes(){
     app.use('/auth',                require('./routes/auth')(app));
     app.use('/search',              require('./routes/search')(app));
     app.use('/api',                 require('./routes/api')(app));
+    //app.use('/api/:key',           require('./routes/api')(app));
     app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
