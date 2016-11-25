@@ -1,0 +1,42 @@
+<div id="searchBox" ng-controller="SongController">
+    {{#if songs}}
+        <div class="searchContainer">
+            <h1>Songs</h1>
+            <div class="songList fancyScroll">
+                {{#each songs}}
+                    {{>song this}}
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
+    {{#if artists}}
+        <div class="searchContainer">
+            <h1>Artists</h1>
+            <div id="songList fancyScroll">
+                {{#each artists}}
+                    {{>artist this}}
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
+    {{#if genres}}
+        <div class="searchContainer">
+            <h1>Genres</h1>
+            <div class="genreList fancyScroll">
+                {{#each genres}}
+                    {{>genre this}}
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
+    {{#if albums}}
+        <div class="searchContainer">
+            <h1>Albums</h1>
+            <div class="albumList fancyScroll">
+                {{#each albums}}
+                    {{>album this}}
+                {{/each}}
+            </div>
+        </div>
+    {{/if}}
+</div>

@@ -439,11 +439,44 @@ module.exports = function(app){
          * @param query
          * @param cb
          */
-        search: function search(query, cb){
+        searchSongs: function searchSongs(query, cb){
             knex.select("title", "name", "songs.id AS song_id", "artists.id AS artist_id", "album")
                 .from("songs")
                 .join("artists", "songs.artist", "artists.id")
                 .where(knex.raw("MATCH(title) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .asCallback(cb);
+        },
+        /**
+         * Search for artists
+         * @param query
+         * @param cb
+         */
+        searchArtists: function searchArtists(query, cb){
+            knex.select("name", "id")
+                .from("artists")
+                .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .asCallback(cb);
+        },
+        /**
+         * Search for albums
+         * @param query
+         * @param cb
+         */
+        searchAlbums: function searchAlbums(query, cb){
+            knex.select("name", "id")
+                .from("albums")
+                .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .asCallback(cb);
+        },
+        /**
+         * Search for genres
+         * @param query
+         * @param cb
+         */
+        searchGenres: function searchGenres(query, cb){
+            knex.select("name", "id")
+                .from("genres")
+                .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
                 .asCallback(cb);
         },
         /**

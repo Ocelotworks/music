@@ -3,7 +3,8 @@
  */
 
 
-var express = require('express');
+const express = require('express');
+const async = require('async');
 var router = express.Router();
 
 module.exports = function(app){
@@ -34,17 +35,29 @@ module.exports = function(app){
     });
 
 
-    router.get('/template/:query', function(req, res){
-        app.database.search(req.params.query, function(err, resp){
-            if(err){
-                app.renderError(err, res);
-            } else{
-                res.render('templates/songList', {
-                    songs: resp,
-                    layout: false
-                });
-            }
+    router.get('/template/:query', function searchTemplate(req, res){
+        async.mapValues({
+            songs: app.database.searchSongs,
+            albums: app.database.searchAlbums,
+            artists: app.database.searchArtists,
+            genres: app.database.searchGenres
+        }, function(searchFunction, key, cb){
+            searchFunction(req.params.query, cb);
+        }, function(err, result){
+            if(err)app.warn("Error searching: "+err);
+            result.layout = false;
+            res.render('templates/searchResult', result);
         });
+        // app.database.search(req.params.query, function(err, resp){
+        //     if(err){
+        //         app.renderError(err, res);
+        //     } else{
+        //         res.render('templates/songList', {
+        //             songs: resp,
+        //             layout: false
+        //         });
+        //     }
+        // });
     });
 
   return router;
