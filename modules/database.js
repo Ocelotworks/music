@@ -636,7 +636,7 @@ module.exports = function(app){
          * @param cb
          */
         getUserFromApiKey: function getUserFromApiKey(key, cb){
-            knex.select("owner").from("api_keys").where({id: key, revoked: 0}).limit(1).asCallback(cb);
+            knex.select("users.*").innerJoin("users", "api_keys.owner", "users.id").from("api_keys").where({"api_keys.id": key, revoked: 0}).limit(1).asCallback(cb);
         },
         /**
          * Adds a vote for a song
