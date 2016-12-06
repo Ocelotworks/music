@@ -18,6 +18,10 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         });
     };
 
+    $scope.song = {
+        songFolder: "pop"
+    };
+
     $scope.addSong = function(){
         console.log($scope.song);
         $http.post(base+"templates/add/song", $scope.song)
