@@ -10,20 +10,33 @@ var router = express.Router();
 module.exports = function(app){
 
     router.get('/query/:query', function(req, res){
-       app.database.search(req.params.query, function(err, resp){
-          if(err){
-              app.warn("Received invalid search query "+req.params.query);
-              app.warn("Producing error: "+err);
-              res.status(500).json({err: err});
-          } else{
-              res.send(resp);
-          }
-       });
+        async.mapValues({
+            songs: app.database.searchSongs,
+            albums: app.database.searchAlbums,
+            artists: app.database.searchArtists,
+            genres: app.database.searchGenres
+        }, function(searchFunction, key, cb){
+            searchFunction(req.params.query, cb);
+        }, function(err, result){
+            if(err)app.warn("Error searching: "+err);
+            res.json(result);
+        });
     });
 
     router.get('/artist/:query', function(req, res){
-        //TODO
-        app.database.search(req.params.query, function(err, resp){
+        app.database.searchArtists(req.params.query, function(err, resp){
+            if(err){
+                app.warn("Received invalid search query "+req.params.query);
+                app.warn("Producing error: "+err);
+                res.status(500).json({err: err});
+            } else{
+                res.send(resp);
+            }
+        });
+    });
+
+    router.get('/album/:query', function(req, res){
+        app.database.searchAlbums(req.params.query, function(err, resp){
             if(err){
                 app.warn("Received invalid search query "+req.params.query);
                 app.warn("Producing error: "+err);
