@@ -35,6 +35,7 @@ module.exports = function(app){
 
     //XXX: Quick fix
     router.post('/forceDownloadStart', function(req, res){
+        app.downloader.songsProcessing = 0;
         app.downloader.processOneSong();
         res.header(204)
     });
