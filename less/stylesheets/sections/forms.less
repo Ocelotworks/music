@@ -324,3 +324,46 @@ td .addedBy {
   -ms-flex-direction: column;
   flex-direction: column;
 }
+
+.suggestionDropdown {
+  position: absolute;
+  max-height: 100%;
+  background: #333;
+  width: 32.6%;
+  border: 1px solid black;
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  padding-top: 10px;
+  overflow: scroll;
+  overflow-x: hidden;
+
+  &:before {
+    content: " ";
+    display: block;
+    position: absolute;
+    width: 100%;
+    background: #333333;
+    height: 10%;
+    left: -1px;
+    top: -9px;
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+  }
+}
+
+.suggestion {
+  display: block;
+  margin-bottom: 5px;
+  padding: 3%;
+  cursor: pointer;
+  &:hover{
+    background: grey;
+    transition: @transition-time;
+  }
+}
+
+
+form:focus{
+  outline: none;
+}
+

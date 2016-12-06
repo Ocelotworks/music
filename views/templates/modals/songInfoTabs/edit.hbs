@@ -1,9 +1,15 @@
-<form class="formInputGroup">
+<form class="formInputGroup" ng-controller="EditSongController" ng-submit="editSong()" data-id="{{song.id}}" ng-click="artistSuggestions = [];albumSuggestions = []">
     <div class="formInputGroup">
-        <input type="text" class="fancyInput defaultValid" required id="newArtistName" value="{{song.artist_name}}" placeholder="Artist"> - <input type="text" class="fancyInput defaultValid" required id="newSongName" value="{{song.title}}" placeholder="Song Name">
+        <input type="text" class="fancyInput defaultValid" required id="newArtistName" value="{{song.artist_name}}" ng-model="song.artist" placeholder="Artist"> - <input type="text" ng-model="song.title" class="fancyInput defaultValid" required id="newSongName" value="{{song.title}}" placeholder="Song Name">
+        <div id="artistSearch" class="suggestionDropdown fancyScroll" ng-if="artistSuggestions.length > 0">
+            <span class="suggestion" ng-repeat="suggestion in artistSuggestions" ng-click="updateAndUnfocus('artist', suggestion.name)">{[{suggestion}]}</span>
+        </div>
     </div>
     <div class="formInputGroup">
-        <input type="text" class="fancyInput defaultValid" required id="newAlbumName" value="{{song.album_name}}" placeholder="Artist">
+        <input type="text" class="fancyInput defaultValid" required id="newAlbumName" value="{{song.album_name}}" placeholder="Artist" ng-model="song.album" ng-change="displayAlbumSuggestions()">
+        <div id="albumSearch" class="suggestionDropdown fancyScroll" ng-if="albumSuggestions.length > 0">
+            <span class="suggestion" ng-repeat="suggestion in albumSuggestions" ng-click="updateAndUnfocus('album', suggestion.name)">{[{suggestion.name}]}</span>
+        </div>
     </div>
     <div class="formInputGroup">
         <input type="submit" class="happyButton" value="Save">
