@@ -264,10 +264,11 @@ module.exports = function(app){
         /**
          * Attempts to find an album with the name provided, if none is found, creates a new album
          * @param album
+         * @param artist
          * @param cb
          */
-        getOrCreateAlbum: function getOrCreateAlbum(album, cb){
-            knex.select("id").from("albums").where({name: album}).limit(1).asCallback(function getOrCreateAlbum(err, res){
+        getOrCreateAlbum: function getOrCreateAlbum(album, artist, cb){
+            knex.select("id").from("albums").where({name: album, artist: artist}).limit(1).asCallback(function getOrCreateAlbum(err, res){
                 if(err)
                     cb(err);
                 else{
@@ -279,6 +280,7 @@ module.exports = function(app){
                         var id = uuid();
                         knex('albums').insert({
                             name: album,
+                            artist: artist,
                             id: id
                         }).asCallback(function(err){
                             cb(err, id);
@@ -395,7 +397,7 @@ module.exports = function(app){
             }
 
             function albumBit (url, destination, addedById, artistId, title, album){
-               object.getOrCreateAlbum(album || "Unknown Album", function getOrCreateAlbumCB(err, albumId){
+               object.getOrCreateAlbum(album || "Unknown Album", artistId, function getOrCreateAlbumCB(err, albumId){
                    if(err){
                        app.error("Error adding song to download queue: could not get album: "+err)
                    } else{
