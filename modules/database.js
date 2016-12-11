@@ -256,6 +256,7 @@ module.exports = function(app){
                         }).asCallback(function(err){
                             cb(err, id);
                         });
+                        app.genreImageGenerator.updateArtistImage(id);
                     }
                 }
             });
