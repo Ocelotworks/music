@@ -35,6 +35,7 @@
     "passport": "^0.3.2",
     "passport-google-oauth": "^1.0.0",
     "passport-twitter": "^1.0.4",
+    "request": "^2.79.0",
     "serve-favicon": "^2.3.0",
     "spdy": "^3.4.4",
     "uuid": "^2.0.3",

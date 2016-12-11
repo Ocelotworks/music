@@ -2,7 +2,7 @@
 <button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('users')"><i class="fa fa-users"></i>&nbsp;User Manager</button>
 <button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('songs')"><i class="fa fa-music"></i>&nbsp;Song Manager</button>
 <button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('settings')"><i class="fa fa-cog"></i>&nbsp;Settings</button>
-<button class="happyButton" ng-controller="AdminController" ng-click="$http.post(base+'/templates/admin/forceDownloadStart')"><i class="fa fa-bug"></i>&nbsp;Force Song Download Start</button>
+<button class="happyButton" ng-controller="AdminController" ng-click="post(base+'/templates/admin/forceDownloadStart')"><i class="fa fa-bug"></i>&nbsp;Force Song Download Start</button>
 <div id="adminServerManager" class="modalPadding">
     <h1>Server Manager</h1>
     <h3>App Uptime: <span class="bigWord">{{longDuration uptime}}</span></h3>

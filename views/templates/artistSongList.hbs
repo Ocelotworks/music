@@ -1,0 +1,22 @@
+<div id="artistInfo">
+    <img class="artistImage" src="image/artist/{{artistID}}">
+    <div id="artistControlsContainer" ng-controller="PlaylistController">
+        <h1>{{artist.name}}</h1>
+        <button class="happyButton" ng-click="queuePlaylist()"><i class="fa fa-play"></i>&nbsp;Play Artist</button>&nbsp;
+        <button class="happyButton" ng-click="shufflePlaylist()"><i class="fa fa-random"></i>&nbsp;Shuffle Play</button>
+    </div>
+
+</div>
+<div id="artistSongList" class="songList visible fancyScroll playable" ng-controller="SongController">
+    {{#if songs}}
+        {{#each songs}}
+            {{>song}}
+        {{/each}}
+        <!--   This table was automatically created with Macromedia Fireworks 3.0   -->
+        <!--   http://www.macromedia.com   -->
+    {{else}}
+        <div class="softError">There doesn't seem to be anything here.</div>
+    {{/if}}
+
+</div>
+<footer>{{songs.length}} songs.</footer>

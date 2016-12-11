@@ -5,4 +5,6 @@ Album ID: {{song.album}} <br>
 Genre ID: {{song.genre}} <br>
 {{#if song.mbid}}MBID: {{song.mbid}}{{/if}}<br>
 User ID: {{song.addedby}}
-
+<br>
+<button class="happyButton"><i class="fa fa-bug"></i>&nbsp;Force Album Image Update</button>
+<button class="happyButton" ng-click="httpGet(base+'api/artist/{{song.artist}}/forceImageUpdate')"><i class="fa fa-bug"></i>&nbsp;Force Artist Image Update</button>

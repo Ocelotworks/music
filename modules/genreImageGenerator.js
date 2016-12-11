@@ -8,9 +8,13 @@ var fs      = require('fs');
 var async   = require('async');
 var config  = require('config');
 var path    = require('path');
+var request = require('request');
+
+//yes, mega is bigger than extralarge but extralarge is most preferred
+const imageSizes = ["small", "medium", "large", "mega", "extralarge"];
 
 module.exports = function(app){
-    return {
+    var object =  {
         /**
          * Creates a 300x300 square of 4 images from 4 random albums with songs with the specified genre on
          * @param genre The genre UUID
@@ -77,6 +81,78 @@ module.exports = function(app){
                     }
                 }
             });
+        },
+        lastfmImageArrayToMysqlData: function lastfmImageArrayToMysqlData(arr, cb){
+            var biggestImageUrl;
+            var biggestImageSize = -1;
+            async.forEach(arr, function(image, cb){
+                const imageSize = imageSizes.indexOf(image.size);
+                if(image.size && image["#text"] && imageSize > biggestImageSize){
+                    biggestImageSize = imageSize;
+                    biggestImageUrl = image["#text"];
+                }
+                cb();
+            }, function(){
+                request({url: biggestImageUrl, encoding: null}, function(err, resp, imageData){
+                    if(err || resp.statusCode >= 400){
+                        cb(err ||  resp.statusCode, null);
+                    }else{
+                        cb(null, imageData);
+                    }
+                });
+            });
+
+
+
+        },
+        updateArtistImage: function updateArtistImage(artistID){
+            if(!config.has("Keys.lastfm")){
+                app.warn("Tried to get artist image but lastFM key missing.")
+            }else{
+                app.database.getArtistName(artistID, function getArtistNameCB(err, result){
+                    if(err){
+                        app.error("Error getting artist info: "+err);
+                    } else{
+                        if(result[0]){
+                            var artistName = result[0].name;
+                            request(`http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistName}&api_key=${config.get("Keys.lastfm")}&autocorrect=1&format=json`, function lastfmGetArtistInfoCB(err, resp, body){
+                                if(err || resp.statusCode >= 400){
+                                    app.error("Error getting response from lastfm: "+(err ? err : "HTTP "+resp.statusCode))
+                                }else{
+                                    try{
+                                        var data = JSON.parse(body);
+                                        if(data.error){
+                                            app.error("Error getting artist image: "+data.message);
+                                        }else if(data.artist && data.artist.image && data.artist.image.length > 0){
+                                            object.lastfmImageArrayToMysqlData(data.artist.image, function lastfmImageArrayToMysqlDataCB(err, imageData){
+                                               if(err){
+                                                   app.error("Error getting image data: "+err);
+                                               } else{
+                                                   app.database.updateArtistImage(artistID, imageData, function updateArtistImageCB(err){
+                                                      if(err) {
+                                                          app.error("Error adding image data to database: " + err);
+                                                      }else{
+                                                        app.log("Successfully updated image for "+artistName);
+                                                      }
+                                                   });
+                                               }
+                                            });
+                                        }else{
+                                            app.warn("Artist "+artistName+" has no images.");
+                                        }
+                                    }catch(e){
+                                        app.error("Error parsing lastfm response: "+e);
+                                    }
+                                }
+                            });
+                        }else{
+                            app.warn("Tried to get artist image but artist doesn't exist. ("+artistID+")");
+                        }
+                    }
+                });
+            }
         }
     };
+
+    return object;
 };

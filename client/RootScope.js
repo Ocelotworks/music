@@ -234,6 +234,14 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         }
     };
 
+    $rootScope.httpPost = function(url, data){
+        $http.post(url, data);
+    };
+
+    $rootScope.httpGet = function(url){
+        $http.get(url);
+    };
+
     $rootScope.playById = function playById(id){
         $rootScope.playByElement($rootScope.getSongById(id));
     };

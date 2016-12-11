@@ -203,6 +203,29 @@ module.exports = function(app){
         getArtistFromSong: function getArtistFromSong(song, cb){
             knex.select("name", "id").from("artists").where({id: knex.select("artist").from("songs").where({id: song})}).asCallback(cb);
         },
+        getArtistFromId: function getArtistFromId(id, cb){
+            knex.select().from("artists").where({id: id}).limit(1).asCallback(cb);
+        },
+        getArtistImage: function getArtistImage(id, cb){
+            knex.select("image").from("artists").where({id: id}).limit(1).asCallback(cb);
+        },
+        /**
+         * Gets an artists name from their ID
+         * @param id The UUID
+         * @param cb
+         */
+        getArtistName: function getArtistName(id, cb){
+            knex.select("name").from("artists").where({id: id}).limit(1).asCallback(cb);
+        },
+        /**
+         * Updates an artists image
+         * @param id
+         * @param image
+         * @param cb
+         */
+        updateArtistImage: function updateArtistImage(id, image, cb){
+            knex("artists").update({image: image}).where({id: id}).limit(1).asCallback(cb);
+        },
         /**
          * Gets the songs from an artist TODO: Is this a duplicate of getSongsByArtist?
          * @param artist
@@ -614,6 +637,20 @@ module.exports = function(app){
                 playlist_id: playlist,
                 position: 999 //TODO: Positioning
             }).asCallback(cb);
+        },
+        /**
+         * Checks whether a song with `id` exists
+         * @param id
+         * @param cb function(err, exists)
+         */
+        getSongExists: function getSongExists(id, cb){
+              knex("songs").select("COUNT(*) as exists").where({id: id}).limit(1).asCallback(function(err, result){
+                 if(err){
+                     cb(err, null);
+                 } else{
+                     cb(err, result[0].exists)
+                 }
+              });
         },
         /**
          * Gets information about who added a song, it's album, it's duration, etc

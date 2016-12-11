@@ -89,6 +89,7 @@ module.exports = function(app){
        });
     });
 
+    //TO BE DEPRECATED
     router.get("/album/:id", function(req, res){
        app.database.getAlbumArt(req.params.id, function(err, resp){
            if(err || !resp[0] || !resp[0].image)

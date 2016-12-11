@@ -21,8 +21,18 @@ module.exports = function(app){
         app.database.getSongsByArtist(req.params.id, function(err, songs){
             if(err)
                 app.renderError(err, res);
-            else
-                res.render('templates/songList', {songs: songs, layout: false});
+            else{
+                app.database.getArtistName(req.params.id, function(err, response){
+                    if(err){
+                        app.warn("Error getting artist info: "+err);
+                        res.render('templates/songList', {songs: songs, layout: false});
+                    }else{
+                        res.render('templates/artistSongList', {songs: songs, artist: response[0], artistID: req.params.id, layout: false});
+                    }
+                });
+
+            }
+
         });
     });
 

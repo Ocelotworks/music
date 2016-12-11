@@ -55,6 +55,7 @@ if(app.get('env') === 'development')
 
 app.log("Loading modules...");
 app.database            = require('./modules/database.js')(app);
+app.util                = require('./modules/util.js')(app);
 app.downloader          = require('./modules/downloader.js')(app);
 app.auth                = require('./modules/auth.js')(app);
 app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
@@ -96,8 +97,10 @@ app.initRoutes = function initRoutes(){
     app.use('/',                    require('./routes/index')(app));
     app.use('/auth',                require('./routes/auth')(app));
     app.use('/search',              require('./routes/search')(app));
+    app.use('/image',               require('./routes/image')(app));
     app.use('/api',                 require('./routes/api')(app));
-    //app.use('/api/:key',           require('./routes/api')(app));
+    app.use('/api/song',            require('./routes/api/song')(app));
+    app.use('/api/artist',          require('./routes/api/artist')(app));
     app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
