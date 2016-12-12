@@ -22,7 +22,7 @@ module.exports = function(app){
     });
 
     router.get('/', function(req, res){
-        res.render('templates/admin', {layout: false, uptime: process.uptime()});
+        res.render('templates/admin', {layout: false, uptime: process.uptime(), jobs: app.jobs.getJobNames()});
     });
 
     router.get('/settings', function(req, res){
@@ -31,13 +31,6 @@ module.exports = function(app){
 
     router.get('/alerts', function(req, res){
         res.render('templates/admin/alerts', {layout: false, onlineUsers: app.expressWs.getWss('/ws/updates/').clients});
-    });
-
-    //XXX: Quick fix
-    router.post('/forceDownloadStart', function(req, res){
-        app.downloader.songsProcessing = 0;
-        app.downloader.processOneSong();
-        res.header(204)
     });
 
     router.post('/alerts', function(req, res){

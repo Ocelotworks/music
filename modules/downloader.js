@@ -273,5 +273,16 @@ module.exports = function(app){
         }
     };
 
+    app.jobs.addJob("Force Song Download Start", {
+        desc: "Forces the song downloader to attempt to download a song.",
+        args: [],
+        func: function(cb){
+            app.downloader.songsProcessing = 0;
+            app.downloader.processOneSong();
+            if(cb)
+                cb();
+        }
+    });
+
     return object;
 };

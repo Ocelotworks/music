@@ -101,38 +101,42 @@ module.exports = function(app){
                     }
                 });
             });
-
-
-
         },
-        updateArtistImage: function updateArtistImage(artistID){
+        updateArtistImage: function updateArtistImage(artistID, cb){
             if(!config.has("Keys.lastfm")){
-                app.warn("Tried to get artist image but lastFM key missing.")
+                app.warn("Tried to get artist image but lastFM key missing.");
+                if(cb)cb("No Key");
             }else{
                 app.database.getArtistName(artistID, function getArtistNameCB(err, result){
                     if(err){
                         app.error("Error getting artist info: "+err);
+                        if(cb)cb(err);
                     } else{
                         if(result[0]){
                             var artistName = result[0].name;
                             request(`http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistName}&api_key=${config.get("Keys.lastfm")}&autocorrect=1&format=json`, function lastfmGetArtistInfoCB(err, resp, body){
                                 if(err || resp.statusCode >= 400){
                                     app.error("Error getting response from lastfm: "+(err ? err : "HTTP "+resp.statusCode))
+                                    if(cb)cb(err ? err : resp.statusCode);
                                 }else{
                                     try{
                                         var data = JSON.parse(body);
                                         if(data.error){
                                             app.error("Error getting artist image: "+data.message);
+                                            if(cb)cb(data.message);
                                         }else if(data.artist && data.artist.image && data.artist.image.length > 0){
                                             object.lastfmImageArrayToMysqlData(data.artist.image, function lastfmImageArrayToMysqlDataCB(err, imageData){
                                                if(err){
                                                    app.error("Error getting image data: "+err);
+                                                   if(cb)cb(err);
                                                } else{
                                                    app.database.updateArtistImage(artistID, imageData, function updateArtistImageCB(err){
                                                       if(err) {
                                                           app.error("Error adding image data to database: " + err);
+                                                          if(cb)cb(err);
                                                       }else{
                                                         app.log("Successfully updated image for "+artistName);
+                                                        if(cb)cb(null);
                                                       }
                                                    });
                                                }
@@ -142,17 +146,31 @@ module.exports = function(app){
                                         }
                                     }catch(e){
                                         app.error("Error parsing lastfm response: "+e);
+                                        if(cb)cb(e);
                                     }
                                 }
                             });
                         }else{
                             app.warn("Tried to get artist image but artist doesn't exist. ("+artistID+")");
+                            if(cb)cb("No Artist");
                         }
                     }
                 });
             }
         }
     };
+
+    app.jobs.addJob("Update Artist Image", {
+        desc: "Update/add an image for a specific artist ID",
+        args: ["Artist ID"],
+        func: object.updateArtistImage
+    });
+
+    app.jobs.addJob("Update Genre Image", {
+        desc: "Update/add an image for a specific genre ID",
+        args: ["Genre ID"],
+        func: object.generateImageForGenre
+    });
 
     return object;
 };

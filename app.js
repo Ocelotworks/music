@@ -20,6 +20,7 @@ var app = express();
 app.errorCount = 0;
 app.requestCount = 0;
 
+
 app.log = function(message, caller){
     if(!caller)
         caller = caller_id.getData();
@@ -54,11 +55,18 @@ if(app.get('env') === 'development')
     app.warn("Started in DEVELOPMENT MODE! For better performance, set NODE_ENV to PRODUCTION");
 
 app.log("Loading modules...");
+app.jobs                = require('./modules/jobs.js')(app);
 app.database            = require('./modules/database.js')(app);
 app.util                = require('./modules/util.js')(app);
 app.downloader          = require('./modules/downloader.js')(app);
 app.auth                = require('./modules/auth.js')(app);
 app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
+
+app.jobs.addJob("Restart Server", {
+    desc: "Restarts the server",
+    args: [],
+    func: process.exit
+});
 
 app.downloader.processOneSong();
 
@@ -101,6 +109,7 @@ app.initRoutes = function initRoutes(){
     app.use('/api',                 require('./routes/api')(app));
     app.use('/api/song',            require('./routes/api/song')(app));
     app.use('/api/artist',          require('./routes/api/artist')(app));
+    app.use('/api/admin',           require('./routes/api/admin')(app));
     app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
@@ -199,35 +208,44 @@ app.set('view engine', 'hbs');
 //Object setup
 require('./handlebarsHelpers.js');
 app.log("Compiling clientside javascript...");
-new Compressor.minify({
-    type: 'uglifyjs',
-    fileIn:  [
-        "client/AppInit.js",
-        "client/UpdateManager.js",
-        "client/RootScope.js",
-        "client/admin/AdminController.js",
-        "client/AddController.js",
-        "client/AddDeviceController.js",
-        "client/AddPlaylistController.js",
-        "client/AddToPlaylistController.js",
-        "client/ContextMenuController.js",
-        "client/PlaylistController.js",
-        "client/ModalController.js",
-        "client/SongController.js",
-        "client/TabController.js",
-        "client/SongInfoTabController.js",
-        "client/SettingsController.js",
-        "client/EditSongController.js"
-    ],
-    fileOut: 'public/js/music.js',
-    callback: function(err){
-        if(err){
-            app.error("CRIT: Error minifying javascript, client WILL NOT WORK! "+err);
+
+app.updateJavascript = function() {
+    new Compressor.minify({
+        type: 'uglifyjs',
+        fileIn: [
+            "client/AppInit.js",
+            "client/UpdateManager.js",
+            "client/RootScope.js",
+            "client/admin/AdminController.js",
+            "client/AddController.js",
+            "client/AddDeviceController.js",
+            "client/AddPlaylistController.js",
+            "client/AddToPlaylistController.js",
+            "client/ContextMenuController.js",
+            "client/PlaylistController.js",
+            "client/ModalController.js",
+            "client/SongController.js",
+            "client/TabController.js",
+            "client/SongInfoTabController.js",
+            "client/SettingsController.js",
+            "client/EditSongController.js"
+        ],
+        fileOut: 'public/js/music.js',
+        callback: function (err) {
+            if (err) {
+                app.error("CRIT: Error minifying javascript, client WILL NOT WORK! " + err);
+            }
         }
-    }
+    });
+};
+
+app.updateJavascript();
+
+app.jobs.addJob("Refresh Client Script", {
+    desc: "Recompiles the clientside javascript file.",
+    args: [],
+    func: process.exit
 });
-
-
 
 process.on('SIGINT', function(){
    app.log("Received shutdown signal");

@@ -55,7 +55,7 @@
     "shuffleQueueSize": 100
   },
   "Cookies": {
-    "maxAge": 1e100
+    "maxAge": 1e10
   },
   "Static": {
     "maxAge": 345600000

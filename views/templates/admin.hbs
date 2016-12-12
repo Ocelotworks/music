@@ -1,10 +1,35 @@
-<button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('alerts')"><i class="fa fa-exclamation-circle"></i>&nbsp;Send Alert</button>
-<button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('users')"><i class="fa fa-users"></i>&nbsp;User Manager</button>
-<button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('songs')"><i class="fa fa-music"></i>&nbsp;Song Manager</button>
-<button class="happyButton" ng-controller="AdminController" ng-click="createAdminView('settings')"><i class="fa fa-cog"></i>&nbsp;Settings</button>
-<button class="happyButton" ng-controller="AdminController" ng-click="post(base+'/templates/admin/forceDownloadStart')"><i class="fa fa-bug"></i>&nbsp;Force Song Download Start</button>
-<div id="adminServerManager" class="modalPadding">
-    <h1>Server Manager</h1>
-    <h3>App Uptime: <span class="bigWord">{{longDuration uptime}}</span></h3>
-    <button class="happyButton">Restart Server</button>
+<div ng-controller="AdminController" class="modalPadding">
+    <button class="happyButton" ng-click="createAdminView('alerts')"><i class="fa fa-exclamation-circle"></i>&nbsp;Send Alert</button>
+    <button class="happyButton" ng-click="createAdminView('users')"><i class="fa fa-users"></i>&nbsp;User Manager</button>
+    <button class="happyButton" ng-click="createAdminView('songs')"><i class="fa fa-music"></i>&nbsp;Song Manager</button>
+    <button class="happyButton" ng-click="createAdminView('settings')"><i class="fa fa-cog"></i>&nbsp;Settings</button>
+    <div id="jobRunner" class="modalPadding">
+        <h1><i class="fa fa-suitcase"></i>&nbsp;Job Runner</h1>
+        <span ng-if="job.err" class="softError">{[{job.err}]}</span><br>
+        <div class="dropdownWithName">
+            <label for="jobName" class="dropdownName">Select Job</label>
+            <select id="jobName" class="dropdownBox" ng-model="job.name" ng-change="updateJob()">
+                {{#each jobs}}
+                    <option>{{this}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div id="jobDescContainer">
+                {[{job.desc}]}
+        </div>
+        <div id="jobArgContainer" ng-if="job.args.length > 0">
+            <h3>Arguments</h3>
+            <div class="jobArgument" ng-repeat="arg in job.args">
+                {[{arg}]}:&nbsp;<input class="fancyInput" ng-model="job.returnArgs[$index]" type="text" required><br>
+            </div>
+        </div>
+        <br>
+        <button class="happyButton" ng-if="job.desc" ng-click="runJob()"><i class="fa fa-play"></i>&nbsp;Run Job</button>
+
+    </div>
+    <div id="adminServerManager" class="modalPadding">
+        <h1>Server Manager</h1>
+        <h3>App Uptime: <span class="bigWord">{{longDuration uptime}}</span></h3>
+        <button class="happyButton">Restart Server</button>
+    </div>
 </div>

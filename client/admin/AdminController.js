@@ -39,4 +39,28 @@ app.controller("AdminController", function($scope, $rootScope, $sce, $templateRe
         });
     };
 
+
+    $scope.job = {
+        name: "",
+    };
+
+    $scope.updateJob = function(){
+        var tempName = $scope.job.name;
+        $http.get(base+"api/admin/job/"+$scope.job.name).then(function(resp){
+           $scope.job = resp.data;
+           $scope.job.name = tempName;
+           $scope.job.returnArgs = [];
+        });
+    };
+
+    $scope.runJob = function(){
+        console.log($scope.job);
+        $http.get(base+"api/admin/job/run/"+$scope.job.name+"/"+JSON.stringify($scope.job.returnArgs)).then(function(){
+           $scope.job = {
+               name : "",
+               err: "Job Running."
+           };
+        });
+    }
+
 });
