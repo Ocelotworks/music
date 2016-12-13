@@ -843,6 +843,60 @@ module.exports = function(app){
                 .limit(10).asCallback(cb);
         }
     };
+    app.jobs.addJob("Create User", {
+        desc: "Creates a new User",
+        args: ["OAuth Identifier", "Username", "Avatar URL", "Stratedgy"],
+        func: object.getOrCreateUser
+    });
+
+    app.jobs.addJob("Generate New API Key", {
+        desc: "Generates a new API Key for the specified user, invalidating their old one.",
+        args: ["User ID"],
+        func: object.generateApiKey
+    });
+
+    app.jobs.addJob("Clear Failed Downloads", {
+        desc: "Clears failed song downloads",
+        args: [],
+        func: object.clearFailedDownloads
+    });
+
+    app.jobs.addJob("Delete Playlist", {
+        desc: "Deletes a specified playlist",
+        args: ["Playlist ID"],
+        func: object.deletePlaylist
+    });
+
+    app.jobs.addJob("Cleanup Genres", {
+        desc: "Cleanup genres with no songs in",
+        args: [],
+        func: object.cleanupGenres
+    });
+
+    app.jobs.addJob("Cleanup Artists", {
+        desc: "Cleanup artists with no songs",
+        args: [],
+        func: object.cleanupArtists
+    });
+
+    app.jobs.addJob("Cleanup Albums", {
+        desc: "Cleanup albums with no songs in",
+        args: [],
+        func: object.cleanupAlbums
+    });
+
+    app.jobs.addJob("Cleanup Playlist Data", {
+        desc: "Cleanup orphaned playlist data",
+        args: [],
+        func: object.cleanupPlaylists
+    });
+
+    app.jobs.addJob("Add Song", {
+       desc: "Adds a song entry to the database",
+       args: ["Artist ID", "Album ID", "Genre ID", "MBID", "Path", "Duration", "Title", "AddedBy"],
+        func: object.addSong
+    });
+
 
     return object;
 };
