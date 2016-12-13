@@ -833,7 +833,11 @@ module.exports = function(app){
             knex.select("songs.id as id", "artists.id AS artistID", "songs.title AS title", "artists.name AS artist", "songs.album",
                         knex.raw("(SELECT COUNT(*) FROM votes WHERE up = 1 AND owner = ? AND song = songs.id) AS weight", user))
                 .from("songs")
-                .whereNotIn("songs.id", knex.select("song").from("plays").where({user: user}).andWhereRaw("`timestamp` > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 DAY)"))
+                .whereNotIn("songs.id", knex.select("song").from("plays").where({user: user})
+                    .andWhereRaw("`timestamp` > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 1 HOUR)"))
+                .whereNotIn("songs.id", knex.select("song")
+                    .from("votes")
+                    .where({up: 0, owner: user}))
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .orderByRaw("-LOG(1.0 - RAND()) / (weight+1/5)")
                 .limit(10).asCallback(cb);
