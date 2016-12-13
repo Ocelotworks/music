@@ -1,7 +1,6 @@
 var express         = require('express');
 var path            = require('path');
 var favicon         = require('serve-favicon');
-var logger          = require('morgan');
 var cookieParser    = require('cookie-parser');
 var bodyParser      = require('body-parser');
 var session         = require('express-session');
@@ -14,6 +13,7 @@ var dateFormat      = require('dateformat');
 var minifyhtml      = require('express-minify-html');
 var config          = require('config');
 var compression     = require('compression');
+var fs              = require('fs');
 
 var app = express();
 
@@ -240,6 +240,14 @@ app.updateJavascript = function() {
 };
 
 app.updateJavascript();
+
+if(app.get('env') === 'development')
+    fs.watch("client", {
+        persistent: true,
+        recursive: true
+    }, function dirWatcherCB(){
+        app.log("Detected JS change, rebuilding client javascript.");
+    });
 
 app.jobs.addJob("Refresh Client Script", {
     desc: "Recompiles the clientside javascript file.",
