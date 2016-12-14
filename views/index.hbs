@@ -99,6 +99,7 @@
     {{#if user}}
         <li role="menuitem" ng-click="ctxAddToPlaylist($event)"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Playlist</li>
     {{/if}}
+    <li role="menuitem" class="enabled" ng-click="copyShareLink($event)"><i aria-hidden="true" class="fa fa-fw fa-share-alt"></i> Copy Link</li>
     <li role="menuitem" ng-click="ctxViewAlbum($event)"><i aria-hidden="true" class="fa fa-fw fa-square"></i> Go to Album</li>
     <li role="menuitem" ng-click="ctxViewArtist($event)"><i aria-hidden="true" class="fa fa-fw fa-user"></i> Go to Artist</li>
     <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
@@ -183,6 +184,14 @@
                 tabControllerStarted = true;
                 $rootScope.$broadcast("switchTab", {{startTab}});
             });
+            {{#if playSong}}
+                $rootScope.playByData({
+                    id: "{{playSong.song_id}}",
+                    artistID: "{{playSong.artist_id}}",
+                    artist: "{{playSong.artist_name}}",
+                    title: "{{playSong.title}}"
+                });
+            {{/if}}
         }]);
     {{/if}}
 

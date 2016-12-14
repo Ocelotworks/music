@@ -2,6 +2,18 @@
  * Copyright Ocelotworks 2016
  */
 
+function copyToClipboard(text) {
+    try {
+        var $temp = $("<input>");
+        $("body").append($temp);
+        $temp.val(text).select();
+        document.execCommand("copy");
+        $temp.remove();
+    }catch(e){
+        prompt("Copy the share link below: ", text);
+    }
+}
+
 app.controller("ContextMenuController", function($scope, $rootScope){
     $scope.ctxPlayNext = function(event){
         var contextMenu = $("#songContextMenu");
@@ -38,4 +50,12 @@ app.controller("ContextMenuController", function($scope, $rootScope){
         $rootScope.$emit("showSongList", "artist/"+contextMenu.data("artist"), false);
         contextMenu.toggle(100);
     };
+
+
+    $scope.copyShareLink = function(){
+        var contextMenu = $("#songContextMenu");
+        var builtShareString = $rootScope.getSongById(contextMenu.data("id")).innerText.replace(/\s/g,"-").replace("---", "-");
+        copyToClipboard(base+"song/"+contextMenu.data("id")+"/"+builtShareString);
+        contextMenu.toggle(100);
+    }
 });

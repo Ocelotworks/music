@@ -56,7 +56,7 @@ module.exports = function(app){
         album: "templates/songs/album/"
     };
 
-    router.get("/playlist/:id", function(req, res){
+    router.get(["/playlist/:id", "/playlist/:id/:name"], function(req, res){
         res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', loadPage: types["playlist"]+req.params.id});
     });
 
@@ -66,6 +66,24 @@ module.exports = function(app){
                 res.header(500).json(err);
             }else
                 res.header(204).json({});
+        });
+    });
+
+    router.get('/play/:id', function(req, res){
+        app.database.getDetailedSongInfo(req.params.id, function(err, result){
+            if(err)app.error(err);
+            res.render('index', {title: "Petify", user: req.user, developmentMode: app.get('env') === 'development', startTab: 0, playSong: result[0]});
+        });
+    });
+
+    router.get("/song/:id/:name", function(req, res){
+        app.database.getDetailedSongInfo(req.params.id, function(err, data){
+           if(err){
+               app.renderError(err, res);
+           } else{
+               console.log(data[0]);
+               res.render('shareSong', {layout: false, song: data[0]});
+           }
         });
     });
 
