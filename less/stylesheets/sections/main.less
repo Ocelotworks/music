@@ -84,11 +84,16 @@
   color: @text-color;
   .transition(@transition-time);
 
-  &:hover {
+  &:not([disabled]):hover {
     .transition(@transition-time);
     cursor: pointer;
     color: @accent-color;
     border: 1px solid @background-highlight;
+  }
+
+  &[disabled]{
+    cursor: not-allowed;
+    color: grey;
   }
 }
 

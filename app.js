@@ -234,6 +234,8 @@ app.updateJavascript = function() {
         callback: function (err) {
             if (err) {
                 app.error("CRIT: Error minifying javascript, client WILL NOT WORK! " + err);
+            }else{
+                app.log("Successfully built client javascript");
             }
         }
     });
@@ -247,6 +249,7 @@ if(app.get('env') === 'development')
         recursive: true
     }, function dirWatcherCB(){
         app.log("Detected JS change, rebuilding client javascript.");
+        app.updateJavascript();
     });
 
 app.jobs.addJob("Refresh Client Script", {

@@ -69,7 +69,9 @@
             <i role="menuitemcheckbox" class="control fa fa-retweet" aria-label="Repeat" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
         </div>
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
-        <span id="connectedDevices" ng-if="settings.connectedDevices.length > 0" ng-click="$emit('openModal', 'modals/devices?c='+Math.random());"><i class="fa fa-wifi"></i> Connected Devices</span>
+        <span id="connectedDevices" ng-if="settings.connectedDevices.length > 0" ng-click="$emit('openModal', 'modals/devices?c='+Math.random());" ng-class="{'enabled': playOnDevice != null}">
+            <i class="fa fa-wifi"></i> {[{playOnDevice != null ? "Playing on "+playOnDevice.name : "Connected Devices"}]}
+        </span>
     </div>
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>

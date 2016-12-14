@@ -261,6 +261,11 @@
   padding: 5px;
   cursor: pointer;
   border-radius: 5px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: ~"calc(100% - 10px)";
+  display: block;
+  overflow: hidden;
 
   &:hover {
     color: @text-color;

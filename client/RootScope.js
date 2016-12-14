@@ -264,6 +264,11 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     };
 
+    $rootScope.setDevice = function setDevice(id, name){
+        $rootScope.playOnDevice = $rootScope.settings.deviceID == id ? null : {name: name, id: id};
+        $rootScope.$emit('closeModal');
+    };
+
     $rootScope.$on("modalControllerReady", function(){
         if(localStorage) {
             if($rootScope.loggedIn){

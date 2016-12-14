@@ -10,6 +10,8 @@ function initialiseWebsocket($rootScope){
 
     $rootScope.messages = [];
 
+    //{name: "Device Name", id: "Device ID"}
+    $rootScope.playOnDevice = null;
 
     setInterval(function(){
         $rootScope.messages.forEach(function(message, index){
@@ -32,7 +34,7 @@ function initialiseWebsocket($rootScope){
         console.log($rootScope.serverIssues);
         setTimeout(function(){
             initialiseWebsocket($rootScope);
-        }, 2000);
+        }, 2000);//
     };
 
     $rootScope.sendSocketMessage = function(type, payload){
@@ -60,6 +62,15 @@ function initialiseWebsocket($rootScope){
                     break;
                 case "updateDevices":
                     $rootScope.settings.connectedDevices = data.message;
+                    break;
+                case "play":
+                    $rootScope.playById(data.id);
+                    break;
+                case "seek":
+                    $rootScope.audioPlayer.seek(data.seconds);
+                    break;
+                case "volume":
+                    $rootScope.audioPlayer.volume = data.volume;
                     break;
                 default:
                     console.warn("Unknown message type: "+data.type);
