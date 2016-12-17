@@ -114,9 +114,10 @@ module.exports = function(app){
                     } else{
                         if(result[0]){
                             var artistName = result[0].name;
+                            app.log("Getting Image for "+artistName);
                             request(`http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${artistName}&api_key=${config.get("Keys.lastfm")}&autocorrect=1&format=json`, function lastfmGetArtistInfoCB(err, resp, body){
                                 if(err || resp.statusCode >= 400){
-                                    app.error("Error getting response from lastfm: "+(err ? err : "HTTP "+resp.statusCode))
+                                    app.error("Error getting response from lastfm: "+(err ? err : "HTTP "+resp.statusCode));
                                     if(cb)cb(err ? err : resp.statusCode);
                                 }else{
                                     try{
@@ -159,6 +160,26 @@ module.exports = function(app){
             }
         }
     };
+
+
+    app.jobs.addJob("Update All Missing Artist Images", {
+        desc: "Updates all artists with no artist image",
+        args: [],
+        func: function(cb){
+            app.database.getArtistsWithNoImage(function(err, res){
+                if(err)cb(err);
+                else{
+                    async.eachSeries(res, function(artist, asyncCB){
+                        app.log(artist.id);
+                        object.updateArtistImage(artist.id, function(){
+                            //Ignore error
+                            asyncCB();
+                        });
+                    }, cb);
+                }
+            });
+        }
+    });
 
     app.jobs.addJob("Update Artist Image", {
         desc: "Update/add an image for a specific artist ID",

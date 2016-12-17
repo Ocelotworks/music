@@ -210,6 +210,13 @@ module.exports = function(app){
             knex.select("image").from("artists").where({id: id}).limit(1).asCallback(cb);
         },
         /**
+         * Gets all the artists that are missing an image
+         * @param cb
+         */
+        getArtistsWithNoImage: function getArtistsWithNoImage(cb){
+            knex.select("id").from("artists").whereNull("image").asCallback(cb);
+        },
+        /**
          * Gets an artists name from their ID
          * @param id The UUID
          * @param cb
