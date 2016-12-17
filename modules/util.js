@@ -6,7 +6,15 @@ module.exports = function(app){
         validateKeyAbove: function validateKeyAbove(minUserLevel){
             return function validateKey(req, res, next){
                 if(!req.params.key){
-                    res.headers(401).json({err: "You must supply an API key."})
+                    if(req.user){
+                        if(req.user.userlevel < minUserLevel){
+                            res.headers(403).json({err: "Invalid access level"});
+                        }else{
+                            next();
+                        }
+                    }else{
+                        res.headers(401).json({err: "You must supply an API key."});
+                    }
                 }else {
                     app.database.getUserFromApiKey(req.params.key, function (err, result) {
                         if (err) {
