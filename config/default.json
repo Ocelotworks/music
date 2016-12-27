@@ -51,7 +51,7 @@
   "General": {
     "baseURL": "",
     "tempDir": "temp/",
-    "christmasMode": true,
+    "christmasMode": false,
     "shuffleQueueSize": 100
   },
   "Cookies": {
