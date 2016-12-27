@@ -110,19 +110,24 @@ module.exports = function(app){
     router.get('/devices', function(req, res){
         if(req.user){
             app.database.getDevicesForSettings(req.user.id, function(err, result){
-                console.log("RETURN ARGS");
-                console.log(arguments);
                 res.render('templates/modals/devices', {layout: false, devices: result});
             });
         }else{
             res.header(401).text("You need to be logged in to do that.");
         }
-
-
     });
 
-
-
+    router.get("/accountHistory", function(req, res){
+       if(req.user){
+           app.database.getUserHistory(req.user.id, 0, function(err, result){
+               if(err)
+                   app.error("Error getting user history: "+err);
+               res.render('templates/modals/accountHistory', {layout: false, history: result});
+           });
+       }else{
+           res.header(401).text("You need to be logged in to do that.");
+       }
+    });
 
     return router;
 };

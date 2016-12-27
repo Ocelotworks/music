@@ -848,6 +848,29 @@ module.exports = function(app){
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .orderByRaw("-LOG(1.0 - RAND()) / (weight+1/5)")
                 .limit(10).asCallback(cb);
+        },
+        /**
+         * Get the user's actions, in reverse order
+         * @param user The user ID
+         * @param page The page (set of 100 records) to get
+         * @param cb callback
+         */
+        getUserHistory: function(user, page, cb){
+            knex.select("votes.timestamp AS time", "artists.name AS artist", "songs.title AS song", knex.raw('CASE WHEN up THEN (SELECT "Vote Up") ELSE (SELECT "Vote Down") END as type'))
+                .from("votes")
+                .innerJoin("songs", "votes.song", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .where({owner: user})
+                .unionAll(function(){
+                    this.select("plays.timestamp AS time", "artists.name AS artist", "songs.title AS song", knex.raw('(SELECT "Listen") AS type'))
+                        .from("plays")
+                        .innerJoin("songs", "plays.song", "songs.id")
+                        .innerJoin("artists", "songs.artist", "artists.id")
+                        .where({user: user});
+                })
+                .orderBy("time", "DESC")
+                .limit(100)
+                .asCallback(cb);
         }
     };
     app.jobs.addJob("Create User", {

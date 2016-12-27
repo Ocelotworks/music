@@ -1,0 +1,16 @@
+<table class="fancyTable fancyScroll" id="historyTable">
+    <tr>
+        <td>Time</td>
+        <td>Artist</td>
+        <td>Title</td>
+        <td>Action</td>
+    </tr>
+    {{#each history}}
+        <tr>
+            <td>{{time}}</td>
+            <td>{{artist}}</td>
+            <td>{{title}}</td>
+            <td>{{type}}</td>
+        </tr>
+    {{/each}}
+</table>
