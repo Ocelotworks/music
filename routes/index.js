@@ -7,18 +7,21 @@ var child_process = require('child_process');
 module.exports = function(app){
 
 
-    const tabs = [
+    var tabs = [
         "songs",
         "artists",
         "albums",
         "genres",
-        "christmas",
         "playlists",
         "radio",
         "add",
         "stats",
         "admin"
     ];
+
+    if(config.get("General.christmasMode")){
+        tabs.splice(4, 0, "christmas");
+    }
 
     //TODO: TEMP
     app.nowPlayings = {};
