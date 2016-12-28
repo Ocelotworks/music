@@ -4,24 +4,23 @@
 
 var express = require('express');
 var router = express.Router();
+const async = require('async');
 
 module.exports = function(app){
-
     router.get('/', function(req, res){
-        app.database.getOverallStats(function getOverallStatsCB(err, overallStats){
+        async.mapValues({
+            mostPlayed: app.database.getMostPlayedStats,
+            mostPlayedTotal: app.database.getOverallStats,
+            mostPopular: app.database.getMostPopularStats
+        }, function(databaseFunction, key, cb){
+            databaseFunction(cb);
+        }, function(err, result){
             if(err)app.warn("Error getting stats: "+err);
-            app.database.getMostPlayedStats(function getMostPlayedStatsCB(err, mostPlayed){
-                if(err)app.warn("Error getting stats: "+err);
-                res.render('templates/stats', {
-                    layout: false,
-                    stats: {
-                        mostPlayed: mostPlayed,
-                        mostPlayedTotal: overallStats[0]
-                    }
-                });
+            res.render('templates/stats', {
+                layout: false,
+                stats: result
             });
         });
     });
-
     return router;
 };

@@ -780,6 +780,20 @@ module.exports = function(app){
                 .limit(10)
                 .asCallback(cb);
         },
+        /**
+         * Gets the most popular songs based on the amount of votes they get
+         * @param cb
+         */
+        getMostPopularStats: function getMostPopularStats(cb){
+            knex.select("artists.name", "songs.title", knex.raw("SUM(up)"))
+                .from("votes")
+                .innerJoin("songs", "votes.song", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .groupBy("song")
+                .orderByRaw("SUM(UP) DESC")
+                .limit(10)
+                .asCallback(cb);
+        },
         getOverallStats: function getOverallStats(cb){
           knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"), knex.raw("(SELECT AVG(duration) FROM songs) AS averageDuration"))
               .from("plays")
