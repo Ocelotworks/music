@@ -54,6 +54,11 @@ function shuffle(a) {
     }
 }
 
+//Now listen 'ere you lil shit...
+function newInstance(object){
+    return JSON.parse(JSON.stringify(object));
+}
+
 function incompatibleBrowser(){
 
 }

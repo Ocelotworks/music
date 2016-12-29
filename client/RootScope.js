@@ -66,6 +66,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $rootScope.shuffleQueue = [];
     $rootScope.queue = [];
+    $rootScope.historyStack = [];
 
 
     $rootScope.replenishShuffleQueue = function(){
@@ -196,10 +197,29 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $rootScope.replenishShuffleQueue();
 
+    $rootScope.playLast = function(){
+        console.log("Playing from stack");
+        console.log(JSON.stringify($rootScope.historyStack));
+        if($rootScope.historyStack.length > 0){
+            if($rootScope.nowPlaying.id !== null){
+                $rootScope.shuffleQueue.unshift(newInstance($rootScope.nowPlaying));
+            }
+            $rootScope.playByData($rootScope.historyStack.pop());
+        }
+    };
+
     $rootScope.playNext = function playNext(){
         $rootScope.nowPlaying.normalPlay = false;
-        if($rootScope.nowPlaying.id !== null && $rootScope.nowPlaying.elapsed/$rootScope.nowPlaying.duration > 0.5){
-            $http.put(base+"templates/add/play/"+$rootScope.nowPlaying.id, "").then(function(){});
+        if($rootScope.nowPlaying.id !== null) {
+            console.log("Pushing on to history stack:");
+            console.log($rootScope.nowPlaying);
+            $rootScope.historyStack.push(newInstance($rootScope.nowPlaying));
+            console.log("History stack is now");
+            console.log($rootScope.historyStack);
+            if ($rootScope.nowPlaying.elapsed / $rootScope.nowPlaying.duration > 0.5) {
+                $http.put(base + "templates/add/play/" + $rootScope.nowPlaying.id, "").then(function () {
+                });
+            }
         }
         var nextSong;
         if($rootScope.queue.length > 0) {

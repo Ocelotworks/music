@@ -41,15 +41,20 @@
 
   color: @background-highlight;
 
-  &.disabled:hover{
+  &.disabled:hover, &[disabled]:hover{
     cursor: not-allowed;
   }
 
-  &:hover{
+  &:not([disabled]):hover{
     cursor: pointer;
     color: @text-color;
     .transition(@transition-time);
   }
+
+  &[disabled]{
+    color: #292929;
+  }
+
 }
 
 #controls {

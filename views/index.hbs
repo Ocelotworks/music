@@ -61,7 +61,7 @@
             {{!--{{/if}}--}}
     </span>
     <div id="controls" class="weeBox" role="menu">
-        <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward"></i>
+        <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward" ng-click="playLast()" ng-disabled="historyStack.length === 0"></i>
         <i role="menuitem" aria-label="Play/Pause" class="control fa" title="Play/Pause" ng-click="togglePlaying()" ng-class="audioPlayer.paused ? 'fa-play' : nowPlaying.buffering ? 'fa-shekel fa-spin' : 'fa-pause'"></i>
         <i role="menuitem" aria-label="Forward" class="control fa fa-forward" title="Forward" ng-click="skipSong()"></i>
         <div id="lesserControls">
