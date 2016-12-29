@@ -202,7 +202,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         console.log(JSON.stringify($rootScope.historyStack));
         if($rootScope.historyStack.length > 0){
             if($rootScope.nowPlaying.id !== null){
-                $rootScope.shuffleQueue.unshift(newInstance($rootScope.nowPlaying));
+                ($rootScope.queue.length > 0 ? $rootScope.queue : $rootScope.shuffleQueue).unshift(newInstance($rootScope.nowPlaying));
             }
             $rootScope.playByData($rootScope.historyStack.pop());
         }
