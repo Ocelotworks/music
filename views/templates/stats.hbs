@@ -4,7 +4,7 @@
 <div class="formInputGroup">
     <h1>Most Played Songs</h1>
     {{#each stats.mostPlayedTotal}} {{!I know, I know}}
-        <h3><span class="bigWord">{{total}}</span> total plays. <span class="bigWord">{{seconds}}</span> of listening.</h3>
+        <h3><span class="bigWord">{{total}}</span> total plays. <span class="bigWord">{{longDuration seconds}}</span> of listening.</h3>
         <h3>Average Song Duration: <span class="bigWord">{{longDuration averageDuration}}</span></h3>
     {{/each}}
     <table class="fancyTable graphedTable">
