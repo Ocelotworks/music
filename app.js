@@ -110,6 +110,7 @@ app.initRoutes = function initRoutes(){
     app.use('/api/song',            require('./routes/api/song')(app));
     app.use('/api/artist',          require('./routes/api/artist')(app));
     app.use('/api/admin',           require('./routes/api/admin')(app));
+    app.use('/api/stats',           require('./routes/api/stats')(app));
     app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));

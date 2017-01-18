@@ -885,6 +885,12 @@ module.exports = function(app){
                 .orderBy("time", "DESC")
                 .limit(100)
                 .asCallback(cb);
+        },
+        getSongPlaysStats: function getSongPlaysStats(cb){
+            knex.select(knex.raw("COUNT(*) AS y"), knex.raw("DATE(timestamp) AS x"))
+                .from("plays")
+                .groupByRaw("DATE(timestamp)")
+                .asCallback(cb);
         }
     };
     app.jobs.addJob("Create User", {

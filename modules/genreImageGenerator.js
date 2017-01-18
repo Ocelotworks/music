@@ -102,6 +102,15 @@ module.exports = function(app){
                 });
             });
         },
+        getImageFromAlbumName: function getImageFromAlbumName(albumName, cb){
+
+        },
+        updateSongFromLastfmData: function(songID, cb){
+
+        },
+        updateAlbumImage: function updateAlbumImage(albumID, cb){
+
+        },
         updateArtistImage: function updateArtistImage(artistID, cb){
             if(!config.has("Keys.lastfm")){
                 app.warn("Tried to get artist image but lastFM key missing.");

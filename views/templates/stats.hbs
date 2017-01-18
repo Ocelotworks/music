@@ -1,6 +1,20 @@
 {{#each stats}}
     {{@key}}
 {{/each}}
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/metrics-graphics/2.10.1/metricsgraphics.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/metrics-graphics/2.10.1/metricsgraphics.min.css" />
+<style>
+    #graph {
+        position: absolute;
+        top: 0;
+        right: 10px;
+    }
+
+    text{
+        fill: white !important;
+    }
+</style>
 <div class="formInputGroup">
     <h1>Most Played Songs</h1>
     {{#each stats.mostPlayedTotal}} {{!I know, I know}}
@@ -37,6 +51,29 @@
 
         {{/each}}
     </table>
+    <div id="graph">
+    </div>
+    <script>
+       setTimeout(function(){
+           d3.json('/petify/api/stats/plays', function(data) {
+               data = MG.convert.date(data, 'x', d3.timeFormat("%Y-%m-%dT%H:%M:%S.000Z"));
+               MG.data_graphic({
+                   title: "Song plays per day",
+                   data: data, //[data1, data2],
+                   width: 600,
+                   height: 200,
+                   right: 40,
+                   area: false,
+                   linked: false,
+                   xax_count: 4,
+                   color: '#ffffff',
+                   target: '#graph',
+                   x_accessor: 'x',
+                   y_accessor: 'y'
+               });
+           });
+       }, 1000);
 
+    </script>
 
 </div>
