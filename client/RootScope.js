@@ -198,8 +198,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     $rootScope.replenishShuffleQueue();
 
     $rootScope.playLast = function(){
-        console.log("Playing from stack");
-        console.log(JSON.stringify($rootScope.historyStack));
         if($rootScope.historyStack.length > 0){
             if($rootScope.nowPlaying.id !== null){
                 ($rootScope.queue.length > 0 ? $rootScope.queue : $rootScope.shuffleQueue).unshift(newInstance($rootScope.nowPlaying));
@@ -211,11 +209,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     $rootScope.playNext = function playNext(){
         $rootScope.nowPlaying.normalPlay = false;
         if($rootScope.nowPlaying.id !== null) {
-            console.log("Pushing on to history stack:");
-            console.log($rootScope.nowPlaying);
             $rootScope.historyStack.push(newInstance($rootScope.nowPlaying));
-            console.log("History stack is now");
-            console.log($rootScope.historyStack);
             if ($rootScope.nowPlaying.elapsed / $rootScope.nowPlaying.duration > 0.5) {
                 $http.put(base + "templates/add/play/" + $rootScope.nowPlaying.id, "").then(function () {
                 });
