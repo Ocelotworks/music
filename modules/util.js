@@ -21,6 +21,7 @@ module.exports = function(app){
                             res.headers(500).json({err: err});
                         } else {
                             var user = result[0];
+                            req.user = user;
                             if (user.userlevel < minUserLevel) {
                                 res.headers(403).json({err: "Invalid access level"});
                             } else {
