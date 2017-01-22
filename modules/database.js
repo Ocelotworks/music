@@ -189,7 +189,8 @@ module.exports = function(app){
         addPlayForSong: function addPlayForSong(id, userid, manual, cb){
             knex("plays").insert({
                 user: userid,
-                song: id
+                song: id,
+                manual: manual ? 1 : 0
             }).asCallback(function getSongPathToPlayCB(err){
                 if(err)
                     app.warn("Error adding play for song "+id+": "+err);
