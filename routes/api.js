@@ -10,7 +10,7 @@ var router = express.Router();
 module.exports = function(app){
 
     router.get('/status', function(req, res){
-       res.json({errorCount: app.errorCount, requestCount: app.requestCount});
+       res.json({errorCount: app.errorCount, requestCount: app.requestCount, uptime: process.uptime()});
     });
 
 
