@@ -182,10 +182,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.buffering = true;
     };
 
-    $rootScope.audioPlayer.onvolumechange = function(){
-        console.log("Aye lad the volume changed");
-    };
-
     $rootScope.audioPlayer.onended = function(){
         if($rootScope.settings.autoplay){
             if($rootScope.settings.repeat)
