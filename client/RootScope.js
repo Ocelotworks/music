@@ -207,8 +207,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         if($rootScope.nowPlaying.id !== null) {
             $rootScope.historyStack.push(newInstance($rootScope.nowPlaying));
             if ($rootScope.nowPlaying.elapsed / $rootScope.nowPlaying.duration > 0.5) {
-                $http.put(base + "templates/add/play/" + $rootScope.nowPlaying.id, "").then(function () {
-                });
+                $http.put(base + "api/song/play/" + $rootScope.nowPlaying.id+"/"+$rootScope.nowPlaying.manual || "false", "");
             }
         }
         var nextSong;
@@ -256,7 +255,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.playByElement($rootScope.getSongById(id));
     };
 
-    $rootScope.playByElement = function playByElement(element){
+    $rootScope.playByElement = function playByElement(element, manual){
         if(!element)return console.warn("Warning: playByElement called with a null element! Bad ID somewhere?");
         $(".songRate").removeClass("rated");
         var info = (element.outerText || element.textContent).split("\u00A0-\u00A0");
@@ -265,6 +264,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.artist = info[0];
         $rootScope.nowPlaying.title = info[1];
         $rootScope.nowPlaying.buffering = true;
+        $rootScope.nowPlaying.manual = manual;
         $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
         if(window.innerWidth <= 1111){

@@ -35,6 +35,28 @@ module.exports = function(app){
     });
 
     /**
+     * /api/song/play/:id/:manual
+     * /api/song/:key/play/:id/:manual
+     */
+    router.put(['/play/:id/:manual', '/:key/play/:id/:manual'], app.util.validateKeyAbove(0), function(req, res){
+        res.header(204);
+        app.database.addPlayForSong(req.params.id, req.user ? req.user.id :"c999f4ab-72a6-11e6-839f-00224dae0d2a",req.params.manual == "true", function addPlayForSongCB(err){
+            if(err)app.error(`Error adding play for ${req.params.id} by user ${req.user.id}: ${err}`);
+        });
+    });
+
+    /**
+     * /api/song/skip/:id/:seconds
+     * /api/song/:key/skip/:id/:seconds
+     */
+    router.put(['/skip/:id/:seconds', '/:key/skip/:id/:seconds'], app.util.validateKeyAbove(0), function(req, res){
+        res.header(204);
+        app.database.addSkipForSong(req.params.id,  req.user ? req.user.id :"c999f4ab-72a6-11e6-839f-00224dae0d2a", parseFloat(req.params.seconds) || 0, function  addSkipForSongCB(err) {
+            if(err)app.error(`Error adding skip for ${req.params.id} by user ${req.user.id}: ${err}`);
+        })
+    });
+
+    /**
      * /song/:key/like/:songid
      * /song/:key/dislike/:songid
      */

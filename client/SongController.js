@@ -5,7 +5,7 @@
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http, $location){
 
     $scope.playSong = function(event){
-        $rootScope.playByElement(event.target);
+        $rootScope.playByElement(event.target, true);
     };
 
 
@@ -65,7 +65,10 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
     };
 
     $scope.skipSong = function(){
-        ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed);
+        if($rootScope.nowPlaying.id){
+            ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed);
+            $http.put(base + "api/song/skip/" + $rootScope.nowPlaying.id+"/"+$rootScope.nowPlaying.elapsed, "");
+        }
         $scope.playNext();
     };
 

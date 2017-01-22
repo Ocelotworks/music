@@ -186,7 +186,7 @@ module.exports = function(app){
         getSongPathToPlay: function getSongPathToPlay(id, userid, cb){
             knex.select("path").from("songs").where({id: id}).limit(1).asCallback(cb);
         },
-        addPlayForSong: function addPlayForSong(id, userid, cb){
+        addPlayForSong: function addPlayForSong(id, userid, manual, cb){
             knex("plays").insert({
                 user: userid,
                 song: id
@@ -194,6 +194,20 @@ module.exports = function(app){
                 if(err)
                     app.warn("Error adding play for song "+id+": "+err);
             });
+        },
+        /**
+         * Adds a skip for a song for a specific user
+         * @param id The song ID
+         * @param userid The user ID
+         * @param seconds The amount of seconds into the song that they skipped
+         * @param cb
+         */
+        addSkipForSong: function addSkipForSong(id, userid, seconds, cb){
+            knex("skips").insert({
+                user: userid,
+                song: id,
+                seconds: seconds
+            }).asCallback(cb);
         },
         /**
          * Gets the artist name from a song ID
