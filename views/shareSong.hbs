@@ -15,18 +15,26 @@
     {{/if}}
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:domain" value="unacceptableuse.com/petify/" />
+    <meta name="twitter:url" value="http://unacceptableuse.com/petify/song/{{song.song_id}}/-" />
+    <meta name="twitter:site" content="https://unacceptableuse.com/petify/" />
+    <meta name="twitter:description" content="Listen to {{song.title}} on Petify." />
+    <meta name="twitter:image" content="https://unacceptableuse.com/petify/album/{{song.album_id}}" />
+    <meta property="og:url" content="http://unacceptableuse.com/petify/song/{{song.song_id}}/-" />
     <meta property="og:type" content="music.song">
     <meta property="og:audio" content="https://unacceptableuse.com/petify/song/{{song.song_id}}">
     <meta property="og:music:duration" content="{{song.duration}}">
     <meta property="og:music:album" content="{{song.album_name}}">
     <meta property="og:music:musician:first_name" content="{{song.artist_name}}">
-    <meta property="og:url" content="https://unacceptableuse.com/petify/play/{{song.song_id}}">
+    <meta property="og:url" content="https://unacceptableuse.com/petify/song/{{song.song_id}}/-">
     <meta property="og:title" content="{{song.artist_name}} - {{song.title}}">
     <meta property="og:image" content="https://unacceptableuse.com/petify/album/{{song.album_id}}">
     <meta property="og:image:type" content="image/png">
     <meta property="og:description" content="Listen to {{song.title}} on Petify">
     <meta property="og:site_name" content="Petify">
     <meta property="og:locale" content="en_GB">
+
     {{!Google Analytics}}
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
