@@ -11,7 +11,8 @@ module.exports = function(app){
         async.mapValues({
             mostPlayed: app.database.getMostPlayedStats,
             mostPlayedTotal: app.database.getOverallStats,
-            mostPopular: app.database.getMostPopularStats
+            mostPopular: app.database.getMostPopularStats,
+            mostSkipped: app.database.getMostSkippedStats
         }, function(databaseFunction, key, cb){
             databaseFunction(cb);
         }, function(err, result){

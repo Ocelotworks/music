@@ -18,7 +18,7 @@ Handlebars.registerPartial('genre', '<div class="album" ng-click="playGenre(\'{{
 Handlebars.registerHelper('prettyParseDuration', function(seconds){
 
 
-    var duration = seconds;
+    var duration = seconds.toFixed(2);
     var prefix = "second";
     if(seconds >= 3.154e+7){
         duration    = (seconds/3.154e+7).toFixed(2);

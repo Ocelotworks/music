@@ -810,10 +810,20 @@ module.exports = function(app){
                 .asCallback(cb);
         },
         getOverallStats: function getOverallStats(cb){
-          knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"), knex.raw("(SELECT AVG(duration) FROM songs) AS averageDuration"))
-              .from("plays")
-              .innerJoin("songs", "plays.song", "songs.id")
-              .asCallback(cb);
+            knex.select(knex.raw("SUM(songs.duration) AS seconds"), knex.raw("COUNT(*) as total"), knex.raw("(SELECT AVG(duration) FROM songs) AS averageDuration"))
+                .from("plays")
+                .innerJoin("songs", "plays.song", "songs.id")
+                .asCallback(cb);
+        },
+        getMostSkippedStats: function getMostSkippedStats(cb){
+            knex.select("artists.name AS artist", "songs.title AS title", knex.raw("COUNT(*) as timesSkipped"), knex.raw("AVG(seconds) as averageSkip"), knex.raw(" (AVG(seconds)/duration)*100 as percentage"))
+                .from("skips")
+                .innerJoin("songs", "skips.song", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .groupBy("song")
+                .orderByRaw("COUNT(*) DESC,AVG(seconds) ASC")
+                .limit(10)
+                .asCallback(cb);
         },
         /**
          * Checks if a song with artist artistName and song songName exists already

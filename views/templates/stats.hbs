@@ -51,6 +51,22 @@
 
         {{/each}}
     </table>
+    <h1>Most Skipped Songs</h1>
+    <table class="fancyTable graphedTable">
+        <tr><td>Rank</td><td>Song</td><td>Skips</td><td>Average Time Tolerated</td><td>
+            Percentage of total duration before skip <span class="fiftyPercentMarker">50%</span> <span class="hundredPercentMarker">100%</span>
+        </td></tr>
+        {{#each stats.mostSkipped}}
+            <tr>
+                <td>{{@index}}</td>
+                <td>{{artist}}&nbsp;-&nbsp;{{title}}</td>
+                <td>{{timesSkipped}}</td>
+                <td>
+                    {{prettyParseDuration averageSkip}}
+                </td>
+                <td style="width: {{percentage}}%; text-indent: calc({{percentage}}% + 10px);">{{percentage}}%</td></tr>
+        {{/each}}
+    </table>
     <div id="graph">
     </div>
     <script>
