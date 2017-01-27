@@ -60,7 +60,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         elapsed: 0,
         playing: false,
         buffered: 0,
-        buffering: false
+        buffering: false,
+        manual: false
     };
 
 
@@ -98,7 +99,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             title: info[1],
             id: element.attributes["data-id"].value,
             album: element.attributes["data-album"].value,
-            artistID: element.attributes["data-artist"].value
+            artistID: element.attributes["data-artist"].value,
+            manual: true
         };
         $rootScope.queue.push(songObject);
     };
@@ -114,7 +116,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             title: info[1],
             id: element.attributes["data-id"].value,
             album: element.attributes["data-album"].value,
-            artistID: element.attributes["data-artist"].value
+            artistID: element.attributes["data-artist"].value,
+            manual: true
         };
         $rootScope.queue.unshift(songObject);
     };
@@ -235,6 +238,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.artist = data.artist;
         $rootScope.nowPlaying.title = data.title;
         $rootScope.nowPlaying.buffering = true;
+        $rootScope.nowPlaying.manual = data.manual;
         $rootScope.audioPlayer.src = base+"song/"+data.id;
         $("#albumArt").attr("src", base+"album/"+data.album);
         if(window.innerWidth <= 1111){
@@ -252,7 +256,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.playById = function playById(id){
-        $rootScope.playByElement($rootScope.getSongById(id));
+        $rootScope.playByElement($rootScope.getSongById(id), true);
     };
 
     $rootScope.playByElement = function playByElement(element, manual){
@@ -264,7 +268,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.artist = info[0];
         $rootScope.nowPlaying.title = info[1];
         $rootScope.nowPlaying.buffering = true;
-        $rootScope.nowPlaying.manual = manual;
+        $rootScope.nowPlaying.manual = manual || false;
         $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
         if(window.innerWidth <= 1111){
