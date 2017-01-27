@@ -5,7 +5,7 @@
         <label for="showSongInUrl">Show song ID in URL bar</label><br>
         <input type="checkbox" id="showSongInTitle" {{#if settings.showSongInTitle}}checked{{/if}}>
         <label for="showSongInTitle">Show song name in page title</label><br>
-        <input type="checkbox" id="debugMode" {{#if settings.debugMode}}checked{{/if}}>
+        <input type="checkbox" ng-model="settings.debugMode" id="debugMode" {{#if settings.debugMode}}checked{{/if}}>
         <label for="debugMode">Show debug information</label><br>
         <input type="checkbox" id="showShuffleQueue" ng-model="settings.showShuffleQueue" {{#if settings.showShuffleQueue}}checked{{/if}}>
         <label for="debugMode">Show shuffle items in queue</label><br>

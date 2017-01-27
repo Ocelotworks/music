@@ -35,6 +35,17 @@
     </div>
 </div>
 {{!
+    DEBUG MODE
+}}
+<div id="debug" ng-if="settings.debugMode">
+    {[{nowPlaying | json}]}
+    <br><br>
+    History Stack Size: {[{historyStack.length}]}<br>
+    Normal Queue Size:  {[{queue.length}]}<br>
+    Shuffle Queue Size: {[{shuffleQueue.length}]}<br>
+
+</div>
+{{!
     SIDEBAR
 }}
 <div id="sidebarContainer" ng-controller="SongController">
@@ -54,7 +65,7 @@
     <span id="currentArtist" class="secondaryText" ng-click="playArtist(nowPlaying.artistID)" title="See more by this artist">{[{nowPlaying.artist}]}</span>
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
-            {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}
+            {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}<br>
             {{!--{{#if developmentMode}}--}}
                 {{!--<br>S: {[{nowPlaying.id}]}--}}
                 {{!--<br>A: {[{nowPlaying.artistID}]}--}}
