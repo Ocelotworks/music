@@ -29,7 +29,7 @@ module.exports = function(app){
                     if (info && info[0] && info[0].id) {
                         app.log(`Starting processing song ${info[0].id} (${info[0].status})`);
                         info = info[0];
-                        if(info.status === "QUEUED")
+                        if(info.status == "QUEUED" || info.artist == "Unknown" || info.title == "Unknown")
                             object.getYoutubeInfoForSong(info.id);
                         else
                             object.downloadSong(info);
@@ -254,7 +254,7 @@ module.exports = function(app){
                                         album: info.album,
                                         addedby: info.addedby,
                                         title: info.title.trim(),
-                                        duration: data.format.duration | 0,
+                                        duration: data.format.duration || 0,
                                         genre: genreID ? genreID : "6fe0d616-2f05-40e5-8f9f-a2ecd8052543"
                                     }, function addSong(err) {
                                         if (err) {
