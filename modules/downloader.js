@@ -210,6 +210,15 @@ module.exports = function(app){
                     options.push("--force-ipv4");
                 var downloader = ytdl(info.url, options);
                 var songUUID = uuid();
+
+                downloader.on("error", function songInfoError(){
+                   app.warn("Error whilst processing song "+info.id);
+                   object.songsProcessing--;
+                    app.database.updateQueuedSong(info.id, {
+                        status: "FAILED"
+                    }, updateErrorHandler);
+                });
+
                 downloader.on("info", function songInfoStart() {
                     ffmpeg()
                         .input(downloader)
