@@ -83,6 +83,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
 
 
     $scope.showErrorScreen = function(error){
+        $scope.tabSwitching = false;
         $scope.error = error;
         $templateRequest("error").then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
@@ -94,7 +95,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $scope.search = debounce(function(){
         var query = $("#searchBar").find(".search").val();
         if(query && query.length > 0) {
-            var templateUrl = $sce.getTrustedResourceUrl("search/template/" + query+"#"+Math.random());
+            var templateUrl = $sce.getTrustedResourceUrl("search/template/" + query+"?v="+Math.random());
             $templateRequest(templateUrl).then(function (template) {
                 $compile($("#tabContainer").html(template).contents())($scope);
             }, $scope.showErrorScreen);
@@ -117,7 +118,6 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $scope.tabSwitching = false;
 
     $scope.switchTab = function(tab){
-        console.trace();
         if($scope.tabSwitching)return console.warn("Tried to switch tab whilst tab was switching");
         $scope.tabSwitching = true;
         //TODO: Angular if statement for this?
@@ -129,7 +129,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             $("#tabContainer").html(template);
         }, $scope.showErrorScreen);
 
-        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.nocache ? "#"+Math.random() : ""));
+        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.nocache ? "?v="+Math.random() : ""));
         $templateRequest(templateUrl).then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);
             $scope.tabSwitching = false;
