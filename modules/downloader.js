@@ -246,7 +246,7 @@ module.exports = function(app){
                                         addedby: info.addedby,
                                         title: info.title.trim(),
                                         duration: data.format.duration | 0,
-                                        genre: genreID
+                                        genre: genreID ? genreID : "6fe0d616-2f05-40e5-8f9f-a2ecd8052543"
                                     }, function addSong(err) {
                                         if (err) {
                                             app.error("Error adding song to database: "+err);
