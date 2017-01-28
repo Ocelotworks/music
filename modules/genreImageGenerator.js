@@ -109,7 +109,54 @@ module.exports = function(app){
 
         },
         updateAlbumImage: function updateAlbumImage(albumID, cb){
-
+            app.database.getAlbumInfo(albumID, function getAlbumInfoCB(err, result){
+               if(err){
+                   app.warn(`Error getting album info for ${albumID}: ${err}`);
+                   if(cb)cb(err);
+               } else{
+                   var album = result[0];
+                   if(album){
+                       request(`https://ws.audioscrobbler.com/2.0/?method=album.search&album=${album.albumName}&api_key=${config.get("Keys.lastfm")}&format=json`, function lastfmGetAlbumSearchCB(err, response){
+                           if(err){
+                               app.error(`Error getting album search page for album ${album.albumName}/${albumID}: ${err}`);
+                               if(cb)cb(err);
+                           }else{
+                               if(!response.results){
+                                   app.error(`No results found for album ${album.albumName}/${albumID}`);
+                               }else{
+                                   var albumMatches = response.results.albummatches.album;
+                                   async.each(albumMatches, function(albumMatch, eachCb){
+                                       if(albumMatch.artist.toLowerCase() == album.artistName.toLowerCase()){
+                                           object.lastfmImageArrayToMysqlData(albumMatch.image, function(err, imageData){
+                                               if(err){
+                                                   app.error(`Error turning lastfm image array into data: ${err}`);
+                                                   eachCb();
+                                               }else{
+                                                   app.database.updateAlbumArt(albumID, imageData, function(err){
+                                                       if(err){
+                                                           app.error(`Error updating album art for ${albumID}: ${err}`);
+                                                           eachCb();
+                                                       }else{
+                                                           eachCb(true);
+                                                       }//if err
+                                                   });//updateAlbumArt
+                                               }//if err
+                                           });//lastfmImageArrayToMysqlData
+                                       }//if artist = artistName
+                                   }, function finishIteration(foundMatch){
+                                       if(!foundMatch){
+                                           app.warn(`Failed to find album art for ${album.name}/${albumID}`);
+                                       }
+                                       cb();
+                                   }); //each albumMatches
+                               }// !response.results
+                           }// err
+                       });//request
+                   }else{
+                       app.error(`Invalid Album ID ${albumID}`);
+                   }//album
+               }//err
+            });//getAlbumInfo
         },
         updateArtistImage: function updateArtistImage(artistID, cb){
             if(!config.has("Keys.lastfm")){
@@ -120,7 +167,7 @@ module.exports = function(app){
                     if(err){
                         app.error("Error getting artist info: "+err);
                         if(cb)cb(err);
-                    } else{
+                    }else{
                         if(result[0]){
                             var artistName = result[0].name;
                             app.log("Getting Image for "+artistName);
@@ -139,7 +186,7 @@ module.exports = function(app){
                                                if(err){
                                                    app.error("Error getting image data: "+err);
                                                    if(cb)cb(err);
-                                               } else{
+                                               }else{
                                                    app.database.updateArtistImage(artistID, imageData, function updateArtistImageCB(err){
                                                       if(err) {
                                                           app.error("Error adding image data to database: " + err);
@@ -179,15 +226,36 @@ module.exports = function(app){
                 if(err)cb(err);
                 else{
                     async.eachSeries(res, function(artist, asyncCB){
-                        app.log(artist.id);
                         object.updateArtistImage(artist.id, function(){
-                            //Ignore error
                             asyncCB();
                         });
                     }, cb);
                 }
             });
         }
+    });
+
+    app.jobs.addJob("Update All Missing Album Images", {
+        desc: "Updates all albums with no album art",
+        args: [],
+        func: function(cb){
+            app.database.getAlbumsWithNoImage(function(err, res){
+               if(err && cb)cb(err);
+               else{
+                   async.eachSeries(res, function(album, asyncCB){
+                       object.updateAlbumImage(album, function(){
+                          asyncCB();
+                       });
+                   });
+               }
+            });
+        }
+    });
+
+    app.jobs.addJob("Update Album Image", {
+        desc: "Update/add an image for a specific album ID",
+        args: ["Album ID"],
+        func: object.updateAlbumImage
     });
 
     app.jobs.addJob("Update Artist Image", {

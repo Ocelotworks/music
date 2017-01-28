@@ -317,7 +317,6 @@ module.exports = function(app){
          * @param blob A binary blob of the album art
          * @param cb
          */
-
         updateAlbumArt: function updateAlbumArt(album, blob, cb){
           knex("albums").update({image: blob}).where({id: album}).asCallback(cb);
         },
@@ -328,6 +327,29 @@ module.exports = function(app){
          */
         getAlbumArt: function getAlbumArt(album, cb){
             knex.select("image").from("albums").where({id: album}).limit(1).asCallback(cb);
+        },
+        /**
+         * Returns the album with the specified UUID
+         * @param album
+         * @param cb
+         */
+        getAlbumInfo: function getAlbum(album, cb){
+            knex.select("albums.id", "albums.artist", "albums.name AS albumName", "artists.name AS artistName")
+                .from("albums")
+                .where({"albums.id": album})
+                .limit(1)
+                .innerJoin("artists", "albums.artist", "artists.name")
+                .asCallback(cb);
+        },
+        /**
+         * Gets all albums with no album art
+         * @param cb
+         */
+        getAlbumsWithNoImage: function getAlbumsWithNoImage(cb){
+            knex.select("id")
+                .from("albums")
+                .whereNull("image")
+                .asCallback(cb);
         },
         /**
          * Tries to find a specific genre, if none is found, creates a new genre
