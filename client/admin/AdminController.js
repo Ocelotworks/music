@@ -39,6 +39,7 @@ app.controller("AdminController", function($scope, $rootScope, $sce, $templateRe
         });
     };
 
+    $rootScope.sendSocketMessage("setReceiveLogs", true);
 
     $scope.job = {
         name: "",

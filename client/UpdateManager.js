@@ -72,6 +72,13 @@ function initialiseWebsocket($rootScope){
                 case "volume":
                     $rootScope.audioPlayer.volume = data.volume;
                     break;
+                case "log":
+                    $("#adminServerConsole").append("\n"+data.message);
+                    break;
+                case "clearLogs":
+                    console.log("Clearing logs");
+                    $("#adminServerConsole").empty().append("Connected!");
+                    break;
                 default:
                     console.warn("Unknown message type: "+data.type);
 

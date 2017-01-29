@@ -7,10 +7,21 @@ var router = express.Router();
 
 
 
+
 module.exports = function(app){
 
     app.connectedDevices = {};
     app.deviceClients = {};
+    app.websocketHandlers = {};
+
+    app.registerWebsocketHandler = function registerWebsocketHandler(handler){
+        app.log(`Registering websocket handler ${handler.name}`);
+        app.websocketHandlers = Object.assign(app.websocketHandlers, handler.handlers);
+    };
+
+    app.registerWebsocketHandler(require("../websocket/deviceHandler.js")(app));
+    app.registerWebsocketHandler(require("../websocket/adminHandler.js") (app));
+
 
     router.ws('/updates/', function updateWebsocketConnect(client, req){
         app.log((req.user ? req.user.username : "A client")+" connected to the websocket");
@@ -18,45 +29,14 @@ module.exports = function(app){
         client.on("message", function wsMessageHandler(data){
             try {
                 var message = JSON.parse(data);
-                console.log(message);
                 if(message.type){
-                    switch(message.type){
-                        case "registerDevice":
-                            app.log("Registering device "+message.message);
-                            if(!client.user){
-                                app.sendUpdate(client, "rejectDevice", "NOT_LOGGED_IN");
-                            }else if(message.message && message.message.length == 36){
-                                app.database.getDeviceInfo(message.message, function getDeviceInfoCB(err, result){
-                                    if(err){
-                                        app.warn("Error getting device info: "+err);
-                                        app.sendUpdate(client, "rejectDevice", "INVALID_DEVICE");
-                                    }else{
-                                        var device = result[0];
-                                        app.deviceClients[device.id] = client;
-                                        if(device.owner == client.user.id){
-                                            client.device = device;
-                                            if(app.connectedDevices[client.user.id]){
-                                                app.connectedDevices[client.user.id].push(device);
-                                            }else{
-                                                app.connectedDevices[client.user.id] = [device];
-                                            }
-                                            app.broadcastUpdateToUser(client.user.id, "updateDevices", app.connectedDevices[client.user.id]);
-                                            app.database.updateDeviceLastSeen(device.id, function updateDeviceLastSeenCB(err){
-                                               if(err)app.warn("Error updating last seen for device: "+err);
-                                            });
-                                        }else{
-                                            app.warn("User "+req.user.id+" ("+req.user.username+") tried to register a device that didn't belong to them, "+device.id);
-                                            app.warn("Device belongs to "+device.owner);
-                                            app.sendUpdate(client, "rejectDevice", "INVALID_DEVICE");
-                                        }
-                                   }
-                                });
-                            }else{
-                                app.sendUpdate(client, "rejectDevice", "INVALID_DEVICE");
-                                app.warn("User "+req.user.id+" ("+req.user.username+") tried to register an invalid device ID: "+message.message);
-                            }
-                            break;
+                    if(app.websocketHandlers[message.type]){
+                        app.websocketHandlers[message.type](client, req, message);
+                    }else{
+                        app.warn(`Unknown message type ${message.type} from ${client.user ? client.user.username : "Guest"}`)
                     }
+                }else{
+                    app.warn(`Received message with no message type: ${JSON.stringify(message)}`);
                 }
             }catch(e){
                 app.warn("Caught exception from incoming message: "+e);
@@ -97,7 +77,8 @@ module.exports = function(app){
     };
 
     app.sendUpdate = function(client, type, message){
-        client.send(JSON.stringify({type: type, message: message}));
+        if(client.readyState == 1) //You know what? fuck you. I'm not including an entire fucking package just for the enums, this is SOCKET FUCKING OPEN, and theres no docs for express-ws, happy?
+            client.send(JSON.stringify({type: type, message: message}));
     };
 
     return router;
