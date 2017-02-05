@@ -9,6 +9,7 @@ var ffmpeg      = require('fluent-ffmpeg');
 var path        = require('path');
 var uuid        = require('uuid').v4;
 var ffprobe     = require('node-ffprobe');
+var spawn       = require('child_process').spawn;
 var songRegex = /\(.*\)|lyrics|official|HQ|hq/g;
 
 var downloaderConfig = config.get("Downloader");
@@ -290,6 +291,21 @@ module.exports = function(app){
             app.downloader.processOneSong();
             if(cb)
                 cb();
+        }
+    });
+
+    app.jobs.addJob("Update youtube-dl", {
+        desc: "Checks for updates then updates youtube-dl.",
+        args: [],
+        func: function(cb){
+           var youtubedlUpdater = spawn("node_modules/youtube-dl/bin/youtube-dl", ['-U']);
+           youtubedlUpdater.stdout.on('data', function youtubeDlUpdater(data){
+               app.log(data);
+           });
+           youtubedlUpdater.stderr.on('data', function youtubeDlUpdater(data){
+               app.error(data);
+           });
+           if(cb)cb();
         }
     });
 
