@@ -36,7 +36,7 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
     $scope.addSong = function(){
         console.log($scope.song);
-        $http.post(base+"templates/add/song", $scope.song)
+        $http.post(base+"api/downloader/add", $scope.song)
             .then(function(response){
                 $scope.song.url = "";
                 if(!response.data.err){
@@ -52,7 +52,7 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
     };
 
     $scope.clearFailed = function(){
-        $http.get(base+"templates/delete/downloadQueue/allFailed").then(function(){
+        $http.get(base+"api/downloader/clearFailed").then(function(){
             $scope.refresh();
         });
     };
