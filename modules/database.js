@@ -398,7 +398,14 @@ module.exports = function(app){
          * @param cb
          */
         getQueuedSong: function getQueuedSong(cb){
-          knex.select().from("queue").whereNot({status: 'FAILED'}).orWhereNot({status: 'DUPLICATE'}).limit(1).asCallback(cb);
+          knex.select().from("queue").whereNot({status: 'FAILED'}).andWhereNot({status: 'DUPLICATE'}).andWhereNot({status: 'PROCESSING'}).limit(1).asCallback(cb);
+        },
+        /**
+         * Changes all "PROCESSING" songs to "WAITING" after a server restart
+         * @param cb
+         */
+        resetSongQueue: function resetSongQueue(cb){
+            knex("queue").update({status: 'WAITING'}).where({status: 'PROCESSING'}).asCallback(cb);
         },
         /**
          * Removes a song from the download queue

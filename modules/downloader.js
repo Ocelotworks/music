@@ -16,6 +16,15 @@ var downloaderConfig = config.get("Downloader");
 var proxy = downloaderConfig.get("proxy");
 
 module.exports = function(app){
+
+    app.database.resetSongQueue(function resetSongQueueCB(err){
+        if(err){
+            app.error("Could not reset song queue: "+err);
+        }else{
+            app.log("Reset song queue");
+        }
+    });
+
     var object = {
         songsProcessing: 0,
         /**
@@ -212,12 +221,14 @@ module.exports = function(app){
                 var downloader = ytdl(info.url, options);
                 var songUUID = uuid();
 
-                downloader.on("error", function songInfoError(){
+                downloader.on("error", function songDownloadError(downloadError){
                    app.warn("Error whilst processing song "+info.id);
-                   object.songsProcessing--;
+                   console.log(downloadError);
                     app.database.updateQueuedSong(info.id, {
                         status: "FAILED"
                     }, updateErrorHandler);
+                    object.songsProcessing--;
+                    object.processOneSong();
                 });
 
                 downloader.on("info", function songInfoStart() {
@@ -231,6 +242,8 @@ module.exports = function(app){
                             app.database.updateQueuedSong(info.id, {
                                 status: "FAILED"
                             }, updateErrorHandler);
+                            object.songsProcessing--;
+                            object.processOneSong();
                         })
                         .on('end', function songDownloadEnd() {
                             app.log("Finished downloading " + info.id);
