@@ -22,16 +22,25 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         songFolder: "pop"
     };
 
+    $scope.retry = function(song){
+        $http.get(base+"api/downloader/"+song+"/retry").then($scope.refresh);
+    };
+
+    $scope.refresh = function(){
+        console.log("Refreshing add view");
+        var templateUrl = $sce.getTrustedResourceUrl("templates/add/song#"+Math.random());
+        $templateRequest(templateUrl).then(function(template){
+            $compile($("#tabContainer").html(template).contents())($scope);
+        }, $scope.showErrorScreen);
+    };
+
     $scope.addSong = function(){
         console.log($scope.song);
         $http.post(base+"templates/add/song", $scope.song)
             .then(function(response){
+                $scope.song.url = "";
                 if(!response.data.err){
-                    console.log("Aye aye cpn");
-                    var templateUrl = $sce.getTrustedResourceUrl("templates/add/song#"+Math.random());
-                    $templateRequest(templateUrl).then(function(template){
-                        $compile($("#tabContainer").html(template).contents())($scope);
-                    }, $scope.showErrorScreen);
+                   $scope.refresh();
                 }else{
                     $scope.err = response.data.err;
                 }
@@ -44,11 +53,8 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
 
     $scope.clearFailed = function(){
         $http.get(base+"templates/delete/downloadQueue/allFailed").then(function(){
-            var templateUrl = $sce.getTrustedResourceUrl("templates/add/song#"+Math.random());
-            $templateRequest(templateUrl).then(function(template){
-                $compile($("#tabContainer").html(template).contents())($scope);
-            }, $scope.showErrorScreen);
-        })
+            $scope.refresh();
+        });
     };
 
 
