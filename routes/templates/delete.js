@@ -7,6 +7,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Delete Templates",
+        route: "/templates/delete"
+    };
+
     router.get('/playlist/:id', function(req, res){
         app.database.getPlaylistInfo(req.params.id, function(err, playlist) {
             if (err)

@@ -14,6 +14,7 @@ var minifyhtml      = require('express-minify-html');
 var config          = require('config');
 var compression     = require('compression');
 var fs              = require('fs');
+var async           = require('async');
 
 var app = express();
 
@@ -105,26 +106,20 @@ app.initRoutes = function initRoutes(){
 
     app.log("Loading routes...");
 
-    app.use('/',                    require('./routes/index')(app));
-    app.use('/auth',                require('./routes/auth')(app));
-    app.use('/search',              require('./routes/search')(app));
-    app.use('/image',               require('./routes/image')(app));
-    app.use('/api',                 require('./routes/api')(app));
-    app.use('/api/song',            require('./routes/api/song')(app));
-    app.use('/api/artist',          require('./routes/api/artist')(app));
-    app.use('/api/admin',           require('./routes/api/admin')(app));
-    app.use('/api/stats',           require('./routes/api/stats')(app));
-    app.use('/api/downloader',      require('./routes/api/downloader')(app));
-    app.use('/templates',           require('./routes/templates')(app));
-    app.use('/templates/admin',     require('./routes/templates/admin')(app));
-    app.use('/templates/modals',    require('./routes/templates/modals')(app));
-    app.use('/templates/songs',     require('./routes/templates/songs')(app));
-    app.use('/templates/settings',  require('./routes/templates/settings')(app));
-    app.use('/templates/delete',    require('./routes/templates/delete')(app));
-    app.use('/templates/add',       require('./routes/templates/add')(app));
-    app.use('/templates/stats',     require('./routes/templates/stats')(app));
-    app.use('/ws',                  require('./routes/websocket')(app));
+    var routes = config.get("Routes");
+    app.loadedRoutes = [];
 
+    async.eachSeries(routes, function loadRoutes(route, cb){
+       var router =  require(route)(app);
+       if(!router.petifyInfo){
+           app.error(route+" missing petifyInfo! Cannot Load!");
+       }else{
+           app.log("Loading route "+router.petifyInfo.name+" ("+router.petifyInfo.route+")");
+           app.use(router.petifyInfo.route, router);
+           app.loadedRoutes.push(router);
+       }
+       cb();
+    });
 
     app.log("Loading some more middleware...");
     //Rate limiting

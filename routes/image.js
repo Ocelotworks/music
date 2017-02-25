@@ -9,6 +9,11 @@ var router = express.Router();
 //BASE+/image/
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Images",
+        route: "/image"
+    };
+
     router.get('/album/:id', function(req, res){
         app.database.getAlbumArt(req.params.id, function(err, resp){
             if(err || !resp[0] || !resp[0].image)

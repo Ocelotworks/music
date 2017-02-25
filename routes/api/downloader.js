@@ -8,6 +8,12 @@ var path = require('path');
 
 // BASE+/api/downloader/
 module.exports = function(app){
+
+    router.petifyInfo = {
+        name: "Downloader API",
+        route: "/api/downloader"
+    };
+
     /**
      * /downloader/queue
      */

@@ -10,6 +10,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Websocket",
+        route: "/ws"
+    };
+
     app.connectedDevices = {};
     app.deviceClients = {};
     app.websocketHandlers = {};

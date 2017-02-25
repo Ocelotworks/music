@@ -6,6 +6,12 @@ var router = express.Router();
 
 // BASE+/api/song/
 module.exports = function(app){
+
+    router.petifyInfo = {
+        name: "Song API",
+        route: "/api/song"
+    };
+
     /**
      * /song/:id/info
      */

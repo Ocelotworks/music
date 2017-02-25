@@ -10,6 +10,10 @@ var uuid = require('uuid').v4;
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Add Templates",
+        route: "/templates/add"
+    };
 
     router.get('/', function(req, res, next) {
         res.render('templates/add', {layout: false});

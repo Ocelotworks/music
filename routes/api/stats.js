@@ -6,6 +6,13 @@ var router = express.Router();
 
 // BASE+/api/stats/
 module.exports = function(app){
+
+    router.petifyInfo = {
+        name: "Stats API",
+        route: "/api/stats"
+    };
+
+
     /**
      * /api/stats/plays
      */

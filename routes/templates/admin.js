@@ -8,6 +8,10 @@ const config = require('config');
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Admin Templates",
+        route: "/templates/admin"
+    };
 
     router.use(function(req, res, next){
         if(!req.user){

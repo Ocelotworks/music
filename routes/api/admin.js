@@ -8,6 +8,11 @@ var router = express.Router();
 module.exports = function(app){
 
 
+    router.petifyInfo = {
+        name: "Admin API",
+        route: "/api/admin"
+    };
+
     function isLoggedInAdmin(req, res, next){
         if(req.user && req.user.userlevel >= 2)next();
         else res.header(402).json({err: "Not Authorised"});

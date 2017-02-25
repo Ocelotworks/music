@@ -78,6 +78,27 @@
       "saveUninitialized": true
     }
   },
+  "Routes": [
+    "./routes/index",
+    "./routes/auth",
+    "./routes/search",
+    "./routes/image",
+    "./routes/api",
+    "./routes/api/song",
+    "./routes/api/artist",
+    "./routes/api/admin",
+    "./routes/api/stats",
+    "./routes/api/downloader",
+    "./routes/templates",
+    "./routes/templates/admin",
+    "./routes/templates/modals",
+    "./routes/templates/songs",
+    "./routes/templates/settings",
+    "./routes/templates/delete",
+    "./routes/templates/add",
+    "./routes/templates/stats",
+    "./routes/websocket"
+  ],
   "RateLimiter": {
     "General": {
       "window": 1000,

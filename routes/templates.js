@@ -6,6 +6,11 @@ var path = require('path');
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Templates Base",
+        route: "/templates"
+    };
+
     router.get('/radio', function(req, res, next) {
         res.render('templates/radioList', {radios: [
             {

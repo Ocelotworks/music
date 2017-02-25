@@ -9,6 +9,11 @@ var router = express.Router();
 // BASE+/api/
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "API Base",
+        route: "/api"
+    };
+
     router.get('/status', function(req, res){
        res.json({errorCount: app.errorCount, requestCount: app.requestCount, uptime: process.uptime()});
     });

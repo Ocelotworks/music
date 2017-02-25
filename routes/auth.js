@@ -8,6 +8,10 @@ const base = require('config').get("General.baseURL");
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Authentication",
+        route: "/auth"
+    };
 
     const correctLogin = function(req, res){
         app.log(req.user.username+" logged in");

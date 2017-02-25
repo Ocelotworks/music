@@ -7,6 +7,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Songs Templates",
+        route: "/templates/songs"
+    };
+
     router.get('/', function(req, res, next) {
         app.database.getSongList(function(err, songs){
             if(err){

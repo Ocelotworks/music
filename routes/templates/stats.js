@@ -7,6 +7,12 @@ var router = express.Router();
 const async = require('async');
 
 module.exports = function(app){
+
+    router.petifyInfo = {
+        name: "Stats Templates",
+        route: "/templates/stats"
+    };
+
     router.get('/', function(req, res){
         async.mapValues({
             mostPlayed: app.database.getMostPlayedStats,

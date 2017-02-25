@@ -9,6 +9,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Search",
+        route: "/search"
+    };
+
     router.get('/query/:query', function(req, res){
         async.mapValues({
             songs: app.database.searchSongs,

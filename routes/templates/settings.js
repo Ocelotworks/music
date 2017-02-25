@@ -7,6 +7,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Settings Templates",
+        route: "/templates/settings"
+    };
+
     router.get('/', function(req, res){
         if(!req.user){
             res.header(401);

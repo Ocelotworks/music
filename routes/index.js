@@ -6,6 +6,10 @@ var child_process = require('child_process');
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Base",
+        route: "/"
+    };
 
     var tabs = [
         "songs",

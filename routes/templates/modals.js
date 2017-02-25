@@ -7,6 +7,11 @@ var router = express.Router();
 
 module.exports = function(app){
 
+    router.petifyInfo = {
+        name: "Modal Templates",
+        route: "/templates/modals"
+    };
+
     router.get('/songInfo/:id', function(req, res){
         app.database.getDetailedSongInfo(req.params.id, function(err, resp){
             if(err)
