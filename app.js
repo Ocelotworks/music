@@ -114,6 +114,7 @@ app.initRoutes = function initRoutes(){
     app.use('/api/artist',          require('./routes/api/artist')(app));
     app.use('/api/admin',           require('./routes/api/admin')(app));
     app.use('/api/stats',           require('./routes/api/stats')(app));
+    app.use('/api/downloader',      require('./routes/api/downloader')(app));
     app.use('/templates',           require('./routes/templates')(app));
     app.use('/templates/admin',     require('./routes/templates/admin')(app));
     app.use('/templates/modals',    require('./routes/templates/modals')(app));
