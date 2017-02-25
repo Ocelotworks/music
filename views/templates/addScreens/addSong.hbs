@@ -16,7 +16,9 @@
         <input type="submit" value="&#61677; Add to Download Queue" class="happyButton downloadButton">
     </form>
 
-    <h2>Import Queue <button class="happyButton" ng-click="clearFailed()"><i class="fa fa-trash"></i>&nbsp;Clear Failed Downloads</button></h2>
+    <h2>Import Queue
+        <button class="happyButton" ng-click="clearFailed()"><i class="fa fa-trash"></i>&nbsp;Clear Failed Downloads</button>
+        <button class="happyButton" ng-click="refresh()"><i class="fa fa-refresh"></i>&nbsp;Refresh</button></h2>
     {{#if queue}}
         <div id="importQueue" class="fancyScroll">
             <table class="fancyTable">
@@ -30,7 +32,7 @@
                         </span>
                     </td>
                     <td class="songControlSet">
-                        <i class="fa fa-edit" title="Edit"></i>
+                        <i class="fa fa-refresh" title="Retry" ng-click="retry('{{id}}')"></i>
                         <i class="fa fa-upload" title="Process Now"></i>
                         <i class="fa fa-remove" title="Delete"></i>
                     </td>
