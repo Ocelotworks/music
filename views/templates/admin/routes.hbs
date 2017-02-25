@@ -1,0 +1,15 @@
+<h1>Route Manager</h1>
+<hr>
+<h2>Currently Loaded Routes</h2>
+<table class="fancyTable">
+    <tr><td>Priority</td><td>Route Name</td><td>Route</td><td>Status</td><td>Actions</td></tr>
+    {{#each routes}}
+        <tr>
+            <td>{{@index}}</td>
+            <td>{{petifyInfo.name}}</td>
+            <td><code>{{petifyInfo.route}}</code></td>
+            <td>{{#if petifyInfo.disabled}}DISABLED{{else}}ENABLED{{/if}}</td>
+            <td></td>
+        </tr>
+    {{/each}}
+</table>

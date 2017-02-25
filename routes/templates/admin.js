@@ -37,6 +37,10 @@ module.exports = function(app){
         res.render('templates/admin/alerts', {layout: false, onlineUsers: app.expressWs.getWss('/ws/updates/').clients});
     });
 
+    router.get('/routes', function(req, res){
+       res.render('templates/admin/routes', {layout: false, routes: app.loadedRoutes});
+    });
+
     router.post('/alerts', function(req, res){
        if(!req.user || req.user.userlevel < 2){
            res.header(401).json({error: "You don't have permission to do that."});
