@@ -16,8 +16,16 @@ module.exports = function(app){
         app.database.getDetailedSongInfo(req.params.id, function(err, resp){
             if(err)
                 app.renderError(err, res);
-            else
-                res.render('templates/modals/songInfo', {layout: false, info: resp[0]})
+            else{
+                app.database.getSongPlays(req.params.id, function(err, playsResp){
+                    if(err)
+                        app.renderError(err, res);
+                    else
+                        res.render('templates/modals/songInfo', {layout: false, info: resp[0], plays: playsResp[0].plays});
+                });
+
+            }
+
         });
     });
 
@@ -43,16 +51,6 @@ module.exports = function(app){
             app.database.getDetailedSongInfo(req.params.id, function(err, resp){
                 res.render('templates/modals/songInfoTabs/edit', {layout: false, song: resp[0]});
             });
-        }
-    });
-
-    router.post('/songInfo/:id/edit', function(req, res){
-        if(!req.user){
-            res.header(401).json({error: "Your session has timed out. Please log back in."});
-        }else if(req.body){
-            res.header(501).json({error: "Not yet Implemented"});
-        }else{
-            res.header(406).json({error: "Malformed Request."});
         }
     });
 

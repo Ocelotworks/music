@@ -5,7 +5,7 @@
         <h2>{{info.artist_name}} ({{info.genre_name}})</h2>
         <h3>{{info.album_name}}</h3>
         {{#if info.duration}}
-        <h3>{[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]}</h3>
+        <h3>Duration: {[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]} | Played {{plays}} times.</h3>
         {{/if}}
     </div>
     <span class="addedBy">
