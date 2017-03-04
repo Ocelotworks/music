@@ -57,7 +57,6 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
         });
     };
 
-
     $scope.createAddView = function(type){
         $templateRequest("loading").then(function(template){
             $compile($("#tabContainer").html(template).contents())($scope);

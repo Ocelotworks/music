@@ -83,5 +83,37 @@ module.exports = function(app){
             }
         });
     });
+
+
+    router.post(['/:key/:id/update', '/:id/update'], app.util.validateKeyAbove(0), function(req, res){
+        if(req.body && req.body.album && req.body.artist && req.body.title){
+            app.database.getOrCreateArtist(req.body.artist.trim(), function(err, artistID){
+                if(err){
+                    res.header(500).json({err: err});
+                }else{
+                    app.database.getOrCreateAlbum(req.body.album.trim(), artistID, function(err, albumID){
+                       if(err){
+                           res.header(500).json({err: err});
+                       }else{
+                           var updatedFields = {
+                               title: req.body.title.trim(),
+                               artist: artistID,
+                               album: albumID
+                           };
+
+                           app.database.updateSong(req.params.id, updatedFields, function(err){
+                              if(err){
+                                  res.header(500).json({err: err});
+                              }else{
+                                  res.json(updatedFields);
+                              }
+                           });
+                       }
+                    });
+                }
+            });
+
+        }
+    });
     return router;
 };
