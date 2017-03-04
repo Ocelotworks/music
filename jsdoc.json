@@ -1,0 +1,8 @@
+{
+  "plugins": ["plugins/markdown"],
+  "source": {
+    "exclude": [
+      "node_modules"
+    ]
+  }
+}
