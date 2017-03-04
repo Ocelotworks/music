@@ -69,7 +69,7 @@ module.exports = function(app){
      * /downloader/add
      * /downloader/:key/add
      */
-    router.get(['/add', '/:key/add'], app.util.validateKeyAbove(0), function(req, res){
+    router.post(['/add', '/:key/add'], app.util.validateKeyAbove(0), function(req, res){
         if(req.body && req.body.url && req.body.songFolder){
             app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
             res.json({});
