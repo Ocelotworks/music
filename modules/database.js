@@ -110,7 +110,7 @@ module.exports = function database(app){
         },
         /**
          * Gets information about a certain song
-         * @param id The song UUID
+         * @param {string} id The song UUID
          * @param {function} cb
          */
         getSongInfo: function getSongInfo(id, cb){
@@ -118,7 +118,7 @@ module.exports = function database(app){
         },
         /**
          * Returns the UUID of the user who added a song
-         * @param id The song UUID
+         * @param {string} id The song UUID
          * @param {function} cb function(err, userID)
          */
         getSongOwner: function getSongOwner(id, cb){
@@ -128,7 +128,7 @@ module.exports = function database(app){
         },
         /**
          * Deletes a song, and triggers cleanup
-         * @param id The song UUID
+         * @param {string} id The song UUID
          * @param {function} cb function(err)
          */
         deleteSong: function deleteSong(id, cb){
@@ -199,13 +199,20 @@ module.exports = function database(app){
         },
         /**
          * Gets the path of a song, and logs the play
-         * @param id the song UUID
-         * @param userid the UUID of the user playing the song
+         * @param {string} id the song UUID
+         * @param {string} userid the UUID of the user playing the song
          * @param {function} cb function(err, path)
          */
         getSongPathToPlay: function getSongPathToPlay(id, userid, cb){
             knex.select("path").from("songs").where({id: id}).limit(1).asCallback(cb);
         },
+        /**
+         * Register a song being played
+         * @param {string} id The UUID of the song being played
+         * @param {string} userid The UUID of the user that played the song
+         * @param {boolean} manual Whether or not the song was played manually or via the shuffle queue
+         * @param {function} cb
+         */
         addPlayForSong: function addPlayForSong(id, userid, manual, cb){
             knex("plays").insert({
                 user: userid,
@@ -218,9 +225,9 @@ module.exports = function database(app){
         },
         /**
          * Adds a skip for a song for a specific user
-         * @param id The song ID
-         * @param userid The user ID
-         * @param seconds The amount of seconds into the song that they skipped
+         * @param {string} id The song ID
+         * @param {string} userid The user ID
+         * @param {integer} seconds The amount of seconds into the song that they skipped
          * @param {function} cb
          */
         addSkipForSong: function addSkipForSong(id, userid, seconds, cb){
@@ -232,15 +239,25 @@ module.exports = function database(app){
         },
         /**
          * Gets the artist name from a song ID
-         * @param song the song ID
+         * @param {string} song the song ID
          * @param {function} cb
          */
         getArtistFromSong: function getArtistFromSong(song, cb){
             knex.select("name", "id").from("artists").where({id: knex.select("artist").from("songs").where({id: song})}).asCallback(cb);
         },
+        /**
+         * Get artist info
+         * @param {string} id Artist UUID
+         * @param {function} cb
+         */
         getArtistFromId: function getArtistFromId(id, cb){
             knex.select().from("artists").where({id: id}).limit(1).asCallback(cb);
         },
+        /**
+         * Get the image blob from an artist ID
+         * @param {string} id Artist UUID
+         * @param {function} cb
+         */
         getArtistImage: function getArtistImage(id, cb){
             knex.select("image").from("artists").where({id: id}).limit(1).asCallback(cb);
         },
@@ -253,7 +270,7 @@ module.exports = function database(app){
         },
         /**
          * Gets an artists name from their ID
-         * @param id The UUID
+         * @param {string} id Artist UUID
          * @param {function} cb
          */
         getArtistName: function getArtistName(id, cb){
@@ -261,8 +278,8 @@ module.exports = function database(app){
         },
         /**
          * Updates an artists image
-         * @param id
-         * @param image
+         * @param {string} id Artist UUID
+         * @param {binary} image Image blob
          * @param {function} cb
          */
         updateArtistImage: function updateArtistImage(id, image, cb){
@@ -270,7 +287,8 @@ module.exports = function database(app){
         },
         /**
          * Gets the songs from an artist TODO: Is this a duplicate of getSongsByArtist?
-         * @param artist
+         * @see getSongsByArtist
+         * @param {string} artist Artist UUID
          * @param {function} cb
          */
         getSongsFromArtist: function getSongsFromArtist(artist, cb){
@@ -278,7 +296,7 @@ module.exports = function database(app){
         },
         /**
          * Attempts to find an artist with the name provided, if none is found, creates a new artist
-         * @param artist
+         * @param {string} artist Artist UUID
          * @param {function} cb
          */
         getOrCreateArtist: function getOrCreateArtist(artist, cb){
@@ -305,8 +323,8 @@ module.exports = function database(app){
         },
         /**
          * Attempts to find an album with the name provided, if none is found, creates a new album
-         * @param album
-         * @param artist
+         * @param {string} album Album Name
+         * @param {string} artist Artist UUID
          * @param {function} cb
          */
         getOrCreateAlbum: function getOrCreateAlbum(album, artist, cb){
@@ -333,8 +351,8 @@ module.exports = function database(app){
         },
         /**
          * Changes the album art of an album
-         * @param album the UUID of the album
-         * @param blob A binary blob of the album art
+         * @param {string} album Album UUID
+         * @param {binary} blob A binary blob of the album art
          * @param {function} cb
          */
         updateAlbumArt: function updateAlbumArt(album, blob, cb){
@@ -342,7 +360,7 @@ module.exports = function database(app){
         },
         /**
          * Gets the album art from an album
-         * @param album The UUID of the album
+         * @param {string} album Album UUID
          * @param {function} cb function(err, blob)
          */
         getAlbumArt: function getAlbumArt(album, cb){
@@ -350,7 +368,7 @@ module.exports = function database(app){
         },
         /**
          * Returns the album with the specified UUID
-         * @param album
+         * @param {string} album Album UUID
          * @param {function} cb
          */
         getAlbumInfo: function getAlbum(album, cb){
@@ -373,7 +391,7 @@ module.exports = function database(app){
         },
         /**
          * Tries to find a specific genre, if none is found, creates a new genre
-         * @param genre the name of the genre
+         * @param {string} genre Genre Name
          * @param {function} cb
          */
         getOrCreateGenre: function getOrCreateGenre(genre, cb){
@@ -400,7 +418,7 @@ module.exports = function database(app){
         },
         /**
          * Get the generated image for a genre
-         * @param genre
+         * @param {string} genre Genre UUID
          * @param {function} cb
          */
         getGenreArt: function getGenreArt(genre, cb){
@@ -429,7 +447,7 @@ module.exports = function database(app){
         },
         /**
          * Removes a song from the download queue
-         * @param id The ID of the queued item
+         * @param {string} id The ID of the queued item
          * @param {function} cb
          */
         removeQueuedSong: function removeQueuedSong(id, cb){
@@ -437,7 +455,7 @@ module.exports = function database(app){
         },
         /**
          * Update the status of a queued download
-         * @param id the ID of the queued item
+         * @param {string} id the ID of the queued item
          * @param update the new status (FAILED,PROCESSING,DONE)
          * @param {function} cb
          */
@@ -487,10 +505,10 @@ module.exports = function database(app){
         },
         /**
          * Retrieves or creates a user account from an oauth
-         * @param identifier The token from the oauth
-         * @param username The username
-         * @param avatar The avatar URL
-         * @param strategy The login strat used (TWITTER,GOOGLE,BOT if it is a manually added account)
+         * @param {string} identifier The token from the oauth
+         * @param {string} username The username
+         * @param {string} avatar The avatar URL
+         * @param {enum} strategy The login strategy used (TWITTER,GOOGLE,BOT if it is a manually added account)
          * @param {function} cb
          */
         getOrCreateUser: function getOrCreateUser(identifier, username, avatar, strategy, cb){
@@ -522,7 +540,7 @@ module.exports = function database(app){
         },
         /**
          * Retrieve information about a certain user
-         * @param id The UUID of the user
+         * @param {string} id User UUID
          * @param {function} cb
          */
         getUserInfo: function getUserInfo(id, cb){
@@ -533,7 +551,7 @@ module.exports = function database(app){
         },
         /**
          * Search for songs
-         * @param query
+         * @param {string} query Search Query
          * @param {function} cb
          */
         searchSongs: function searchSongs(query, cb){
@@ -545,7 +563,7 @@ module.exports = function database(app){
         },
         /**
          * Search for artists
-         * @param query
+         * @param {string} query Search Query
          * @param {function} cb
          */
         searchArtists: function searchArtists(query, cb){
@@ -556,7 +574,7 @@ module.exports = function database(app){
         },
         /**
          * Search for albums
-         * @param query
+         * @param {string} query Search Query
          * @param {function} cb
          */
         searchAlbums: function searchAlbums(query, cb){
@@ -567,7 +585,7 @@ module.exports = function database(app){
         },
         /**
          * Search for genres
-         * @param query
+         * @param {string} query Search Query
          * @param {function} cb
          */
         searchGenres: function searchGenres(query, cb){
@@ -576,9 +594,10 @@ module.exports = function database(app){
                 .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
                 .asCallback(cb);
         },
+
         /**
          * Create a playlist
-         * @param playlist The playlist object, as defined by the form in templates.js
+         * @param {object} playlist The playlist object, as defined by the form in templates.js
          * @see templates.js
          * @param {function} cb
          */
@@ -602,7 +621,7 @@ module.exports = function database(app){
         },
         /**
          * Deletes a playlist and all it's songs. Executes cb when the playlist object has been deleted and not when the playlist data has.
-         * @param id
+         * @param {string} id Playlist UUID
          * @param {function} cb
          */
         deletePlaylist: function deletePlaylist(id, cb){
@@ -625,8 +644,8 @@ module.exports = function database(app){
         },
         /**
          * Looks up if a user can perform administrative functions on a playlist
-         * @param id The UUID of the playlist
-         * @param user The UUID of the user
+         * @param {string} id Playlist UUID
+         * @param {string} user User UUID
          * @param {function} cb function(err, canEdit)
          */
         canUserEditPlaylist: function canUserEditPlaylist(id, user, cb){
@@ -640,7 +659,7 @@ module.exports = function database(app){
         },
         /**
          * Get all playlists owned by a certain user
-         * @param id The user UUID
+         * @param {string} id User UUID
          * @param {function} cb
          */
         getPrivatePlaylists: function getPrivatePlaylists(id, cb){
@@ -653,7 +672,7 @@ module.exports = function database(app){
         },
         /**
          * Get all playlists owned by a certain user, regardless of visibility status
-         * @param id User UUID
+         * @param {string} id User UUID
          * @param {function} cb
          */
         getOwnedPlaylists: function getOwnedPlaylists(id, cb){
@@ -664,7 +683,7 @@ module.exports = function database(app){
         },
         /**
          * Get information about a certain playlist
-         * @param id The playlist UUID
+         * @param {string} id Playlist UUID
          * @param {function} cb
          */
         getPlaylistInfo: function getPlaylistInfo(id, cb){
@@ -677,7 +696,7 @@ module.exports = function database(app){
         },
         /**
          * Get all the songs in a playlist
-         * @param id The playlist UUID
+         * @param {string} id Playlist UUID
          * @param {function} cb
          */
         getSongsByPlaylist: function getSongsByPlaylist(id, cb){
@@ -691,8 +710,8 @@ module.exports = function database(app){
         },
         /**
          * Get all playlists that contain a certain song
-         * @param id The UUID of the song
-         * @param user The UUID of the user
+         * @param {string} id Song UUID
+         * @param {string} user User UUID
          * @param {function} cb
          */
         getPlaylistsBySong: function getPlaylistsBySong(id, user, cb){
@@ -714,7 +733,7 @@ module.exports = function database(app){
         },
         /**
          * Checks whether a song with `id` exists
-         * @param id
+         * @param {string} id
          * @param {function} cb function(err, exists)
          */
         getSongExists: function getSongExists(id, cb){
@@ -728,7 +747,7 @@ module.exports = function database(app){
         },
         /**
          * Gets information about who added a song, it's album, it's duration, etc
-         * @param id The song UUID
+         * @param {string} id The song UUID
          * @param {function} cb
          */
         getDetailedSongInfo: function getDetailedSongInfo(id, cb){
@@ -747,7 +766,7 @@ module.exports = function database(app){
         },
         /**
          * Generate a new key and invalidate all the old oens
-         * @param id The UUID of the user to assign to the key
+         * @param {string} id The UUID of the user to assign to the key
          * @param {function} cb
          */
         generateApiKey: function generateApiLey(id, cb){
@@ -768,7 +787,7 @@ module.exports = function database(app){
         },
         /**
          * Get the current valid API key for a user
-         * @param id The user UUID
+         * @param {string} id The user UUID
          * @param {function} cb
          */
         getApiKeyFromUser: function getApiKeyFromUser(id, cb){
@@ -776,7 +795,7 @@ module.exports = function database(app){
         },
         /**
          * Get the user that owns a certain API key, ONLY if the API key is not revoked
-         * @param key The API key
+         * @param {string} key The API key
          * @param {function} cb
          */
         getUserFromApiKey: function getUserFromApiKey(key, cb){
@@ -784,9 +803,9 @@ module.exports = function database(app){
         },
         /**
          * Adds a vote for a song
-         * @param song The UUID of the song
-         * @param user The UUID of the user
-         * @param up bool, true if upvote, false if downvote
+         * @param {string} song The UUID of the song
+         * @param {string} user The UUID of the user
+         * @param {boolean} up true if upvote, false if downvote
          * @param {function} cb function(err)
          */
         addSongVote: function addSongVote(song, user, up, cb){
@@ -811,9 +830,9 @@ module.exports = function database(app){
         },
         /**
          * Logs an error
-         * @param type ENUM('PAGE_ERROR','APP_ERROR','DATABASE_ERROR','SECURITY','OTHER')
-         * @param detail MAX 128 CHARS
-         * @param trace MAX 128 CHARS
+         * @param {enum} type ENUM('PAGE_ERROR','APP_ERROR','DATABASE_ERROR','SECURITY','OTHER')
+         * @param {string} detail MAX 128 CHARS
+         * @param {string} trace MAX 128 CHARS
          * @param {function} cb function(err)
          */
         logError: function logError(type, detail, trace, cb){
@@ -884,8 +903,8 @@ module.exports = function database(app){
         },
         /**
          * Checks if a song with artist artistName and song songName exists already
-         * @param artistName The exact name of the artist to look up
-         * @param songName The exact name of the song to look up
+         * @param {string} artistName The exact name of the artist to look up
+         * @param {string} songName The exact name of the song to look up
          * @param {function} cb function(err, exists)
          */
         doesSongExist: function doesSongExist(artistName, songName, cb){
@@ -897,6 +916,11 @@ module.exports = function database(app){
                     cb(err, result && result[0] ? result[0].exists : null);
                 });
         },
+        /**
+         * Returns a queued song from its id
+         * @param {string} id The queued song ID
+         * @param {function} cb
+         */
         getQueuedSongInfo: function getQueuedSongInfo(id, cb){
             knex.select("*")
                 .from("queue")
@@ -904,15 +928,35 @@ module.exports = function database(app){
                 .limit(1)
                 .asCallback(cb);
         },
+        /**
+         * Add a device
+         * @param {object} device
+         * @param {function} cb
+         */
         addDevice: function addDevice(device, cb){
             knex("devices").insert(device).asCallback(cb);
         },
+        /**
+         * Change a devices last seen time to right now
+         * @param {string} device Device UUID
+         * @param {function} cb
+         */
         updateDeviceLastSeen: function updateDeviceLastSeen(device, cb){
             knex("devices").update({lastSeen: knex.raw("CURRENT_TIMESTAMP()")}).where({id: device}).limit(1).asCallback(cb);
         },
+        /**
+         * Get's a users device list
+         * @param {string} user User UUID
+         * @param {function} cb
+         */
         getDevicesByUser: function getDevicesByUser(user, cb){
             knex.select("*").from("devices").where({owner: user}).asCallback(cb);
         },
+        /**
+         * Get a devices info along with the time difference since it was last seen
+         * @param {string} user User UUID
+         * @param {function} cb
+         */
         getDevicesForSettings: function getDevicesForSettings(user, cb){
             knex.select(knex.raw("TIMESTAMPDIFF(SECOND, lastSeen, CURRENT_TIMESTAMP()) as lastSeenAt"), "name", "mobile", "id")
                 .from("devices")
@@ -929,9 +973,19 @@ module.exports = function database(app){
                     }
                 })
         },
+        /**
+         * Get a device from it's UUID
+         * @param {string} device Device UUID
+         * @param {function} cb
+         */
         getDeviceInfo: function(device, cb){
             knex.select("*").from("devices").where({id: device}).limit(1).asCallback(cb);
         },
+        /**
+         * Generate a shuffle queue for a user
+         * @param {string} user User UUID
+         * @param {function} cb
+         */
         getShuffleQueue: function(user, cb){
             knex.select("songs.id as id", "artists.id AS artistID", "songs.title AS title", "artists.name AS artist", "songs.album",
                         knex.raw("(SELECT COUNT(*) FROM votes WHERE up = 1 AND owner = ? AND song = songs.id) AS weight", user))
@@ -968,6 +1022,10 @@ module.exports = function database(app){
                 .limit(100)
                 .asCallback(cb);
         },
+        /**
+         * Get most played songs
+         * @param {function} cb
+         */
         getSongPlaysStats: function getSongPlaysStats(cb){
             knex.select(knex.raw("COUNT(*) AS y"), knex.raw("DATE(timestamp) AS x"))
                 .from("plays")
