@@ -22,7 +22,13 @@ app.errorCount = 0;
 app.requestCount = 0;
 
 
-app.log = function(message, caller){
+
+/**
+ * Log a message
+ * @param {string} message
+ * @param {object} [caller]
+ */
+app.log = function log(message, caller){
     if(!caller)
         caller = caller_id.getData();
     var file = ["Nowhere"];
@@ -35,7 +41,11 @@ app.log = function(message, caller){
     console.log(`[${dateFormat(new Date(), "dd/mm/yy hh:MM")}]`+output);
 };
 
-app.error = function(message){
+/**
+ * Log an error
+ * @param {string} message
+ */
+app.error = function error(message){
     app.log(message.red, caller_id.getData());
     app.errorCount++;
     if(app.database)
@@ -44,7 +54,11 @@ app.error = function(message){
         });
 };
 
-app.warn = function(message){
+/**
+ * Like an error, but less critical
+ * @param {string} message
+ */
+app.warn = function warn(message){
     app.log(message.yellow, caller_id.getData());
     if(app.database)
         app.database.logError("APP_WARNING", message.length > 128 ? message.substring(0, 128) : message, caller_id.getData().functionName, function(err){
