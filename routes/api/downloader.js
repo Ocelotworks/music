@@ -5,6 +5,7 @@
 var express = require('express');
 var router = express.Router();
 var path = require('path');
+var config = require('config');
 
 // BASE+/api/downloader/
 module.exports = function(app){
@@ -71,7 +72,7 @@ module.exports = function(app){
      */
     router.post(['/add', '/:key/add'], app.util.validateKeyAbove(0), function(req, res){
         if(req.body && req.body.url && req.body.songFolder){
-            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
+            app.downloader.queue(req.body.url, path.join(config.get("Folders.baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
             res.json({});
         }else{
             res.json({err: "A required piece of data is missing."});
