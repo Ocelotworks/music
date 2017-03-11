@@ -10,6 +10,7 @@ var path        = require('path');
 var uuid        = require('uuid').v4;
 var ffprobe     = require('node-ffprobe');
 var spawn       = require('child_process').spawn;
+var async       = require('async');
 var songRegex = /[{\[\('"].*["'\]\)}]|lyrics|official|hd/ig;
 
 var downloaderConfig = config.get("Downloader");
@@ -319,6 +320,41 @@ module.exports = function(app){
                app.error(data);
            });
            if(cb)cb();
+        }
+    });
+
+
+    app.jobs.addJob("Fix 0 Length Songs", {
+        desc: "Fixes songs with no calculated length",
+        args: [],
+        func: function(cb){
+            app.database.getSongsWithNoLength(function getSongsWithNoLengthCB(err, songs){
+               if(err){
+                   app.error("Error getting songs with no length: "+err);
+                   if(cb)cb(err);
+               }else{
+                   async.eachSeries(songs, function(song, asyncCb){
+                      app.log("Probing song "+song.id+"...");
+                       ffprobe(song.path, function ffprobe(err, data){
+                           if(err){
+                               app.warn("Error probing file: "+path+": "+err);
+                               asyncCb();
+                           }else{
+                               app.database.updateSong(song.id, {
+                                   duration: data.format.duration || 0
+                               }, function(err){
+                                   if(err){
+                                       app.error("Error updating song "+song.id+": "+err);
+                                   }else{
+                                       app.log("Changed song "+song.id+" duration to "+data.format.duration);
+                                   }
+                                   asyncCB();
+                               });
+                           }
+                       });
+                   });
+               }
+            });
         }
     });
 
