@@ -10,7 +10,7 @@ var path        = require('path');
 var uuid        = require('uuid').v4;
 var ffprobe     = require('node-ffprobe');
 var spawn       = require('child_process').spawn;
-var songRegex = /\(.*\)|lyrics|official|HQ|hq/g;
+var songRegex = /[{\[\('"].*["'\]\)}]|lyrics|official|hd/ig;
 
 var downloaderConfig = config.get("Downloader");
 var proxy = downloaderConfig.get("proxy");
