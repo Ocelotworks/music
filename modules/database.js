@@ -83,7 +83,11 @@ module.exports = function database(app){
          * @param {function} cb
          */
         getSongsByArtist: function getSongsByArtist(artist, cb){
-            knex.from("songs").where({artist: artist}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
+            knex.select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
+                .from("songs")
+                .where({artist: artist})
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .asCallback(cb);
         },
         /**
          * Gets every song by a specific album ID
@@ -91,7 +95,10 @@ module.exports = function database(app){
          * @param {function} cb
          */
         getSongsByAlbum: function getSongsByAlbum(album, cb){
-            knex.from("songs").where({album: album}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
+            knex.select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
+                .from("songs")
+                .where({album: album})
+                .innerJoin("artists", "songs.artist", "artists.id").asCallback(cb);
         },
         /**
          * Gets every song by a specific genre ID
@@ -99,7 +106,18 @@ module.exports = function database(app){
          * @param {function} cb
          */
         getSongsByGenre: function getSongsByGenre(genre, cb){
-            knex.from("songs").where({genre: genre}).innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title").asCallback(cb);
+            knex.select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
+                .from("songs")
+                .where({genre: genre})
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .asCallback(cb);
+        },
+        /**
+         * Gets every song that has an invalid length
+         * @param cb
+         */
+        getSongsWithNoLength: function getSongsWithNoLength(cb){
+           knex.select("id", "path").from("songs").where({duration: 0}).asCallback(cb);
         },
         /**
          * Gets a list of songs, including artist and album name, sorted by artist
