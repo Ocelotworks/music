@@ -1,9 +1,11 @@
 <div id="songInfoContainer" data-id="{{info.song_id}}">
     <img id="songInfoAlbumArt" src="album/{{info.album_id}}" alt="{{info.album_name}}">
-    <div id="songInfoTitle">
+    <div id="songInfoTitle" ng-controller="SongController">
         <h1>{{info.title}}</h1>
-        <h2>{{info.artist_name}} ({{info.genre_name}})</h2>
-        <h3>{{info.album_name}}</h3>
+        <h2>
+            <span class="moreInfo" ng-click="playArtist('{{info.artist_id}}')">{{info.artist_name}}</span>
+            (<span class="moreInfo" ng-click="playGenre('{{info.genre_id}}')">{{info.genre_name}}</span>)</h2>
+        <h3 class="moreInfo" ng-click="playAlbum('{{info.album_id}}')">{{info.album_name}}</h3>
         {{#if info.duration}}
         <h3>Duration: {[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]} | Played {{plays}} times.</h3>
         {{/if}}
