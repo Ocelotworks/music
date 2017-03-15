@@ -56,7 +56,8 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             name: "Stats",
             icon: "fa-area-chart",
             location: "stats",
-            template: "stats"
+            template: "stats",
+            nocache: true
         }
     ];
 
