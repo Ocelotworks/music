@@ -29,6 +29,11 @@ module.exports = function(app){
                 } else {
                     if (data.length < 4) {
                         app.warn("Not enough albums to create genre image for " + genre);
+                        if(data.length >= 1){
+                            app.database.putGenreImage(genre, data[0].image, function(err){
+                                app.log("Created one anyway");
+                            });
+                        }
                     } else {
                         app.log("Creating genre image for "+genre);
                         var imagePaths = [];
@@ -106,7 +111,75 @@ module.exports = function(app){
 
         },
         updateSongFromLastfmData: function(songID, cb){
-
+            app.database.getDetailedSongInfo(songID, function getSongInfoCB(err, result){
+                if(err){
+                    app.log(`Error getting song info for ${songID}: ${err}`);
+                    if(cb)cb();
+                }else{
+                    var song = result[0];
+                    if(song && song.artist_name){
+                        request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${config.get("Keys.lastfm")}&artist=${song.artist_name}&track=${song.title}&format=json`, function lastfmGetAlbumSearchCB(err, response, body){
+                            if(err){
+                                app.log(`Error getting info from lastFM: ${err}`);
+                                if(cb)cb();
+                            }else{
+                                if(cb)cb();
+                                body = JSON.parse(body).track;
+                                if(body && body.album && body.album.title){
+                                    app.log("Got new album");
+                                    app.database.getOrCreateAlbum(body.album.title, song.artist_id, function(err, albumID){
+                                        if(err){
+                                            app.log(`Error creating album ${body.album.title}: ${err}`);
+                                            if(cb)cb();
+                                        } else{
+                                            app.log(`Updated album ${body.album.title} by ${song.artist_name} (${albumID})`);
+                                            if(body.album.image){
+                                                object.lastfmImageArrayToMysqlData(body.album.image, function(err, imageData){
+                                                    if(err){
+                                                        app.log(`Error getting lastfm image for ${body.album.title}: ${err}`);
+                                                    }else{
+                                                        app.database.updateAlbumArt(albumID, imageData, function (err) {
+                                                            if (err) {
+                                                                app.error(`Error updating album art for ${albumID}: ${err}`);
+                                                            } else {
+                                                                app.log(`Updated album art for ${albumID}`);
+                                                            }//if err
+                                                        });//updateAlbumArt
+                                                    }// if err
+                                                }); //lastfmImageArrayToMysqlData
+                                            }else{
+                                                app.log(`No image for album ${body.album.title}`);
+                                            }//if body.album.image
+                                            app.database.updateSong(songID, {album: albumID}, function(err){
+                                                if(err)
+                                                    app.log(`Error updating song for album ${songID}: ${err}`);
+                                            });
+                                        }// if err
+                                    });//getOrCreateAlbum
+                                }//if body.album
+                                if(body && body.toptags && body.toptags.tag.length > 0){
+                                    app.log("Got new genre");
+                                    var genre = body.toptags.tag[0].name;
+                                    app.database.getOrCreateGenre(genre, function(err, genreID){
+                                        if(err){
+                                            app.log(`Error creating genre ${genre}: ${err}`);
+                                        }else{
+                                            app.log("Created genre "+genreID);
+                                            app.database.updateSong(songID, {genre: genreID}, function(err){
+                                                if(err)
+                                                    app.log(`Error updating song for genre ${songID}: ${err}`);
+                                                else{
+                                                    app.log(`Changed ${songID}/${song.title} genre to ${genre}`);
+                                                }
+                                            }); //updateSong
+                                        }// if err
+                                    });//getOrCreateGenre
+                                } //if body.toptags
+                            }//if err
+                        }); //request
+                    }//if song.artist_name
+                }//if err
+            }); //getSongInfo
         },
         updateAlbumImage: function updateAlbumImage(albumID, cb){
             app.database.getAlbumInfo(albumID, function getAlbumInfoCB(err, result){
@@ -116,38 +189,52 @@ module.exports = function(app){
                } else{
                    var album = result[0];
                    if(album){
+                       app.log(JSON.stringify(album));
                        request(`https://ws.audioscrobbler.com/2.0/?method=album.search&album=${album.albumName}&api_key=${config.get("Keys.lastfm")}&format=json`, function lastfmGetAlbumSearchCB(err, response){
                            if(err){
                                app.error(`Error getting album search page for album ${album.albumName}/${albumID}: ${err}`);
                                if(cb)cb(err);
                            }else{
+                               response = JSON.parse(response.body);
                                if(!response.results){
                                    app.error(`No results found for album ${album.albumName}/${albumID}`);
+                                   if(cb)cb();
                                }else{
+                                   app.log(`Results found for album ${album.albumName}/${albumID}`);
                                    var albumMatches = response.results.albummatches.album;
-                                   async.each(albumMatches, function(albumMatch, eachCb){
-                                       if(albumMatch.artist.toLowerCase() == album.artistName.toLowerCase()){
-                                           object.lastfmImageArrayToMysqlData(albumMatch.image, function(err, imageData){
-                                               if(err){
+                                   async.eachSeries(albumMatches, function(albumMatch, eachCb) {
+                                       app.log("Trying album art...");
+                                       if (albumMatch.artist.toLowerCase() == album.artistName.toLowerCase()) {
+                                           app.log("Matched album "+JSON.stringify(albumMatch));
+                                           object.lastfmImageArrayToMysqlData(albumMatch.image, function (err, imageData) {
+                                               if (err) {
                                                    app.error(`Error turning lastfm image array into data: ${err}`);
                                                    eachCb();
-                                               }else{
-                                                   app.database.updateAlbumArt(albumID, imageData, function(err){
-                                                       if(err){
+                                               } else {
+                                                   app.log("Transferring album art to database...");
+                                                   app.database.updateAlbumArt(albumID, imageData, function (err) {
+                                                       if (err) {
                                                            app.error(`Error updating album art for ${albumID}: ${err}`);
                                                            eachCb();
-                                                       }else{
+                                                       } else {
+                                                           app.log(`Updated album art for ${album.albumName}/${albumID}`);
                                                            eachCb(true);
                                                        }//if err
                                                    });//updateAlbumArt
                                                }//if err
                                            });//lastfmImageArrayToMysqlData
+                                       } else {
+                                           app.log(`Artist ${albumMatch.artist.toLowerCase()} doesn't match ${album.artistName.toLowerCase()}`);
+                                           eachCb();
                                        }//if artist = artistName
+
                                    }, function finishIteration(foundMatch){
                                        if(!foundMatch){
-                                           app.warn(`Failed to find album art for ${album.name}/${albumID}`);
+                                           app.warn(`Failed to find album art for ${album.albumName}/${albumID}`);
+                                       }else{
+                                           app.log("On to the next album...");
                                        }
-                                       cb();
+                                       if(cb)cb();
                                    }); //each albumMatches
                                }// !response.results
                            }// err
@@ -227,6 +314,7 @@ module.exports = function(app){
                 else{
                     async.eachSeries(res, function(artist, asyncCB){
                         object.updateArtistImage(artist.id, function(){
+                            app.log("Updated artist image for "+artist.id);
                             asyncCB();
                         });
                     }, cb);
@@ -243,11 +331,55 @@ module.exports = function(app){
                if(err && cb)cb(err);
                else{
                    async.eachSeries(res, function(album, asyncCB){
-                       object.updateAlbumImage(album, function(){
+                       object.updateAlbumImage(album.id, function(){
+                           app.log("Updated album image for "+album.id);
                           asyncCB();
                        });
+                   }, function(){
+                       app.log("Finished.");
                    });
                }
+            });
+        }
+    });
+
+    app.jobs.addJob("Update Unknown Albums", {
+        desc: "Updates all songs with unknown albums",
+        args: [],
+        func: function(cb){
+            app.database.getSongsWithUnknownAlbum(function(err, res){
+                if(err && cb)cb(err);
+                else{
+                    async.eachSeries(res, function(song, asyncCB){
+                        object.updateSongFromLastfmData(song.id, function(){
+                            app.log("Processed "+song.id);
+                            asyncCB();
+                        });
+                    }, function(){
+                        app.log("Finished. Running Album cleanup");
+                        app.database.cleanupAlbums(function cleanupAlbumsCB(){
+                            app.log("Finished cleaning up albums");
+                        });
+                    });
+                }
+            });
+        }
+    });
+
+    app.jobs.addJob("Update Genre Images", {
+        desc: "Updates all genres with no genre image",
+        args: [],
+        func: function(cb){
+            app.database.getGenresWithNoImage(function(err, res){
+                if(err && cb)cb(err);
+                else{
+                    async.eachSeries(res, function(genre, asyncCB){
+                        object.generateImageForGenre(genre.id);
+                        asyncCB();
+                    }, function(){
+                        app.log("Finished.");
+                    });
+                }
             });
         }
     });

@@ -278,6 +278,7 @@ module.exports = function(app){
                                                 status: "FAILED"
                                             }, updateErrorHandler);
                                         } else {
+                                            app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){});
                                             app.database.removeQueuedSong(info.id, updateErrorHandler);
                                         }
                                         object.songsProcessing--;
@@ -333,13 +334,14 @@ module.exports = function(app){
                    app.error("Error getting songs with no length: "+err);
                    if(cb)cb(err);
                }else{
-                   async.eachSeries(songs, function(song, asyncCb){
+                   async.eachSeries(songs, function(song, asyncCB){
                       app.log("Probing song "+song.id+"...");
                        ffprobe(song.path, function ffprobe(err, data){
                            if(err){
                                app.warn("Error probing file: "+path+": "+err);
-                               asyncCb();
+                               asyncCB();
                            }else{
+                               app.log("Done probing");
                                app.database.updateSong(song.id, {
                                    duration: data.format.duration || 0
                                }, function(err){
@@ -352,7 +354,7 @@ module.exports = function(app){
                                });
                            }
                        });
-                   });
+                   }, cb);
                }
             });
         }

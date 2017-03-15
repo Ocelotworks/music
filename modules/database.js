@@ -119,6 +119,14 @@ module.exports = function database(app){
         getSongsWithNoLength: function getSongsWithNoLength(cb){
            knex.select("id", "path").from("songs").where({duration: 0}).asCallback(cb);
         },
+
+        getSongsWithUnknownAlbum: function getSongsWithUnknownAlbum(cb){
+          knex.select("songs.id")
+              .from("songs")
+              .where({"albums.name": "Unknown Album"})
+              .innerJoin("albums", "albums.id", "songs.album")
+              .asCallback(cb);
+        },
         /**
          * Gets a list of songs, including artist and album name, sorted by artist
          * @param {function} cb
@@ -394,7 +402,7 @@ module.exports = function database(app){
                 .from("albums")
                 .where({"albums.id": album})
                 .limit(1)
-                .innerJoin("artists", "albums.artist", "artists.name")
+                .innerJoin("artists", "albums.artist", "artists.id")
                 .asCallback(cb);
         },
         /**
@@ -417,7 +425,8 @@ module.exports = function database(app){
                 if(err)
                     cb(err);
                 else{
-                    if(res.length > 0){
+                    res = res[0];
+                    if(res[0] && res[0].id){
                         app.log("Genre "+genre+" already exists");
                         if(res[0].needsImage)app.genreImageGenerator.generateImageForGenre(res[0].id);
                         cb(null, res[0].id);
@@ -1049,6 +1058,22 @@ module.exports = function database(app){
                 .from("plays")
                 .groupByRaw("DATE(timestamp)")
                 .asCallback(cb);
+        },
+        mergeGenres: function mergeGenres(genre, cb){
+            knex("songs")
+                .update({genre: genre})
+                .whereIn("genre",
+                    knex.select("id")
+                        .from("genres")
+                        .where({
+                            name: knex.select("name")
+                                    .from("genres")
+                                    .where({id: genre})
+                        }))
+                .asCallback(cb);
+        },
+        getGenresWithNoImage: function getGenresWtihNoImage(cb){
+            knex.select("id").from("genres").whereNull("image").asCallback(cb);
         }
     };
     app.jobs.addJob("Create User", {
@@ -1103,6 +1128,12 @@ module.exports = function database(app){
        desc: "Adds a song entry to the database",
        args: ["Artist ID", "Album ID", "Genre ID", "MBID", "Path", "Duration", "Title", "AddedBy"],
         func: object.addSong
+    });
+
+    app.jobs.addJob("Merge Genres", {
+        desc: "Merge all genres of the same name with the specified genre ID",
+        args: ["Genre ID"],
+        func: object.mergeGenres
     });
 
 
