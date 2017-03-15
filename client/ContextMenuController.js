@@ -15,25 +15,25 @@ function copyToClipboard(text) {
 }
 
 app.controller("ContextMenuController", function($scope, $rootScope){
-    $scope.ctxPlayNext = function(event){
+    $scope.ctxPlayNext = function(){
         var contextMenu = $(".contextMenu:visible");
         $rootScope.queueNextById(contextMenu.data("id"));
         contextMenu.hide(100);
     };
 
-    $scope.ctxAddToQueue = function(event){
+    $scope.ctxAddToQueue = function(){
         var contextMenu = $(".contextMenu:visible");
         $rootScope.addToQueueById(contextMenu.data("id"));
         contextMenu.hide(100);
     };
 
-    $scope.ctxAddToPlaylist = function(event){
+    $scope.ctxAddToPlaylist = function(){
         var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("openModal", "modals/addToPlaylist/"+contextMenu.data("id"), false);
         contextMenu.hide(100);
     };
 
-    $scope.ctxSongInfo = function(event){
+    $scope.ctxSongInfo = function(){
         var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("openModal", "modals/songInfo/"+contextMenu.data("id"), false);
         contextMenu.hide(100);

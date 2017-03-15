@@ -106,25 +106,25 @@
     Song context menu
 }}
 <ul class="fa-ul contextMenu" id="songContextMenu" ng-controller="ContextMenuController" role="menu">
-    <li role="menuitem" ng-click="ctxAddToQueue($event)"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Queue</li>
-    <li role="menuitem" ng-click="ctxPlayNext($event)"><i aria-hidden="true" class="fa fa-fw fa-fast-forward"></i> Play Next</li>
+    <li role="menuitem" ng-click="ctxAddToQueue()"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Queue</li>
+    <li role="menuitem" ng-click="ctxPlayNext()"><i aria-hidden="true" class="fa fa-fw fa-fast-forward"></i> Play Next</li>
     {{#if user}}
-        <li role="menuitem" ng-click="ctxAddToPlaylist($event)"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Playlist</li>
+        <li role="menuitem" ng-click="ctxAddToPlaylist()"><i aria-hidden="true" class="fa fa-fw fa-plus"></i> Add to Playlist</li>
     {{/if}}
-    <li role="menuitem" class="enabled" ng-click="copyShareLink($event)"><i aria-hidden="true" class="fa fa-fw fa-share-alt"></i> Copy Link</li>
-    <li role="menuitem" ng-click="ctxViewAlbum($event)"><i aria-hidden="true" class="fa fa-fw fa-square"></i> Go to Album</li>
-    <li role="menuitem" ng-click="ctxViewArtist($event)"><i aria-hidden="true" class="fa fa-fw fa-user"></i> Go to Artist</li>
-    <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
+    <li role="menuitem" class="enabled" ng-click="copyShareLink()"><i aria-hidden="true" class="fa fa-fw fa-share-alt"></i> Copy Link</li>
+    <li role="menuitem" ng-click="ctxViewAlbum()"><i aria-hidden="true" class="fa fa-fw fa-square"></i> Go to Album</li>
+    <li role="menuitem" ng-click="ctxViewArtist()"><i aria-hidden="true" class="fa fa-fw fa-user"></i> Go to Artist</li>
+    <li role="menuitem" ng-click="ctxSongInfo()"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
 </ul>
 
 {{!
     Queue context nmenu
 }}
 <ul class="fa-ul contextMenu" id="queueContextMenu" ng-controller="ContextMenuController" role="menu">
-    <li role="menuitem" ng-click="ctxMoveToTop($event)"><i aria-hidden="true" class="fa fa-fw fa-angle-double-up"></i> Move To Top</li>
-    <li role="menuitem" ng-click="ctxRandomise($event)"><i aria-hidden="true" class="fa fa-fw fa-random"></i> Randomise Position</li>
-    <li role="menuitem" ng-click="ctxMoveToBottom($event)"><i aria-hidden="true" class="fa fa-fw fa-angle-double-down"></i> Move To Bottom</li>
-    <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
+    <li role="menuitem" ng-click="ctxMoveToTop()"><i aria-hidden="true" class="fa fa-fw fa-angle-double-up"></i> Move To Top</li>
+    <li role="menuitem" ng-click="ctxRandomise()"><i aria-hidden="true" class="fa fa-fw fa-random"></i> Randomise Position</li>
+    <li role="menuitem" ng-click="ctxMoveToBottom()"><i aria-hidden="true" class="fa fa-fw fa-angle-double-down"></i> Move To Bottom</li>
+    <li role="menuitem" ng-click="ctxSongInfo()"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
 </ul>
 {{!
     Main container
