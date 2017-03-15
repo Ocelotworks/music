@@ -17,3 +17,7 @@ Add all songs with no plays into a playlist:
 
 Get songs by total duration listened:
     SELECT COUNT(*)*songs.duration,songs.title FROM plays INNER JOIN songs ON plays.song=songs.id GROUP BY song ORDER BY COUNT(*)*songs.duration DESC
+
+
+Get percentage of songs with plays:
+    SELECT ((SELECT COUNT(*) from songs)/COUNT(*))*100 AS "percentage" from (SELECT song FROM plays GROUP BY song) AS t
