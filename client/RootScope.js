@@ -302,4 +302,14 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         initialiseWebsocket($rootScope);
     });
 
+    $rootScope.showQueueContextMenu = function(event){
+        $("#queueContextMenu").finish().toggle(100).css({left: event.pageX, top: event.pageY, display: "absolute"})
+            .data("id", event.target.attributes["data-id"].value)
+            .data("artist", event.target.attributes["data-artist"].value)
+            .data("album", event.target.attributes["data-album"].value)
+            .data("index", event.target.attributes["data-index"].value);
+    };
+
+
+
 }]);

@@ -16,46 +16,63 @@ function copyToClipboard(text) {
 
 app.controller("ContextMenuController", function($scope, $rootScope){
     $scope.ctxPlayNext = function(event){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.queueNextById(contextMenu.data("id"));
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
     $scope.ctxAddToQueue = function(event){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.addToQueueById(contextMenu.data("id"));
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
     $scope.ctxAddToPlaylist = function(event){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("openModal", "modals/addToPlaylist/"+contextMenu.data("id"), false);
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
     $scope.ctxSongInfo = function(event){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("openModal", "modals/songInfo/"+contextMenu.data("id"), false);
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
     $scope.ctxViewAlbum = function(){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("showSongList", "album/"+contextMenu.data("album"), false);
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
     $scope.ctxViewArtist = function(){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         $rootScope.$emit("showSongList", "artist/"+contextMenu.data("artist"), false);
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     };
 
+    $scope.ctxMoveToTop = function(){
+        var contextMenu = $(".contextMenu:visible");
+        $rootScope.queue.move(contextMenu.data("index"), 0);
+        contextMenu.hide(100);
+    };
+
+    $scope.ctxRandomise = function(){
+        var contextMenu = $(".contextMenu:visible");
+        $rootScope.queue.move(contextMenu.data("index"), parseInt(Math.random() * $rootScope.queue.length));
+        contextMenu.hide(100);
+    };
+
+    $scope.ctxMoveToBottom = function(){
+        var contextMenu = $(".contextMenu:visible");
+        $rootScope.queue.move(contextMenu.data("index"),$rootScope.queue.length);
+        contextMenu.hide(100);
+    };
 
     $scope.copyShareLink = function(){
-        var contextMenu = $("#songContextMenu");
+        var contextMenu = $(".contextMenu:visible");
         var builtShareString = $rootScope.getSongById(contextMenu.data("id")).innerText.replace(/\s/g,"-").replace("---", "-");
         copyToClipboard(base+"song/"+contextMenu.data("id")+"/"+builtShareString);
-        contextMenu.toggle(100);
+        contextMenu.hide(100);
     }
 });

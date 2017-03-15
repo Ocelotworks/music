@@ -70,10 +70,6 @@
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
             {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}<br>
-            {{!--{{#if developmentMode}}--}}
-                {{!--<br>S: {[{nowPlaying.id}]}--}}
-                {{!--<br>A: {[{nowPlaying.artistID}]}--}}
-            {{!--{{/if}}--}}
     </span>
     <div id="controls" class="weeBox" role="menu">
         <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward" ng-click="playLast()" ng-disabled="historyStack.length === 0"></i>
@@ -92,7 +88,7 @@
     <div id="queue" class="weeBox">
         <span id="queueTitle" class="weeBoxTitle">Queue <span id="queueControls"><i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i> <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i></span></span>
         <div id="songListQueue" class="songList fancyScroll">
-            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artistID}]}" data-album="{[{song.album}]}">
+            <span ng-repeat="song in queue" class="song" data-id="{[{song.id}]}" data-artist="{[{song.artistID}]}" data-album="{[{song.album}]}" data-index="{[{$index}]}" ng-right-click="showQueueContextMenu($event)">
                 {[{song.artist}]}&nbsp;-&nbsp;{[{song.title}]}
                 <span class="queueControls">
                     <i class="fa fa-chevron-up" title="Move Up" ng-click="queueMoveUp($index)"></i>&nbsp;
@@ -118,6 +114,16 @@
     <li role="menuitem" class="enabled" ng-click="copyShareLink($event)"><i aria-hidden="true" class="fa fa-fw fa-share-alt"></i> Copy Link</li>
     <li role="menuitem" ng-click="ctxViewAlbum($event)"><i aria-hidden="true" class="fa fa-fw fa-square"></i> Go to Album</li>
     <li role="menuitem" ng-click="ctxViewArtist($event)"><i aria-hidden="true" class="fa fa-fw fa-user"></i> Go to Artist</li>
+    <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
+</ul>
+
+{{!
+    Queue context nmenu
+}}
+<ul class="fa-ul contextMenu" id="queueContextMenu" ng-controller="ContextMenuController" role="menu">
+    <li role="menuitem" ng-click="ctxMoveToTop($event)"><i aria-hidden="true" class="fa fa-fw fa-angle-double-up"></i> Move To Top</li>
+    <li role="menuitem" ng-click="ctxRandomise($event)"><i aria-hidden="true" class="fa fa-fw fa-random"></i> Randomise Position</li>
+    <li role="menuitem" ng-click="ctxMoveToBottom($event)"><i aria-hidden="true" class="fa fa-fw fa-angle-double-down"></i> Move To Bottom</li>
     <li role="menuitem" ng-click="ctxSongInfo($event)"><i aria-hidden="true" class="fa fa-fw fa-info-circle"></i> Song Info</li>
 </ul>
 {{!
