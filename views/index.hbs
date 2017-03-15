@@ -69,7 +69,7 @@
     <span id="currentArtist" class="secondaryText" ng-click="playArtist(nowPlaying.artistID)" title="See more by this artist">{[{nowPlaying.artist}]}</span>
     <rzslider id="timeElapsedBar" ng-class="{'smoothUpdate': nowPlaying.normalPlay}" class="seekBar" rz-slider-options="progressBar.options" rz-slider-model="nowPlaying.elapsed"></rzslider>
     <span id="currentTime">
-            {[{nowPlaying.elapsed | secondsToDateTime | date:'mm:ss'}]}/{[{nowPlaying.duration | secondsToDateTime | date:'mm:ss'}]}<br>
+            {[{nowPlaying.elapsed | secondsToHHMMSS}]}/{[{nowPlaying.duration | secondsToHHMMSS}]}<br>
     </span>
     <div id="controls" class="weeBox" role="menu">
         <i role="menuitem" aria-label="Backward" class="control fa fa-backward" title="Backward" ng-click="playLast()" ng-disabled="historyStack.length === 0"></i>

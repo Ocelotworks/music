@@ -94,6 +94,23 @@ app.config(function($interpolateProvider, $locationProvider) {
     });
 });
 
+/*
+ * I don't like this
+ */
+function pad2(num){
+    return (num < 10 ? '0' : '') + parseInt(num);
+}
+
+app.filter('secondsToHHMMSS', [function(){
+    return function(totalSeconds){
+        var hours = pad2(Math.floor(totalSeconds / 3600));
+        totalSeconds %= 3600;
+        var minutes = pad2(Math.floor(totalSeconds / 60));
+        var seconds = pad2(totalSeconds % 60);
+        return hours > 0 ? hours+":"+minutes+":"+seconds : minutes+":"+seconds;
+    }
+}]);
+
 app.filter('secondsToDateTime', [function() {
     return function(seconds) {
         return new Date(1970, 0, 1).setSeconds(seconds);
