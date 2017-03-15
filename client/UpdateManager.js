@@ -73,7 +73,9 @@ function initialiseWebsocket($rootScope){
                     $rootScope.audioPlayer.volume = data.volume;
                     break;
                 case "log":
-                    $("#adminServerConsole").append("\n"+data.message);
+                    var console = $("#adminServerConsole");
+                    if(console.text().length > 10000)console.text(console.text().substring(10000));
+                    console.append("\n"+data.message).scrollTop(console[0].scrollHeight - console.height());
                     break;
                 case "clearLogs":
                     console.log("Clearing logs");
