@@ -86,9 +86,9 @@
         </span>
     </div>
     <div id="queue" class="weeBox">
-        <span id="queueTitle" class="weeBoxTitle">Queue
+        <span id="queueTitle" class="weeBoxTitle">Queue ({[{queue.length}]})
             <span id="queueControls">
-                <i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue = []"></i>
+                <i aria-label="Clear Queue" class="fa fa-trash" title="Clear Queue" ng-click="queue.clear()"></i>
                 <i class="fa fa-save" aria-label="Save Queue as Playlist" title="Save Queue as Playlist"></i>
             </span>
         </span>
