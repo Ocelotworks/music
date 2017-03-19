@@ -5,7 +5,7 @@
     <span id="pageTitle"><i class="fa fa-shekel fa-flip-horizontal" aria-hidden="true"></i>&nbsp;{{title}} {{#if developmentMode}}<span id="developmentMode" class="debug">DEVELOPMENT MODE</span>{{/if}}</span>
     <input type="checkbox" class="hamburger" title="Menu">
     <div id="nav" ng-controller="TabController" role="menubar">
-        <a ng-repeat="tab in tabs" class="navButton {[{tab.default}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
+        <a ng-repeat="tab in tabs" class="navButton {[{activeTab == $index ? 'selected' : ''}]}" ng-click="switchTab(tab)"><i class="fa {[{tab.icon}]}"></i>&nbsp;{[{tab.name}]}</a>
     </div>
     <span id="searchBar"><input class="search" type="search" placeholder="search" ng-model="text" ng-controller="TabController" ng-change="search()"></span><!--TODO: move search from TabController-->
     <div id="profile" class="navButton">
