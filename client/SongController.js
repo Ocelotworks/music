@@ -66,10 +66,23 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
     $scope.skipSong = function(){
         if($rootScope.nowPlaying.id){
-            ga('send', 'event', "Song", "Skip", $rootScope.nowPlaying.id, $rootScope.nowPlaying.elapsed);
             $http.put(base + "api/song/skip/" + $rootScope.nowPlaying.id+"/"+$rootScope.nowPlaying.elapsed, "");
         }
         $scope.playNext();
+    };
+
+    $scope.getSongVote = function(){
+        if($rootScope.nowPlaying.id){
+            $http.get(base+"api/song/"+$rootScope.nowPlaying.id+"/votes").then(function(response){
+                if(!response.data.err){
+                    $(".songRate").removeClass("rated");
+                    if(response.data.vote)
+                        $("#songRateUp").addClass("rated");
+                    else
+                        $("#songRateDown").addClass("rated");
+                }
+            });
+        }
     };
 
     $scope.rateSongUp = debounce(function(){

@@ -58,7 +58,7 @@
     </div>
     <div id="albumArtContainer">
         <img src="img/album{{#if christmasMode}}-christmas{{/if}}.png" id="albumArt" title="Album Art" aria-label="Album Art">
-        <div id="albumOverlay">
+        <div id="albumOverlay" ng-mouseenter="getSongVote()">
             <span id="songRateUp" title="Rate Up" aria-label="Rate Up" class="songRate" ng-click="rateSongUp()"><i aria-hidden="true" class="fa fa-thumbs-up"></i></span>
             <span title="Song Info" aria-label="Song Info" class="songRate" ng-click="$emit('openModal', 'modals/songInfo/'+nowPlaying.id);"><i aria-hidden="true" class="fa fa-ellipsis-h"></i></span>
             <span id="songRateDown" title="Rate Down" aria-label="Rate Down" class="songRate" ng-click="rateSongDown()"><i aria-hidden="true" class="fa fa-thumbs-down"></i></span>

@@ -84,7 +84,30 @@ module.exports = function(app){
         });
     });
 
+    /**
+     * /song/:key/:id/votes
+     * /song/:id/votes
+     */
+    router.get(['/:key/:id/votes', '/:id/votes'], app.util.validateKeyAbove(0), function(req, res){
+        app.database.getCurrentSongVote(req.params.id, req.user.id, function(err, result){
+            if(err){
+                console.log(err);
+                res.header(500).json({err: err});
+            }else{
+                if(result.length > 0){
+                    res.json({vote: result[0].up});
+                }else{
+                    res.header(404).json({err: "Not voted"});
+                }
+            }
+        });
+    });
 
+
+    /**
+     * /song/:key/:id/update
+     * /song/:id/update
+     */
     router.post(['/:key/:id/update', '/:id/update'], app.util.validateKeyAbove(0), function(req, res){
         if(req.body && req.body.album && req.body.artist && req.body.title){
             app.database.getOrCreateArtist(req.body.artist.trim(), function(err, artistID){
@@ -115,5 +138,6 @@ module.exports = function(app){
 
         }
     });
+
     return router;
 };

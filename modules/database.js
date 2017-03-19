@@ -849,6 +849,22 @@ module.exports = function database(app){
                 up: up ? 1 : 0
             }).asCallback(cb);
         },
+        /**
+         * Gets the users current vote for a song
+         * @param {string} song
+         * @param {string} user
+         * @param {function} cb
+         */
+        getCurrentSongVote: function getCurrentSongVote(song, user, cb){
+            knex.select("up")
+                .from("votes")
+                .where({
+                    song: song,
+                    owner: user
+                })
+                .limit(1)
+                .asCallback(cb);
+        },
         getAlbumArtForGenreImage: function getAlbumArtForGenreImage(genre, cb){
             knex.select("image")
                 .from("songs")
