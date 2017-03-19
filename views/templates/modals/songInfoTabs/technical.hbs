@@ -6,5 +6,5 @@ Genre ID: {{song.genre}} <br>
 {{#if song.mbid}}MBID: {{song.mbid}}{{/if}}<br>
 User ID: {{song.addedby}}
 <br>
-<button class="happyButton" ng-click="httpGet(base+'api/admin/job/run/Update%20Album%20Image/[%22{{song.artist}}%22]')"><i class="fa fa-suitcase"></i>&nbsp;Force Album Image Update</button>
+<button class="happyButton" ng-click="httpGet(base+'api/admin/job/run/Update%20Album%20Image/[%22{{song.album}}%22]')"><i class="fa fa-suitcase"></i>&nbsp;Force Album Image Update</button>
 <button class="happyButton" ng-click="httpGet(base+'api/admin/job/run/Update%20Artist%20Image/[%22{{song.artist}}%22]')"><i class="fa fa-suitcase"></i>&nbsp;Force Artist Image Update</button>
