@@ -2,6 +2,8 @@
  * Copyright Ocelotworks 2016
  */
 
+var scrollBound = false;
+
 app.controller("TabController", function($scope, $templateRequest, $sce, $compile, $rootScope, $location){
 
     console.log("TAB CONTROLLER STARTED");
@@ -12,7 +14,7 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             icon: "fa-music",
             template: "songs",
             location: "songs",
-            default: "selected"
+            staggered: true
         },
         {
             name: "Artists",
@@ -60,6 +62,8 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             nocache: true
         }
     ];
+
+    $scope.activeTab = 0;
 
     if($rootScope.userLevel >= 2)
         $scope.tabs.push({
@@ -121,20 +125,24 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $scope.switchTab = function(tab){
         if($scope.tabSwitching)return console.warn("Tried to switch tab whilst tab was switching");
         $scope.tabSwitching = true;
-        //TODO: Angular if statement for this?
-        for(var i in $scope.tabs)
-            if($scope.tabs.hasOwnProperty(i))
-                $scope.tabs[i].default = null;
-        tab.default = "selected";
+        $scope.activeTab = $scope.tabs.indexOf(tab);
         $templateRequest("loading").then(function(template){
             $("#tabContainer").html(template);
         }, $scope.showErrorScreen);
 
-        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.nocache ? "?v="+Math.random() : ""));
+
+        var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+(tab.staggered ? "/0" : "")+(tab.nocache ? "?v="+Math.random() : ""));
         $templateRequest(templateUrl).then(function(template){
+            if(tab.staggered){
+                template = '<div id="allSongs" class="songList visible fancyScroll playable" ng-controller="SongController">'+template+'</div>'
+            }
             $compile($("#tabContainer").html(template).contents())($scope);
             $scope.tabSwitching = false;
+            if(tab.staggered){
+                tab.loaded = 0;
+            }
         }, $scope.showErrorScreen);
+
 
         console.log("Setting location "+$location.path());
         $location.path("/"+tab.location);
@@ -150,6 +158,31 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
     $rootScope.$on("switchTab", function(evt, tab){
         $scope.switchTab($scope.tabs[tab]);
     });
+
+
+    if(!scrollBound){
+        console.log("Binding scroll event");
+        scrollBound = true;
+        var isAppending = false;
+        var tabContainer = $("#tabContainer");
+        tabContainer.bind("scroll", function(){
+            var tab = $scope.tabs[$scope.activeTab];
+            if(tab.staggered && !isAppending && tabContainer.scrollTop()/tabContainer.prop("scrollHeight") > 0.7){
+                isAppending = true;
+                var templateUrl = $sce.getTrustedResourceUrl("templates/"+tab.template+"/"+(tab.loaded+100)+(tab.nocache ? "?v="+Math.random() : ""));
+                $templateRequest(templateUrl).then(function(template){
+                    console.log("Appending "+tab.loaded);
+                    if(template.length > 10){
+                        tabContainer.contents(tabContainer.contents(0, tabContainer.contents().length-6)).append(template+"</div>");
+                        $compile(tabContainer.contents())($scope);
+                        tab.loaded += 100;
+                        isAppending = false;
+                    }
+                }, $scope.showErrorScreen);
+            }
+        });
+    }
+
 
     $rootScope.$emit("tabControllerReady");
 });

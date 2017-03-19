@@ -129,10 +129,17 @@ module.exports = function database(app){
         },
         /**
          * Gets a list of songs, including artist and album name, sorted by artist
+         * @param {integer} offset
          * @param {function} cb
          */
-        getSongList: function getSongList(cb){
-            knex.from("songs").innerJoin("artists", "songs.artist", "artists.id").select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album").orderBy("artists.name", "ASC").asCallback(cb);
+        getSongList: function getSongList(offset, cb){
+            knex.from("songs")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
+                .orderBy("artists.name", "ASC")
+                .limit(100)
+                .offset(parseInt(offset))
+                .asCallback(cb);
         },
         /**
          * Gets information about a certain song

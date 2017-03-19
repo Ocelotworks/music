@@ -12,16 +12,6 @@ module.exports = function(app){
         route: "/templates/songs"
     };
 
-    router.get('/', function(req, res, next) {
-        app.database.getSongList(function(err, songs){
-            if(err){
-                app.renderError(err, res);
-            }else{
-                res.render('templates/songList', {songs: songs, layout: false});
-            }
-        });
-    });
-
     router.get('/artist/:id', function(req, res){
         app.database.getSongsByArtist(req.params.id, function(err, songs){
             if(err)
@@ -93,6 +83,17 @@ module.exports = function(app){
            }
         });
     });
+
+    router.get('/:offset', function(req, res) {
+        app.database.getSongList(req.params.offset, function(err, songs){
+            if(err){
+                app.renderError(err, res);
+            }else{
+                res.render('templates/staggeredSongList', {songs: songs, layout: false});
+            }
+        });
+    });
+
 
     return router;
 };
