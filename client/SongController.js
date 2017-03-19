@@ -94,8 +94,4 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
        $scope.showSongList(arg);
     });
 
-
-    $("#allSongs").scroll(function(){
-        console.log("WERE UP TAE SPEED NOW BOYS");
-    })
 });
