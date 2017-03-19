@@ -204,7 +204,7 @@ module.exports = function(app){
                                    var albumMatches = response.results.albummatches.album;
                                    async.eachSeries(albumMatches, function(albumMatch, eachCb) {
                                        app.log("Trying album art...");
-                                       if (albumMatch.artist.toLowerCase() == album.artistName.toLowerCase()) {
+                                       if (albumMatch.artist.toLowerCase().indexOf(album.artistName.toLowerCase()) > -1) {
                                            app.log("Matched album "+JSON.stringify(albumMatch));
                                            object.lastfmImageArrayToMysqlData(albumMatch.image, function (err, imageData) {
                                                if (err) {
