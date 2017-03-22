@@ -13,6 +13,9 @@ Handlebars.registerPartial('radio', ' <div class="song" ng-click="playRadio($eve
 Handlebars.registerPartial('artist', '<div class="song" ng-click="playArtist(\'{{id}}\')">{{name}}</div>');
 Handlebars.registerPartial('album', '<div class="album" ng-click="playAlbum(\'{{id}}\')">\n    <img src="album/{{id}}">\n    <span>{{name}}</span>\n</div>');
 Handlebars.registerPartial('genre', '<div class="album" ng-click="playGenre(\'{{id}}\')">\n    <img src="genre/{{id}}">\n    <span>{{name}}</span>\n</div>');
+Handlebars.registerPartial('card', '<div class="songCard" ng-click="playSong($event)" ng-right-click="showSongContextMenu($event)" data-id="{{song_id}}" data-artist="{{artist_id}}" data-album="{{album_id}}">\n    <img class="cardImage" src="album/{{album_id}}" alt="{{album_name}}">\n    <span class="cardTitle">{{artist_name}}&nbsp;-&nbsp;{{title}}</span>\n</div>');
+
+
 
 
 Handlebars.registerHelper('prettyParseDuration', function(seconds){

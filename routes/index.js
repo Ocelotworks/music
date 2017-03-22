@@ -12,6 +12,7 @@ module.exports = function(app){
     };
 
     var tabs = [
+        "home",
         "songs",
         "artists",
         "albums",

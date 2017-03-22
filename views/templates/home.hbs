@@ -1,0 +1,15 @@
+<h1 class="cardHolderTitle">Listen Again</h1>
+<div id="listenAgain" class="cardHolder" ng-controller="SongController">
+    {{#each listenAgain}}
+       {{>card this}}
+    {{/each}}
+</div>
+<!--<h1 class="cardHolderTitle">Recommended for you</h1>-->
+<!--<div id="recommended" class="cardHolder">-->
+<!--</div>-->
+<h1 class="cardHolderTitle">Latest Additions</h1>
+<div id="latestEditions" class="cardHolder" ng-controller="SongController">
+    {{#each latestSongs}}
+        {{>card this}}
+    {{/each}}
+</div>

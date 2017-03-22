@@ -91,6 +91,22 @@ module.exports = function(app){
     });
 
 
+    router.get('/home', function(req, res){
+        app.database.getLatestSongs(function(latestSongsErr, latestSongs){
+            app.database.getListenAgain(req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(listenAgainErr, listenAgain){
+                console.log(listenAgainErr);
+                res.render('templates/home', {
+                    layout: false,
+                    latestSongs: latestSongs,
+                    listenAgain: listenAgain
+                });
+            });
+
+        });
+
+    });
+
+
     return router;
 };
 

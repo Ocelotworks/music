@@ -1097,6 +1097,34 @@ module.exports = function database(app){
         },
         getGenresWithNoImage: function getGenresWtihNoImage(cb){
             knex.select("id").from("genres").whereNull("image").asCallback(cb);
+        },
+        getLatestSongs: function getLatestSongs(cb){
+            knex.select("songs.id AS song_id",
+                "albums.id AS album_id", "artists.id AS artist_id",
+                "songs.title", "artists.name AS artist_name",
+                "albums.name AS album_name")
+                .from("songs")
+                .innerJoin("albums", "songs.album", "albums.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .orderBy("timestamp", "DESC")
+                .limit(7)
+                .asCallback(cb);
+        },
+        getListenAgain: function getListenAgain(user, cb){
+            knex.select("songs.id AS song_id",
+                "albums.id AS album_id", "artists.id AS artist_id",
+                "songs.title", "artists.name AS artist_name",
+                "albums.name AS album_name")
+                .from("plays")
+                .innerJoin("songs", "plays.song", "songs.id")
+                .innerJoin("albums", "songs.album", "albums.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .where({user: user, manual: 1})
+                .whereNotNull("albums.image")
+                .groupBy("songs.id")
+                .orderByRaw("RAND()")
+                .limit(7)
+                .asCallback(cb);
         }
     };
     app.jobs.addJob("Create User", {

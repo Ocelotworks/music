@@ -361,3 +361,44 @@ sup{
   height: 49%;
   position: absolute;
 }
+
+.cardHolderTitle {
+  margin-left: 1%;
+}
+
+.songCard {
+  background: #101010;
+  box-shadow: black 1px 1px 5px;
+  max-width: 20vh;
+  margin-left: 1.5%;
+  transition: 0.5s;
+  &:hover{
+    transition: 0.2s;
+    transform: scale(1.1);
+    cursor: pointer;
+    box-shadow: grey 1px 1px 5px;
+  }
+}
+
+.cardHolder {
+  display: flex;
+  padding: 4px;
+  margin-top: 10px !important;
+}
+
+.cardTitle {
+  display: block;
+  text-align: center;
+}
+
+.cardImage {
+  display: block;
+  width: 100%;
+  pointer-events: none;
+}
+
+.cardHolderTitle{
+  margin-left: 1%;
+  margin-top: 25px !important;
+  border-bottom: 1px solid #4c4b4b;
+}

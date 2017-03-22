@@ -10,6 +10,12 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
 
     $scope.tabs = [
         {
+            name: "Home",
+            icon: "fa-home",
+            template: "home",
+            location: ""
+        },
+        {
             name: "Songs",
             icon: "fa-music",
             template: "songs",
