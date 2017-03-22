@@ -11,7 +11,7 @@ var uuid        = require('uuid').v4;
 var ffprobe     = require('node-ffprobe');
 var spawn       = require('child_process').spawn;
 var async       = require('async');
-var songRegex = /[{\[\('"].*["'\]\)}]|lyrics|official|hd|.*\|\|/ig;
+var songRegex = /[{\[\('"].*["'\]\)}]|lyrics|official|(music )?video|hd|.*\|\|/ig;
 
 var downloaderConfig = config.get("Downloader");
 var proxy = downloaderConfig.get("proxy");
