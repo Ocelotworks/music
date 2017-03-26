@@ -10,6 +10,7 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
 
 
     $scope.showSongContextMenu = function(event){
+        console.log(event.target);
         $("#songContextMenu").finish().toggle(100).css({left: event.pageX, top: event.pageY, display: "absolute"})
             .data("id", event.target.attributes["data-id"].value)
             .data("artist", event.target.attributes["data-artist"].value)

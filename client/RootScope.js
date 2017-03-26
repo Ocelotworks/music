@@ -84,7 +84,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
     $rootScope.getSongById = function(id){
-        return $(".song[data-id='"+id+"']").get(0);
+        return $(".songData[data-id='"+id+"']").get(0);
     };
 
     $rootScope.addToQueueById = function(id){
