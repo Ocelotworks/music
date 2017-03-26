@@ -939,7 +939,7 @@ module.exports = function database(app){
                 .from("votes")
                 .innerJoin("songs", "votes.song", "songs.id")
                 .innerJoin("artists", "songs.artist", "artists.id")
-                .groupBy("song")
+                .groupBy("song", "artists.name", "songs.title")
                 .orderByRaw("SUM(UP) DESC")
                 .limit(10)
                 .asCallback(cb);
