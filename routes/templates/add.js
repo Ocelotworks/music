@@ -20,13 +20,13 @@ module.exports = function(app){
     });
 
     router.get('/playlist', function(req, res, next) {
-        app.database.getSongList(function(err, songs){
+        //app.database.getSongList(function(err, songs){
             res.render('templates/addScreens/addPlaylist', {
                 signedIn: req.user != null,
-                songs: songs,
+                //songs: songs,
                 layout: false
             });
-        });
+        //});
     });
 
     router.post('/playlist', function(req, res, next){

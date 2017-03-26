@@ -3,6 +3,13 @@
  */
 
 var config  = require('config').get("Database");
+
+if(config.pool){
+    config.pool.afterCreate = function(conn, done){
+        conn.query('SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci', done);
+    }
+}
+
 var knex    = require('knex')(config);
 var uuid    = require('uuid').v4;
 var async   = require('async');
@@ -505,9 +512,10 @@ module.exports = function database(app){
          * @param artist The artist UUID
          * @param title The title
          * @param album The album UUID
+         * @param playlist The playlist UUID to add the song to after it's done
          * @param {function} cb
          */
-        addSongToQueue: function addSongToQueue(url, destination, addedby, artist, title, album, cb){
+        addSongToQueue: function addSongToQueue(url, destination, addedby, artist, title, album, playlist, cb){
             function exec(url, destination, addedById, artistId, title, albumId){
                 knex("queue").insert({
                     url: url,
@@ -515,7 +523,8 @@ module.exports = function database(app){
                     addedby: addedById,
                     artist: artistId,
                     title: title,
-                    album: albumId
+                    album: albumId,
+                    playlist: playlist
                 }).asCallback(cb);
             }
 
@@ -1187,6 +1196,7 @@ module.exports = function database(app){
         func: object.mergeGenres
     });
 
+    object.init();
 
     return object;
 };

@@ -11,8 +11,11 @@
                 {{/each}}
             </select>
         </div><br><br>
-        <input id="pullSongData" name="getLastfmData" type="checkbox" ng-model="song.getLastfmData" checked>
-        <label for="pullSongData">Pull song data from last.fm</label>
+        <input id="pullSongData" name="getLastfmData" type="checkbox" ng-model="song.getLastfmData">
+        <label for="pullSongData">Pull song data from last.fm</label>&nbsp;
+        <input id="addToPlaylist" name="addToPlaylist" type="checkbox" ng-model="song.addToPlaylist" ng-click="openPlaylistChooser();">
+        <label for="addToPlaylist" ng-if="!song.playlist">Add song<span ng-if="song.url.indexOf('playlist') > -1">s</span> to playlist</label>&nbsp;
+        <label for="addToPlaylist" ng-if="song.playlist"><b>Adding song<span ng-if="song.url.indexOf('playlist') > -1">s</span> to playlist '{[{song.playlistName}]}'</b></label>&nbsp;
         <input type="submit" value="&#61677; Add to Download Queue" class="happyButton downloadButton">
     </form>
 

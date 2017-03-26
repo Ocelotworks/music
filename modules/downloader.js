@@ -59,11 +59,12 @@ module.exports = function(app){
          * @param destination The path of the song
          * @param getLastmData Boolean to retrieve data from last.fm or not
          * @param addedBy The UUID of the user that queued the song
+         * @param playlist The UUID of the playlist to add the song to once downloaded
          */
-        queue: function queueSong(url, destination, getLastmData, addedBy){
+        queue: function queueSong(url, destination, getLastmData, addedBy, playlist){
             app.log("Received a song to queue "+url+" -> "+destination);
             if(url && destination){
-                app.database.addSongToQueue(url, destination, addedBy, null, "Unknown", null, function addSongToQueue(err, result){
+                app.database.addSongToQueue(url, destination, addedBy, null, "Unknown", null, playlist, function addSongToQueue(err, result){
                     if(object.songsProcessing > downloaderConfig.get("maxConcurrentDownloads")){
                         app.log(`Too many songs downloading right now (${object.songsProcessing}), adding ${result[0]} to secondary queue.`);
                         app.database.updateQueuedSong(result[0], {
@@ -107,7 +108,7 @@ module.exports = function(app){
                                             if (err) app.error("Failed to remove queued song " + id + " from database: " + err);
                                             for (var i in info)
                                                 if (info.hasOwnProperty(i))
-                                                    object.queue(info[i].url, queuedSong.destination, true, queuedSong.addedby);
+                                                    object.queue(info[i].url, queuedSong.destination, true, queuedSong.addedby, queuedSong.playlist);
                                         });
                                     } else {
                                         var fixedTitle = info.fulltitle.replace(songRegex, "");
@@ -136,6 +137,7 @@ module.exports = function(app){
                                                 }, function updateQueuedSongCB(err) {
                                                     if (err) app.warn(`Error updating queued song: ${err}`);
                                                 });
+
                                                 object.songsProcessing--;
                                                 if (object.songsProcessing < downloaderConfig.get("maxConcurrentDownloads")) {
                                                     object.processOneSong();
@@ -149,11 +151,8 @@ module.exports = function(app){
                                                             status: 'WAITING'
                                                         }, function (err) {
                                                             if (err) {
-                                                                /* ?/ This is bob. Copy and Paste him so */
                                                                 app.error("Error updating queued song: " + err);
-                                                                /* /?  he can take over callback hell!   */
                                                             } else {
-                                                                /* /\                                    */
                                                                 app.log(`Successfully got youtube info for ${id}.`);
                                                             }
                                                             object.songsProcessing--;
@@ -248,12 +247,6 @@ module.exports = function(app){
                         })
                         .on('end', function songDownloadEnd() {
                             app.log("Finished downloading " + info.id);
-                            app.broadcastUpdate("alert", {
-                                lifetime: 5,
-                                title: "Download Finished",
-                                body: `${info.title} has downloaded successfully.`,
-                                image: "album/"+info.album
-                            });
                             var pathSplit = info.destination.split("/");
                             app.database.getOrCreateGenre((pathSplit[info.destination.endsWith("/") ? pathSplit.length-2 : pathSplit.length-1]).trim(), function createGenre(err, genreID){
                                 if(err)app.warn("Error creating genre: "+err);
@@ -278,8 +271,20 @@ module.exports = function(app){
                                                 status: "FAILED"
                                             }, updateErrorHandler);
                                         } else {
-                                            app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){});
+                                            app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){
+                                                app.broadcastUpdate("alert", {
+                                                    lifetime: 5,
+                                                    title: "Download Finished",
+                                                    body: `${info.title} has downloaded successfully.`,
+                                                    image: "album/"+info.album
+                                                });
+                                            });
                                             app.database.removeQueuedSong(info.id, updateErrorHandler);
+                                            if(info.playlist){
+                                                app.database.addSongToPlaylist(info.playlist, songUUID, function(err){
+                                                   if(err)app.warn("Unable to add song "+songUUID+" to playlist "+info.playlist);
+                                                });
+                                            }
                                         }
                                         object.songsProcessing--;
                                         object.processOneSong();

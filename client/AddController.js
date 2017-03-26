@@ -1,7 +1,7 @@
 /*
  * Copyright Ocelotworks 2016
  */
-app.controller('AddController', function($scope,  $templateRequest, $sce, $compile, $http){
+app.controller('AddController', function($scope,  $templateRequest, $sce, $compile, $http, $rootScope){
 
     $scope.addViews = {
         playlist: "playlist",
@@ -19,7 +19,18 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
     };
 
     $scope.song = {
-        songFolder: "pop"
+        songFolder: "pop",
+        getLastfmData: true
+
+    };
+
+    $scope.openPlaylistChooser = function(){
+        if(!$scope.song.addToPlaylist) {
+            if ($scope.song.playlist)
+                $scope.song.playlist = null;
+        }else{
+            $rootScope.$emit('openModal', 'modals/addToPlaylist/new', true);
+        }
     };
 
     $scope.retry = function(song){
@@ -50,6 +61,19 @@ app.controller('AddController', function($scope,  $templateRequest, $sce, $compi
                 console.log("There was an error: "+err);
             });
     };
+
+    $rootScope.$on("selectPlaylist", function(evt, playlist, name){
+        $scope.song.playlist = playlist;
+        $scope.song.playlistName = name;
+        $scope.song.addToPlaylist = true;
+    });
+
+    $rootScope.$on("closeModal", function(evt, cancelled){
+       if(cancelled){
+           $scope.song.addToPlaylist = false;
+           $rootScope.$apply();
+       }
+    });
 
     $scope.clearFailed = function(){
         $http.get(base+"api/downloader/clearFailed").then(function(){
