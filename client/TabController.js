@@ -13,7 +13,8 @@ app.controller("TabController", function($scope, $templateRequest, $sce, $compil
             name: "Home",
             icon: "fa-home",
             template: "home",
-            location: ""
+            location: "",
+            nocache: true
         },
         {
             name: "Songs",
