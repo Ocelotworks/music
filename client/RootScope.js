@@ -216,7 +216,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         var nextSong;
         if($rootScope.queue.length > 0) {
             nextSong = $rootScope.queue.shift();
-            $rootScope.playById(nextSong.id);
+            $rootScope.playByData(nextSong);
         }else{
             if($rootScope.shuffleQueue.length > 0){
                 nextSong = $rootScope.shuffleQueue.shift();
