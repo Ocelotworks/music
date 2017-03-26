@@ -18,6 +18,7 @@ app.controller("ModalController", function($scope, $rootScope, $sce, $templateRe
     };
 
     $scope.openModal = function(path, nocache){
+        console.log("Opening modal");
         $("#modalShadow").addClass("modal-visible");
         $templateRequest("loading").then(function(template){
             $compile($("#modalBox").html(template).contents())($scope);
@@ -42,7 +43,7 @@ app.controller("ModalController", function($scope, $rootScope, $sce, $templateRe
 
     $("#modalShadow").click(function(e){
         if(e.target != this) return;
-        $scope.closeModal();
+        $rootScope.$emit("closeModal", true);
     });
 
     $rootScope.$emit("modalControllerReady");
