@@ -1135,7 +1135,7 @@ module.exports = function database(app){
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .where({user: user, manual: 1})
                 .whereNotNull("albums.image")
-                .whereRaw("plays.timestamp < CURRENT_TIMESTAMP() - INTERVAL 2 DAY")
+                .whereRaw("plays.timestamp < CURRENT_TIMESTAMP() - 172800")
                 .groupBy("songs.id")
                 .orderByRaw("RAND()")
                 .limit(7)
