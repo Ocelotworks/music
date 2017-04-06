@@ -65,6 +65,9 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
     };
 
 
+
+
+
     $rootScope.shuffleQueue = [];
     $rootScope.queue = [];
     $rootScope.historyStack = [];
@@ -240,6 +243,18 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.buffering = true;
         $rootScope.nowPlaying.manual = data.manual;
         $rootScope.audioPlayer.src = base+"song/"+data.id;
+
+        if('mediaSession' in navigator){
+            console.log("Doing the mediaSession dance");
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: data.title,
+                artist: data.artist,
+                artwork: [
+                    { src: base+"album/"+data.album,   sizes: '300x300',   type: 'image/png' },
+                ]
+            });
+        }
+
         $("#albumArt").attr("src", base+"album/"+data.album);
         if(window.innerWidth <= 1111){
             changeFavicon(base+"album/"+data.album);
@@ -270,6 +285,18 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.nowPlaying.buffering = true;
         $rootScope.nowPlaying.manual = manual || false;
         $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
+
+        if('mediaSession' in navigator){
+            console.log("Doing the mediaSession dance PBE");
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: info[1],
+                artist: info[0],
+                artwork: [
+                    { src: base+"album/"+element.attributes["data-album"].value,  sizes: '300x300',   type: 'image/png' },
+                ]
+            });
+        }
+
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
         if(window.innerWidth <= 1111){
             changeFavicon(base+"album/"+element.attributes["data-album"].value);
@@ -309,6 +336,21 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             .data("album", event.target.attributes["data-album"].value)
             .data("index", event.target.attributes["data-index"].value);
     };
+
+
+    if('mediaSession' in navigator){
+        navigator.mediaSession.setActionHandler('play', $rootScope.togglePlaying);
+        navigator.mediaSession.setActionHandler('pause', $rootScope.togglePlaying);
+        navigator.mediaSession.setActionHandler('previoustrack', $rootScope.playLast);
+        navigator.mediaSession.setActionHandler('nexttrack', $rootScope.playNext);
+        navigator.mediaSession.setActionHandler('seekbackward', function() {
+            $rootScope.audioPlayer.currentTime = Math.max( $rootScope.audioPlayer.currentTime - 10, 0);
+        });
+
+        navigator.mediaSession.setActionHandler('seekforward', function() {
+            $rootScope.audioPlayer.currentTime = $rootScope.audioPlayer.currentTime + 10
+        });
+    }
 
 
 
