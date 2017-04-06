@@ -96,28 +96,37 @@ module.exports = function(app){
     });
 
     router.get("/song/:id", function(req, res){
-       app.database.getSongPathToPlay(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, resp){
-           if(err){
-               app.warn("Error getting song path: "+err);
-               res.sendFile("/home/peter/doot/doot me up inside.mp3");
-           }else{
-               if(resp.length > 0){
-                   var path = resp[0].path;
-                   res.sendFile(path);
-                   if(req.user){
-                       app.nowPlayings[req.user.id] = req.params.id;
-                   }
-               }else{
-                   app.warn("Received request for unknown song: "+req.param.id);
-                   res.sendFile("/home/peter/doot/doot me up inside.mp3");
-               }
-           }
-       });
+        //TODO proper this
+        if(req.headers['If-Modified-Since']){
+            res.header(304).send("");
+        }else{
+            app.database.getSongPathToPlay(req.params.id, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a", function(err, resp){
+                if(err){
+                    app.warn("Error getting song path: "+err);
+                    res.sendFile("/home/peter/doot/doot me up inside.mp3");
+                }else{
+                    if(resp.length > 0){
+                        var path = resp[0].path;
+                        res.header("Cache-Control", "public, max-age=999999");
+                        res.sendFile(path);
+                        if(req.user){
+                            app.nowPlayings[req.user.id] = req.params.id;
+                        }
+                    }else{
+                        app.warn("Received request for unknown song: "+req.param.id);
+                        res.sendFile("/home/peter/doot/doot me up inside.mp3");
+                    }
+                }
+            });
+        }
     });
 
     //TO BE DEPRECATED
     router.get("/album/:id", function(req, res){
-       app.database.getAlbumArt(req.params.id, function(err, resp){
+        if(req.headers['If-Modified-Since']){
+            res.header(304).send("");
+        }else
+        app.database.getAlbumArt(req.params.id, function(err, resp){
            if(err || !resp[0] || !resp[0].image) {
                if(config.get("General.christmasMode"))
                    res.redirect("../img/album-christmas.png");
@@ -125,18 +134,23 @@ module.exports = function(app){
                    res.redirect("../img/album.png");
            }else{
                res.header('Content-Type', 'image/png');
+               res.header("Cache-Control", "public, max-age=60000");
                res.end(resp[0].image);
            }
 
-       })
+        })
     });
 
     router.get("/genre/:id", function(req, res){
+        if(req.headers['If-Modified-Since']){
+            res.header(304).send("");
+        }else
         app.database.getGenreArt(req.params.id, function(err, resp){
             if(err || !resp[0] || !resp[0].image)
                 res.redirect("../img/album.png");
             else{
                 res.header('Content-Type', 'image/png');
+                res.header("Cache-Control", "public, max-age=60000");
                 res.end(resp[0].image);
             }
 
