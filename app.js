@@ -226,24 +226,7 @@ app.log("Compiling clientside javascript...");
 app.updateJavascript = function() {
     new Compressor.minify({
         type: 'uglifyjs',
-        fileIn: [
-            "client/AppInit.js",
-            "client/UpdateManager.js",
-            "client/RootScope.js",
-            "client/admin/AdminController.js",
-            "client/AddController.js",
-            "client/AddDeviceController.js",
-            "client/AddPlaylistController.js",
-            "client/AddToPlaylistController.js",
-            "client/ContextMenuController.js",
-            "client/PlaylistController.js",
-            "client/ModalController.js",
-            "client/SongController.js",
-            "client/TabController.js",
-            "client/SongInfoTabController.js",
-            "client/SettingsController.js",
-            "client/EditSongController.js"
-        ],
+        fileIn: config.get("Advanced.clientOrder"),
         fileOut: 'public/js/music.js',
         callback: function (err) {
             if (err) {
