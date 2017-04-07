@@ -134,8 +134,15 @@
     top: 8px;
     left: 5px;
     &:checked{
-      transform: rotate(180deg);
-      transition: @transition-time;
+      position: absolute;
+      left: 50%;
+      width: 48.6%;
+      top: 0;
+      height: 1000px;
+      overflow: hidden;
+      color: rgba(0, 0, 0, 0);
+      z-index: 10000;
+      transition: 0s;
     }
     &:focus{
       outline: none;
