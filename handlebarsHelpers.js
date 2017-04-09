@@ -98,6 +98,7 @@ Handlebars.registerHelper("longDuration", function(seconds){
 
     if (typeof seconds === 'number') {
 
+        data = quantify(data, 'year',   parseInt(seconds / 31556926));
         data = quantify(data, 'day',    parseInt(seconds / 86400));
         data = quantify(data, 'hour',   parseInt((seconds % 86400) / 3600));
         data = quantify(data, 'minute', parseInt((seconds % 3600) / 60));
