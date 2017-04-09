@@ -41,7 +41,35 @@ module.exports = function(app){
                     app.sendUpdate(client, "rejectDevice", "INVALID_DEVICE");
                     app.warn("User " + req.user.id + " (" + req.user.username + ") tried to register an invalid device ID: " + message.message);
                 }
+            },
+            "receiveSongUpdates": function setReceiveSongUpdates(client, req, message){
+                app.log("Device wants to receive song updates");
+                if(!client.user){
+                    app.sendUpdate(client, "error", "NOT_LOGGED_IN");
+                }else{
+                    if(client.device && app.deviceClients[client.device.id]){
+                        client.receiveSongUpdates = !!message.message;
+                        app.log(`Client ${client.device.id} is now ${!message.message ? "no longer" : ""} receiving song updates.`);
+                    }else{
+                        app.sendUpdate(client, "error", "DEVICE_NOT_REGISTERED");
+                    }
+                }
+            },
+            "songUpdate": function recieveSongUpdate(client, req, message){
+                if(!client.user){
+                    app.sendUpdate(client, "error", "NOT_LOGGED_IN");
+                }else if(message.message.type){
+                    for(var i in app.connectedDevices[client.user.id]){
+                        //what in gods name was i smoking when i decided to set this shit up like this
+                        var connectedClient = app.deviceClients[app.connectedDevices[client.user.id][i].id];
+                        if(connectedClient && connectedClient !== client && connectedClient.receiveSongUpdates){
+                            app.sendUpdate(connectedClient, "songUpdate", message.message);
+                        }
+                    }
+                }
             }
         }
     };
 };
+
+

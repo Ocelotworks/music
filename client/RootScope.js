@@ -255,6 +255,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             });
         }
 
+        $rootScope.sendSocketMessage("songUpdate", {type: "play", data: data});
+
         $("#albumArt").attr("src", base+"album/"+data.album);
         if(window.innerWidth <= 1111){
             changeFavicon(base+"album/"+data.album);
@@ -296,6 +298,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
                 ]
             });
         }
+
+        $rootScope.sendSocketMessage("songUpdate", {type: "play", data: $rootScope.nowPlaying});
 
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
         if(window.innerWidth <= 1111){
