@@ -27,9 +27,21 @@ module.exports = function(app){
     app.registerWebsocketHandler(require("../websocket/deviceHandler.js")(app));
     app.registerWebsocketHandler(require("../websocket/adminHandler.js") (app));
 
+    function updateWebsocketConnect(client, req){
+        if(req.params.key)
+            app.database.getUserFromApiKey(req.params.key, function(err, user){
+                if(!err && user && user[0]) {
+                    req.user = user[0];
+                    client.user = user[0];
+                    app.log("Websocket authed as "+user[0].username+" using API key.");
+                }else{
+                    app.log("Incorrect API key used");
+                    client.close();
+                }
+            });
+        else
+            app.log((req.user ? req.user.username : "A client")+" connected to the websocket");
 
-    router.ws('/updates/', function updateWebsocketConnect(client, req){
-        app.log((req.user ? req.user.username : "A client")+" connected to the websocket");
         client.user = req.user;
         client.on("message", function wsMessageHandler(data){
             try {
@@ -66,7 +78,11 @@ module.exports = function(app){
             app.log((req.user ? req.user.username : "A client")+" disconnected from the websocket");
 
         });
-    });
+    }
+
+
+    router.ws('/updates/', updateWebsocketConnect);
+    router.ws('/updates/:key', updateWebsocketConnect);
 
     app.broadcastUpdate = function(type, message){
         app.expressWs.getWss('/ws/updates/').clients.forEach(function(client){
