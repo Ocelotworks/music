@@ -31,10 +31,16 @@ function initialiseWebsocket($rootScope){
         console.error("Websocket disconnected... Retrying in 2 seconds");
         $rootScope.serverIssues = true;
         $rootScope.$apply();
-        console.log($rootScope.serverIssues);
         setTimeout(function(){
             initialiseWebsocket($rootScope);
-        }, 2000);//
+        }, 2000);
+    };
+
+    $rootScope.updateSocket.onclose = function(){
+        console.error("Websocket disconnected... Retrying in 2 seconds");
+        setTimeout(function(){
+            initialiseWebsocket($rootScope);
+        }, 2000);
     };
 
     $rootScope.sendSocketMessage = function(type, payload){
@@ -47,7 +53,7 @@ function initialiseWebsocket($rootScope){
         if($rootScope.settings.deviceID && $rootScope.settings.deviceID !== "gtfo"){
             $rootScope.sendSocketMessage("registerDevice", $rootScope.settings.deviceID);
         }
-    };
+    };;
 
     $rootScope.updateSocket.onmessage = function(message){
         var data = JSON.parse(message.data);
@@ -65,6 +71,9 @@ function initialiseWebsocket($rootScope){
                     break;
                 case "play":
                     $rootScope.playById(data.id);
+                    break;
+                case "skip":
+                    $rootScope.playNext();
                     break;
                 case "seek":
                     $rootScope.audioPlayer.seek(data.seconds);
