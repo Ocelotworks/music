@@ -253,15 +253,15 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
                     { src: base+"album/"+data.album,   sizes: '300x300',   type: 'image/png' },
                 ]
             });
+        }else if(window.innerWidth <= 1111){
+            changeFavicon(base+"album/"+data.album);
+            document.title =  data.artist + " - " + data.title;
         }
 
         $rootScope.sendSocketMessage("songUpdate", {type: "play", data: data});
 
         $("#albumArt").attr("src", base+"album/"+data.album);
-        if(window.innerWidth <= 1111){
-            changeFavicon(base+"album/"+data.album);
-            document.title =  data.artist + " - " + data.title;
-        }
+
     };
 
     $rootScope.httpPost = function(url, data){
@@ -297,20 +297,20 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
                     { src: base+"album/"+element.attributes["data-album"].value,  sizes: '300x300',   type: 'image/png' },
                 ]
             });
+        }else if(window.innerWidth <= 1111){
+            changeFavicon(base+"album/"+element.attributes["data-album"].value);
+            document.title = info[0] + " - " + info[1];
         }
 
         $rootScope.sendSocketMessage("songUpdate", {type: "play", data: $rootScope.nowPlaying});
 
         $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
-        if(window.innerWidth <= 1111){
-            changeFavicon(base+"album/"+element.attributes["data-album"].value);
-            document.title = info[0] + " - " + info[1];
-        }
+
 
     };
 
     $rootScope.setDevice = function setDevice(id, name){
-        $rootScope.playOnDevice = $rootScope.settings.deviceID == id ? null : {name: name, id: id};
+        $rootScope.playOnDevice = $rootScope.settings.deviceID === id ? null : {name: name, id: id};
         $rootScope.$emit('closeModal');
     };
 
