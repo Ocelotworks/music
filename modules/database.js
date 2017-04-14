@@ -1140,7 +1140,38 @@ module.exports = function database(app){
                 .orderByRaw("RAND()")
                 .limit(7)
                 .asCallback(cb);
+        },
+        addDeviceSocket: function addDeviceSocket(data, cb){
+            knex("ws_devices")
+                .insert(data)
+                .asCallback(cb);
+        },
+        removeDeviceSocket: function removeDeviceSocket(id, cb){
+            knex.delete()
+                .from("ws_devices")
+                .where({id: id})
+                .limit(1)
+                .asCallback(cb);
+        },
+        modifyDeviceSocket: function modifyDeviceSocket(id, data, cb){
+            knex("ws_devices")
+                .update(data)
+                .where({id: id})
+                .limit(1)
+                .asCallback(cb);
+        },
+        clearDeviceSockets: function clearDeviceSockets(cb){
+            knex("ws_devices")
+                .delete()
+                .asCallback(cb);
+        },
+        getDeviceSocketsWithProp: function getDeviceSocketsWithProp(prop, cb){
+            knex.select("id")
+                .from("ws_devices")
+                .where(prop, 1)
+                .asCallback(cb);
         }
+
     };
     app.jobs.addJob("Create User", {
         desc: "Creates a new User",

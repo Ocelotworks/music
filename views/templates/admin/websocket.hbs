@@ -1,0 +1,17 @@
+<h1>Websocket Manager</h1>
+<hr>
+<h2>{{connectedClients}} connected clients</h2>
+<table class="fancyTable">
+    <tr><td>Client ID</td><td>Account ID</td><td>Device ID</td><td>Status</td><td>Actions</td></tr>
+    {{#each clients}}
+        <tr>
+            <td>{{@index}}</td>
+            <td><code>{{user.id}}</code> ({{user.username}})</td>
+            <td><code>{{device.id}}</code> ({{device.name}})</td>
+            <td>-</td>
+            <td><button class="happyButton">Disconnect</button></td>
+        </tr>
+    {{/each}}
+</table>
+
+

@@ -32,8 +32,19 @@ module.exports = function(app){
               if(!req.user || req.user.userlevel < 2){
                   app.warn("User " + (req.user ? (req.user.id + " (" + req.user.username + ")") : "Guest")+ "tried to use admin function: " + message.message);
               }else{
+                  if(client.id){
+                      app.database.modifyDeviceSocket(client.id, {
+                          receiveLogs: !!message.message
+                      }, function(err){
+                          if(err){
+                              app.error(`Error setting ${client.id} to receive logs: ${err}`)
+                          }
+                      });
+                  }
+
                   if(message.message){
-                      if(clientsReceivingLogs.indexOf(client) == -1){
+
+                      if(clientsReceivingLogs.indexOf(client) === -1){
                           clientsReceivingLogs.push(client);
                           app.sendUpdate(client, "clearLogs");
                       }

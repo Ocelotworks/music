@@ -5,7 +5,22 @@
 var express = require('express');
 var router = express.Router();
 
-
+const closeCodes = {
+    1000: "Closed",
+    1001: "Page Closed/Server Failure",
+    1002: "Protocol Error",
+    1003: "Unsupported Data Type",
+    1005: "No Status Code Received",
+    1006: "Abnormal Status Code Received",
+    1007: "Unsupported Data",
+    1008: "Policy Violation",
+    1009: "Data Too Large",
+    1010: "Extension Missing",
+    1011: "Internal Error",
+    1012: "Server Restarting",
+    1013: "Server Overload",
+    1015: "TLS Handshake failed"
+};
 
 
 module.exports = function(app){
@@ -27,13 +42,20 @@ module.exports = function(app){
     app.registerWebsocketHandler(require("../websocket/deviceHandler.js")(app));
     app.registerWebsocketHandler(require("../websocket/adminHandler.js") (app));
 
+    app.database.clearDeviceSockets(function clearDeviceSocketsCB(err){
+        if(err)
+            app.error(`Error clearing device sockets: ${err}`);
+        else
+            app.log("Cleared device sockets");
+    });
+
     function updateWebsocketConnect(client, req){
         if(req.params.key)
-            app.database.getUserFromApiKey(req.params.key, function(err, user){
+            app.database.getUserFromApiKey(req.params.key, function getUserFromApiKeyCB(err, user){
                 if(!err && user && user[0]) {
                     req.user = user[0];
                     client.user = user[0];
-                    app.log("Websocket authed as "+user[0].username+" using API key.");
+                    app.log("Websocket authenticated as "+user[0].username+" using API key.");
                 }else{
                     app.log("Incorrect API key used");
                     client.close();
@@ -63,20 +85,20 @@ module.exports = function(app){
             }
         });
 
-        client.on('close', function websocketClose(){
-            if(client.device){
-                app.deviceClients[client.device.id] = null;
-                if(client.user && app.connectedDevices[client.user.id]){
-                    var devices = app.connectedDevices[client.user.id];
-                    var index = devices.indexOf(client.device);
-                    if(index > -1){
-                        devices.splice(index, 1);
-                        app.log("Removed device");
-                    }
-                }
-            }
-            app.log((req.user ? req.user.username : "A client")+" disconnected from the websocket");
+        client.on('error', function wsErrorHandler(error){
+           app.error(`Device ${client.id} error: ${error}`);
+        });
 
+        client.on('close', function wsCloseHandler(code){
+            if(client.id){
+                app.database.removeDeviceSocket(client.id, function removeDeviceSocketCB(err){
+                    if(err)
+                        app.error(`Error removing device socket for client ID ${client.id}: ${err}`);
+                    else
+                        app.log(`Removed device for client ${client.id}`);
+                });
+            }
+            app.log((req.user ? req.user.username : "A client")+" disconnected from the websocket with code "+closeCodes[code]);
         });
     }
 
@@ -92,13 +114,13 @@ module.exports = function(app){
 
     app.broadcastUpdateToUser = function(user, type, message){
         app.expressWs.getWss('/ws/updates/').clients.forEach(function(client){
-            if(client.user && client.user.id == user)
+            if(client.user && client.user.id === user)
                app.sendUpdate(client, type, message);
         });
     };
 
     app.sendUpdate = function(client, type, message){
-        if(client.readyState == 1) //You know what? fuck you. I'm not including an entire fucking package just for the enums, this is SOCKET FUCKING OPEN, and theres no docs for express-ws, happy?
+        if(client.readyState === 1) //You know what? fuck you. I'm not including an entire fucking package just for the enums, this is SOCKET FUCKING OPEN, and theres no docs for express-ws, happy?
             client.send(JSON.stringify({type: type, message: message}));
     };
 
