@@ -143,7 +143,7 @@ module.exports = function database(app){
             knex.from("songs")
                 .innerJoin("artists", "songs.artist", "artists.id")
                 .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
-                .orderBy("artists.name", "ASC")
+                .orderByRaw("artists.name, songs.title ASC")
                 .limit(100)
                 .offset(parseInt(offset))
                 .asCallback(cb);
