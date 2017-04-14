@@ -146,7 +146,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
      const unsigned short MEDIA_ERR_SRC_NOT_SUPPORTED = 4;
      */
     $rootScope.audioPlayer.onerror = function(){
-        console.error("Error: "+audioPlayer.error.code);
+        console.error("Error: "+$rootScope.audioPlayer.error.code);
     };
 
     $rootScope.audioPlayer.oncanplay = function(){
@@ -210,12 +210,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     $rootScope.playNext = function playNext(){
         $rootScope.nowPlaying.normalPlay = false;
-        if($rootScope.nowPlaying.id !== null) {
-            $rootScope.historyStack.push(newInstance($rootScope.nowPlaying));
-            if ($rootScope.nowPlaying.elapsed / $rootScope.nowPlaying.duration > 0.5) {
-                $http.put(base + "api/song/play/" + $rootScope.nowPlaying.id+"/"+$rootScope.nowPlaying.manual || "false", "");
-            }
-        }
         var nextSong;
         if($rootScope.queue.length > 0) {
             nextSong = $rootScope.queue.shift();
@@ -234,8 +228,24 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         $rootScope.audioPlayer.play();
     };
 
+    $rootScope.httpPost = function(url, data){
+        $http.post(url, data);
+    };
+
+    $rootScope.httpGet = function(url){
+        $http.get(url);
+    };
+
     $rootScope.playByData = function playByData(data){
         $(".songRate").removeClass("rated");
+
+        if($rootScope.nowPlaying.id !== null){
+            $rootScope.historyStack.push(newInstance($rootScope.nowPlaying));
+            if ($rootScope.nowPlaying.elapsed / $rootScope.nowPlaying.duration > 0.5) {
+                $http.put(base + "api/song/play/" + $rootScope.nowPlaying.id+"/"+$rootScope.nowPlaying.manual || "false", "");
+            }
+        }
+
         $rootScope.nowPlaying.id = data.id;
         $rootScope.nowPlaying.artistID = data.artistID;
         $rootScope.nowPlaying.artist = data.artist;
@@ -264,14 +274,6 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
 
     };
 
-    $rootScope.httpPost = function(url, data){
-        $http.post(url, data);
-    };
-
-    $rootScope.httpGet = function(url){
-        $http.get(url);
-    };
-
     $rootScope.playById = function playById(id){
         $rootScope.playByElement($rootScope.getSongById(id), true);
     };
@@ -280,33 +282,14 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
         if(!element)return console.warn("Warning: playByElement called with a null element! Bad ID somewhere?");
         $(".songRate").removeClass("rated");
         var info = (element.outerText || element.textContent).split("\u00A0-\u00A0");
-        $rootScope.nowPlaying.id = element.attributes["data-id"].value;
-        $rootScope.nowPlaying.artistID = element.attributes["data-artist"].value;
-        $rootScope.nowPlaying.artist = info[0];
-        $rootScope.nowPlaying.title = info[1];
-        $rootScope.nowPlaying.buffering = true;
-        $rootScope.nowPlaying.manual = manual || false;
-        $rootScope.audioPlayer.src = base+"song/"+element.attributes["data-id"].value;
 
-        if('mediaSession' in navigator){
-            console.log("Doing the mediaSession dance PBE");
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: info[1],
-                artist: info[0],
-                artwork: [
-                    { src: base+"album/"+element.attributes["data-album"].value,  sizes: '300x300',   type: 'image/png' },
-                ]
-            });
-        }else if(window.innerWidth <= 1111){
-            changeFavicon(base+"album/"+element.attributes["data-album"].value);
-            document.title = info[0] + " - " + info[1];
-        }
-
-        $rootScope.sendSocketMessage("songUpdate", {type: "play", data: $rootScope.nowPlaying});
-
-        $("#albumArt").attr("src", base+"album/"+element.attributes["data-album"].value);
-
-
+        $rootScope.playByData({
+            id: element.attributes["data-id"].value,
+            artistID: element.attributes["data-artist"].value,
+            artist: info[0],
+            title: info[1],
+            manual: manual
+        });
     };
 
     $rootScope.setDevice = function setDevice(id, name){
