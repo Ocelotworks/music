@@ -4,7 +4,11 @@
 
 const websocketBase = "wss://unacceptableuse.com/petify/ws";
 
+var reconnectTimeout;
+
 function initialiseWebsocket($rootScope){
+
+    console.log("INITIALISING WEB SOCKET");
 
     $rootScope.serverIssues = false;
 
@@ -25,20 +29,27 @@ function initialiseWebsocket($rootScope){
         });
     }, 1000);
 
+    if($rootScope.updateSocket){
+        console.log("UPDATE SOCKET ALREADY EXISTS");
+        $rootScope.updateSocket.close();
+        $rootScope.updateSocket = null;
+    }
     $rootScope.updateSocket = new WebSocket(websocketBase+"/updates");
 
     $rootScope.updateSocket.onerror = function(err){
-        console.error("Websocket disconnected... Retrying in 2 seconds");
+        console.error("Websocket disconnected from error ("+err+")... Retrying in 2 seconds");
         $rootScope.serverIssues = true;
         $rootScope.$apply();
-        setTimeout(function(){
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = setTimeout(function(){
             initialiseWebsocket($rootScope);
         }, 2000);
     };
 
-    $rootScope.updateSocket.onclose = function(){
-        console.error("Websocket disconnected... Retrying in 2 seconds");
-        setTimeout(function(){
+    $rootScope.updateSocket.onclose = function(code){
+        console.error("Websocket disconnected (closed "+code+")... Retrying in 2 seconds");
+        clearTimeout(reconnectTimeout);
+        reconnectTimeout = setTimeout(function(){
             initialiseWebsocket($rootScope);
         }, 2000);
     };
@@ -49,11 +60,14 @@ function initialiseWebsocket($rootScope){
 
     $rootScope.updateSocket.onopen = function(){
         console.log("Connected");
-        $rootScope.serverIssues = false;
-        if($rootScope.settings.deviceID && $rootScope.settings.deviceID !== "gtfo"){
-            $rootScope.sendSocketMessage("registerDevice", $rootScope.settings.deviceID);
-        }
-    };;
+        setTimeout(function(){
+            $rootScope.serverIssues = false;
+            if($rootScope.settings.deviceID && $rootScope.settings.deviceID !== "gtfo"){
+                $rootScope.sendSocketMessage("registerDevice", $rootScope.settings.deviceID);
+            }
+        }, 500);
+
+    };
 
     $rootScope.updateSocket.onmessage = function(message){
         var data = JSON.parse(message.data);
