@@ -25,6 +25,7 @@ module.exports = function database(app){
      * @memberof database
      * @namespace app.database
      * @type {{name: string, init: init, getKnex: getKnex, addSong: addSong, getAllSongs: getAllSongs, getAllArtists: getAllArtists, getAllAlbums: getAllAlbums, getAllGenres: getAllGenres, getSongsByArtist: getSongsByArtist, getSongsByAlbum: getSongsByAlbum, getSongsByGenre: getSongsByGenre, getSongList: getSongList, getSongInfo: getSongInfo, getSongOwner: getSongOwner, deleteSong: deleteSong, cleanupAll: cleanupAll, cleanupAlbums: cleanupAlbums, cleanupPlaylists: cleanupPlaylists, cleanupArtists: cleanupArtists, cleanupGenres: cleanupGenres, getSongPathToPlay: getSongPathToPlay, addPlayForSong: addPlayForSong, addSkipForSong: addSkipForSong, getArtistFromSong: getArtistFromSong, getArtistFromId: getArtistFromId, getArtistImage: getArtistImage, getArtistsWithNoImage: getArtistsWithNoImage, getArtistName: getArtistName, updateArtistImage: updateArtistImage, getSongsFromArtist: getSongsFromArtist, getOrCreateArtist: getOrCreateArtist, getOrCreateAlbum: getOrCreateAlbum, updateAlbumArt: updateAlbumArt, getAlbumArt: getAlbumArt, getAlbumInfo: getAlbum, getAlbumsWithNoImage: getAlbumsWithNoImage, getOrCreateGenre: getOrCreateGenre, getGenreArt: getGenreArt, getSongQueue: getSongQueue, getQueuedSong: getQueuedSong, resetSongQueue: resetSongQueue, removeQueuedSong: removeQueuedSong, updateQueuedSong: updateQueuedSong, addSongToQueue: addSongToQueue, getOrCreateUser: getOrCreateUser, getUserInfo: getUserInfo, searchSongs: searchSongs, searchArtists: searchArtists, searchAlbums: searchAlbums, searchGenres: searchGenres, createPlaylist: createPlaylist, deletePlaylist: deletePlaylist, getPublicPlaylists: getPublicPlaylists, canUserEditPlaylist: canUserEditPlaylist, getPrivatePlaylists: getPrivatePlaylists, getOwnedPlaylists: getOwnedPlaylists, getPlaylistInfo: getPlaylistInfo, getSongsByPlaylist: getSongsByPlaylist, getPlaylistsBySong: getPlaylistsBySong, addSongToPlaylist: addSongToPlaylist, getSongExists: getSongExists, getDetailedSongInfo: getDetailedSongInfo, generateApiKey: generateApiLey, getApiKeyFromUser: getApiKeyFromUser, getUserFromApiKey: getUserFromApiKey, addSongVote: addSongVote, getAlbumArtForGenreImage: getAlbumArtForGenreImage, putGenreImage: putGenreImage, logError: logError, clearFailedDownloads: clearFailedDownloads, getMostPlayedStats: getMostPlayedStats, getMostPopularStats: getMostPopularStats, getOverallStats: getOverallStats, getMostSkippedStats: getMostSkippedStats, doesSongExist: doesSongExist, getQueuedSongInfo: getQueuedSongInfo, addDevice: addDevice, updateDeviceLastSeen: updateDeviceLastSeen, getDevicesByUser: getDevicesByUser, getDevicesForSettings: getDevicesForSettings, getDeviceInfo: getDeviceInfo, getShuffleQueue: getShuffleQueue, getUserHistory: getUserHistory, getSongPlaysStats: getSongPlaysStats}}
+     * @type {{name: string, init: init, getKnex: getKnex, addSong: addSong, getAllSongs: getAllSongs, getAllArtists: getAllArtists, getAllAlbums: getAllAlbums, getAllGenres: getAllGenres, getSongsByArtist: getSongsByArtist, getSongsByAlbum: getSongsByAlbum, getSongsByGenre: getSongsByGenre, getSongList: getSongList, getSongInfo: getSongInfo, getSongOwner: getSongOwner, deleteSong: deleteSong, cleanupAll: cleanupAll, cleanupAlbums: cleanupAlbums, cleanupPlaylists: cleanupPlaylists, cleanupArtists: cleanupArtists, cleanupGenres: cleanupGenres, getSongPathToPlay: getSongPathToPlay, addPlayForSong: addPlayForSong, addSkipForSong: addSkipForSong, getArtistFromSong: getArtistFromSong, getArtistFromId: getArtistFromId, getArtistImage: getArtistImage, getArtistsWithNoImage: getArtistsWithNoImage, getArtistName: getArtistName, updateArtistImage: updateArtistImage, getSongsFromArtist: getSongsFromArtist, getOrCreateArtist: getOrCreateArtist, getOrCreateAlbum: getOrCreateAlbum, updateAlbumArt: updateAlbumArt, getAlbumArt: getAlbumArt, getAlbumInfo: getAlbum, getAlbumsWithNoImage: getAlbumsWithNoImage, getOrCreateGenre: getOrCreateGenre, getGenreArt: getGenreArt, getSongQueue: getSongQueue, getQueuedSong: getQueuedSong, resetSongQueue: resetSongQueue, removeQueuedSong: removeQueuedSong, updateQueuedSong: updateQueuedSong, addSongToQueue: addSongToQueue, getOrCreateUser: getOrCreateUser, getUserInfo: getUserInfo, searchSongs: searchSongs, searchArtists: searchArtists, searchAlbums: searchAlbums, searchGenres: searchGenres, createPlaylist: createPlaylist, deletePlaylist: deletePlaylist, getPublicPlaylists: getPublicPlaylists, canUserEditPlaylist: canUserEditPlaylist, getPrivatePlaylists: getPrivatePlaylists, getOwnedPlaylists: getOwnedPlaylists, getPlaylistInfo: getPlaylistInfo, getSongsByPlaylist: getSongsByPlaylist, getPlaylistsBySong: getPlaylistsBySong, addSongToPlaylist: addSongToPlaylist, getSongExists: getSongExists, getDetailedSongInfo: getDetailedSongInfo, generateApiKey: generateApiLey, getApiKeyFromUser: getApiKeyFromUser, getUserFromApiKey: getUserFromApiKey, addSongVote: addSongVote, getAlbumArtForGenreImage: getAlbumArtForGenreImage, putGenreImage: putGenreImage, logError: logError, clearFailedDownloads: clearFailedDownloads, getMostPlayedStats: getMostPlayedStats, getMostPopularStats: getMostPopularStats, getOverallStats: getOverallStats, getMostSkippedStats: getMostSkippedStats, doesSongExist: doesSongExist, getQueuedSongInfo: getQueuedSongInfo, addDevice: addDevice, updateDeviceLastSeen: updateDeviceLastSeen, getDevicesByUser: getDevicesByUser, getDevicesForSettings: getDevicesForSettings, getDeviceInfo: getDeviceInfo, getShuffleQueue: getShuffleQueue, getUserHistory: getUserHistory, getSongPlaysStats: getSongPlaysStats}}
      */
     var object = {
         name: "Database Handler",
@@ -1009,28 +1010,10 @@ module.exports = function database(app){
          * @param {function} cb
          */
         getDevicesByUser: function getDevicesByUser(user, cb){
-            knex.select("*").from("devices").where({owner: user}).asCallback(cb);
-        },
-        /**
-         * Get a devices info along with the time difference since it was last seen
-         * @param {string} user User UUID
-         * @param {function} cb
-         */
-        getDevicesForSettings: function getDevicesForSettings(user, cb){
-            knex.select(knex.raw("TIMESTAMPDIFF(SECOND, lastSeen, CURRENT_TIMESTAMP()) as lastSeenAt"), "name", "mobile", "id")
+            knex.select("*", knex.raw("(id IN (SELECT device FROM ws_devices)) AS isOnline"), knex.raw("TIMESTAMPDIFF(SECOND, lastSeen, CURRENT_TIMESTAMP()) as lastSeenAt"))
                 .from("devices")
                 .where({owner: user})
-                .asCallback(function(err, res){
-                    if(err)cb(err);
-                    else{
-                        async.forEach(res, function(device, callback){
-                            device.online = app.deviceClients[device.id] != null;
-                            callback();
-                        }, function(err){
-                            cb(err, res);
-                        });
-                    }
-                })
+                .asCallback(cb);
         },
         /**
          * Get a device from it's UUID
@@ -1170,6 +1153,9 @@ module.exports = function database(app){
                 .from("ws_devices")
                 .where(prop, 1)
                 .asCallback(cb);
+        },
+        getDeviceSocketsForDisplay: function getDeviceSocketsForDisplay(cb){
+            knex.select("")
         }
 
     };

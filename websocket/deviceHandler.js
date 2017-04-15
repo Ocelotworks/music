@@ -31,7 +31,13 @@ module.exports = function(app){
                                         app.deviceClients[client.id] = client;
                                     }
                                 });
-                                app.broadcastUpdateToUser(client.user.id, "updateDevices", app.connectedDevices[client.user.id]);
+                                app.database.getDevicesByUser(client.user.id, function getDevicesByUserCB(err, resp){
+                                    if(err)
+                                        app.error(`Error getting devices by user ${client.user.id}: ${err}`);
+                                    else
+                                        app.broadcastUpdateToUser(client.user.id, "updateDevices", resp);
+                                });
+
                                 app.database.updateDeviceLastSeen(device.id, function updateDeviceLastSeenCB(err) {
                                     if (err) app.warn("Error updating last seen for device: " + err);
                                 });

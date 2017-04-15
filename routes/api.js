@@ -34,5 +34,11 @@ module.exports = function(app){
     });
 
 
+    router.get('/skip', function(req, res){
+        app.broadcastUpdate("skip", {});
+        res.send("");
+    });
+
+
     return router;
 };

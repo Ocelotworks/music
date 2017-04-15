@@ -112,7 +112,7 @@ module.exports = function(app){
 
     router.get('/devices', function(req, res){
         if(req.user){
-            app.database.getDevicesForSettings(req.user.id, function(err, result){
+            app.database.getDevicesByUser(req.user.id, function(err, result){
                 res.render('templates/modals/devices', {layout: false, devices: result});
             });
         }else{

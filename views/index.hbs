@@ -82,7 +82,7 @@
             <i role="menuitemcheckbox" class="control fa fa-retweet" aria-label="Repeat" title="Repeat" ng-class="{'enabled': settings.repeat}" ng-click="settings.repeat = !settings.repeat"></i>
         </div>
         <rzslider id="volumeBar" rz-slider-options="progressBar.volumeOptions" rz-slider-model="audioPlayer.volume"></rzslider>
-        <span id="connectedDevices" ng-if="settings.connectedDevices.length > 0" ng-click="$emit('openModal', 'modals/devices?c='+Math.random());" ng-class="{'enabled': playOnDevice != null}">
+        <span id="connectedDevices" ng-if="settings.connectedDevices.length > 0" ng-click="$emit('openModal', 'modals/devices', true);" ng-class="{'enabled': playOnDevice != null}">
             <i class="fa fa-wifi"></i> {[{playOnDevice != null ? "Playing on "+playOnDevice.name : "Connected Devices"}]}
         </span>
     </div>

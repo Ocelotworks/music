@@ -96,6 +96,14 @@ module.exports = function(app){
                         app.error(`Error removing device socket for client ID ${client.id}: ${err}`);
                     else
                         app.log(`Removed device for client ${client.id}`);
+
+
+                    app.database.getDevicesByUser(client.user.id, function getDevicesByUserCB(err, resp){
+                        if(err)
+                            app.error(`Error getting devices by user ${client.user.id}: ${err}`);
+                        else
+                            app.broadcastUpdateToUser(client.user.id, "updateDevices", resp);
+                    });
                 });
             }
             app.log((req.user ? req.user.username : "A client")+" disconnected from the websocket with code "+closeCodes[code]);
