@@ -6,16 +6,16 @@
                 <td class="deviceIcon">
                     <i class="fa {{#if mobile}}fa-mobile{{else}}fa-desktop{{/if}}"></i>
                 </td>
-                <td class="deviceName {{#if online}}online{{/if}}">
+                <td class="deviceName {{#if isOnline}}online{{/if}}">
                     <span class="deviceTitle">{{name}} <span class="thisDevice" ng-if="settings.deviceID === '{{id}}'">(This Device)</span></span>
-                    {{#if online}}
+                    {{#if isOnline}}
                         <span class="deviceLastSeen">Online now.</span>
                     {{else}}
                         <span class="deviceLastSeen">Last seen {{prettyParseIntegerDuration lastSeenAt}} ago.</span>
                     {{/if}}
                 </td>
                 <td class="deviceControls">
-                    <button class="happyButton" ng-click="setDevice('{{id}}', '{{name}}')" {{#unless online}}disabled{{/unless}}><i class="fa fa-play"></i>&nbsp;Play on this device</button>
+                    <button class="happyButton" ng-click="setDevice('{{id}}', '{{name}}')" {{#unless isOnline}}disabled{{/unless}}><i class="fa fa-play"></i>&nbsp;Play on this device</button>
                 </td>
             </tr>
         {{/each}}
