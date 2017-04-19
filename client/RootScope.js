@@ -267,8 +267,8 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             changeFavicon(base+"album/"+data.album);
             document.title =  data.artist + " - " + data.title;
         }
-
-        $rootScope.sendSocketMessage("songUpdate", {type: "play", data: data});
+        if($rootScope.sendSocketMessage)
+            $rootScope.sendSocketMessage("songUpdate", {type: "play", data: data});
 
         $("#albumArt").attr("src", base+"album/"+data.album);
 
