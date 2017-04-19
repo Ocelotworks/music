@@ -118,6 +118,11 @@
     "./routes/templates/stats",
     "./routes/websocket"
   ],
+  "WebsocketHandlers": [
+    "deviceHandler.js",
+    "adminHandler.js",
+    "remoteHandler.js"
+  ],
   "RateLimiter": {
     "General": {
       "window": 1000,

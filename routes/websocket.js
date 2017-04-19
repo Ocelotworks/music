@@ -4,6 +4,7 @@
 
 var express = require('express');
 var router = express.Router();
+var config = require('config');
 
 const closeCodes = {
     1000: "Closed",
@@ -39,8 +40,9 @@ module.exports = function(app){
         app.websocketHandlers = Object.assign(app.websocketHandlers, handler.handlers);
     };
 
-    app.registerWebsocketHandler(require("../websocket/deviceHandler.js")(app));
-    app.registerWebsocketHandler(require("../websocket/adminHandler.js") (app));
+    config.get("WebsocketHandlers").forEach(function(handler){
+        app.registerWebsocketHandler(require("../websocket/"+handler)(app));
+    });
 
     app.database.clearDeviceSockets(function clearDeviceSocketsCB(err){
         if(err)
