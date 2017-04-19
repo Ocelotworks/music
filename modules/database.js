@@ -1154,8 +1154,11 @@ module.exports = function database(app){
                 .where(prop, 1)
                 .asCallback(cb);
         },
-        getDeviceSocketsForDisplay: function getDeviceSocketsForDisplay(cb){
-            knex.select("")
+        getDeviceSocketFromDevice: function getDeviceSocketFromDevice(device, cb){
+            knex.select("*")
+                .from("ws_devices")
+                .where({device: device})
+                .asCallback(cb);
         }
 
     };
