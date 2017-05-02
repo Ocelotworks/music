@@ -589,7 +589,7 @@ module.exports = function database(app){
          */
         getUserInfo: function getUserInfo(id, cb){
             knex.select().from("users").where({id: id}).limit(1).asCallback(function getUserInfoCB(err, res){
-                if(res[0])cb(err, res[0]);
+                if(res && res[0])cb(err, res[0]);
                 else cb(err, null);
             });
         },
@@ -1158,6 +1158,11 @@ module.exports = function database(app){
             knex.select("*")
                 .from("ws_devices")
                 .where({device: device})
+                .asCallback(cb);
+        },
+        getDeviceSockets: function getDeviceSockets(cb){
+            knex.select()
+                .from("ws_devices")
                 .asCallback(cb);
         }
 
