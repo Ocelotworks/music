@@ -96,16 +96,16 @@ function initialiseWebsocket($rootScope){
                     $rootScope.audioPlayer.volume = data.volume;
                     break;
                 case "log":
-                    var console = $("#adminServerConsole");
-                    if(console.text().length > 10000)console.text(console.text().substring(10000));
-                    console.append("\n"+data.message).scrollTop(console[0].scrollHeight - console.height());
+                    var serverConsole = $("#adminServerConsole");
+                    if(serverConsole.text().length > 10000)serverConsole.text(serverConsole.text().substring(10000));
+                    serverConsole.append("\n"+data.message).scrollTop(serverConsole[0].scrollHeight - serverConsole.height());
                     break;
                 case "clearLogs":
                     console.log("Clearing logs");
                     $("#adminServerConsole").empty().append("Connected!");
                     break;
                 default:
-                    whatthefuck(data.type);
+                    console.log("Unknown message type: "+data.type);
                     break;
 
             }
@@ -114,10 +114,3 @@ function initialiseWebsocket($rootScope){
 }
 
 
-/**
- * Fix for console being undefined in the default switch??
- * @param shit
- */
-function whatthefuck(shit){
-    console.log("Unknown message type: "+shit);
-}
