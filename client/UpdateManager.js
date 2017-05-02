@@ -105,9 +105,19 @@ function initialiseWebsocket($rootScope){
                     $("#adminServerConsole").empty().append("Connected!");
                     break;
                 default:
-                    console.warn("Unknown message type: "+data.type);
+                    whatthefuck(data.type);
+                    break;
 
             }
         }
     };
+}
+
+
+/**
+ * Fix for console being undefined in the default switch??
+ * @param shit
+ */
+function whatthefuck(shit){
+    console.log("Unknown message type: "+shit);
 }
