@@ -8,22 +8,22 @@ module.exports = function(app){
                 if(!req.params.key){
                     if(req.user){
                         if(req.user.userlevel < minUserLevel){
-                            res.headers(403).json({err: "Invalid access level"});
+                            res.header(403).json({err: "Invalid access level"});
                         }else{
                             next();
                         }
                     }else{
-                        res.headers(401).json({err: "You must supply an API key."});
+                        res.header(401).json({err: "You must supply an API key."});
                     }
                 }else {
                     app.database.getUserFromApiKey(req.params.key, function (err, result) {
                         if (err) {
-                            res.headers(500).json({err: err});
+                            res.header(500).json({err: err});
                         } else {
                             var user = result[0];
                             req.user = user;
                             if (user.userlevel < minUserLevel) {
-                                res.headers(403).json({err: "Invalid access level"});
+                                res.header(403).json({err: "Invalid access level"});
                             } else {
                                next();
                             }
