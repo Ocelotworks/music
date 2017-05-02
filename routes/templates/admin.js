@@ -42,7 +42,14 @@ module.exports = function(app){
     });
 
     router.get('/websocket', function(req, res){
-        res.render('templates/admin/websocket', {layout: false, clients: app.deviceClients, connectedClients: Object.keys(app.deviceClients).length});
+        app.database.getDeviceSockets(function getDeviceSocketsCB(err, resp){
+            if(err){
+                app.error(`Error getting device sockets: ${err}`);
+            }else{
+                res.render('templates/admin/websocket', {layout: false, clients: resp, connectedClients: resp.length, sockets: app.deviceClients});
+            }
+        });
+
     });
 
     router.post('/alerts', function(req, res){

@@ -2,13 +2,25 @@
 <hr>
 <h2>{{connectedClients}} connected clients</h2>
 <table class="fancyTable">
-    <tr><td>Client ID</td><td>Account ID</td><td>Device ID</td><td>Status</td><td>Actions</td></tr>
+    <tr><td>Client ID</td><td>Account ID</td><td>Device ID</td><td>Status</td><td>Properties</td><td>Actions</td></tr>
     {{#each clients}}
         <tr>
-            <td>{{@index}}</td>
-            <td><code>{{user.id}}</code> ({{user.username}})</td>
-            <td><code>{{device.id}}</code> ({{device.name}})</td>
-            <td>-</td>
+            <td>{{@index}} ({{id}})</td>
+            <td><code>{{user}}</code> ({{username}})</td>
+            <td><code>{{device}}</code> ({{deviceName}})</td>
+            <td>
+                {{#each sockets}}
+                    socket
+                    {{readyState}}
+                {{/each}}
+
+            </td>
+            <td>
+                <code>
+                    {{#if receiveSongUpdates}}SU {{/if}}
+                    {{#if receiveLogs}}LOG {{/if}}
+                </code>
+            </td>
             <td><button class="happyButton">Disconnect</button></td>
         </tr>
     {{/each}}
