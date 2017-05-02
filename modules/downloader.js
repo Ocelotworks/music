@@ -224,9 +224,16 @@ module.exports = function(app){
                 downloader.on("error", function songDownloadError(downloadError){
                    app.warn("Error whilst processing song "+info.id);
                    console.log(downloadError);
-                    app.database.updateQueuedSong(info.id, {
-                        status: "FAILED"
-                    }, updateErrorHandler);
+                    if(info.url.indexOf("youtube") > -1){
+                       app.database.updateQueuedSong(info.id, {
+                           url: info.url.replace("youtube", "youpak"),
+                           status: "WAITING"
+                       }, updateErrorHandler);
+                    }else{
+                       app.database.updateQueuedSong(info.id, {
+                           status: "FAILED"
+                       }, updateErrorHandler);
+                    }
                     object.songsProcessing--;
                     object.processOneSong();
                 });
@@ -262,7 +269,7 @@ module.exports = function(app){
                                         album: info.album,
                                         addedby: info.addedby,
                                         title: info.title.trim(),
-                                        duration: data.format.duration || 0,
+                                        duration: !err ? (data.format.duration || 0) : 0,
                                         genre: genreID ? genreID : "6fe0d616-2f05-40e5-8f9f-a2ecd8052543"
                                     }, function addSong(err) {
                                         if (err) {
