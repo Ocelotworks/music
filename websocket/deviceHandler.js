@@ -28,6 +28,7 @@ module.exports = function(app){
                                     }else{
                                         app.log(`Device ${device.id} registered to ${client.user.id} on socket ID ${result[0]}`);
                                         client.id = result[0];
+                                        client.device = device;
                                         app.deviceClients[client.id] = client;
                                     }
                                 });
@@ -85,6 +86,7 @@ module.exports = function(app){
                         for(var i in result){
                             var device = result[i];
                             var deviceClient = app.deviceClients[device.id];
+                            message.message.device = client.device.id;
                             if(deviceClient && deviceClient.readyState){
                                 app.sendUpdate(deviceClient, "songUpdate", message.message);
                             }else{
