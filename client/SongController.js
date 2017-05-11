@@ -2,6 +2,8 @@
  * Copyright Ocelotworks 2016
  */
 
+var songInfoListener;
+
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http, $location){
 
     $scope.playSong = function(event){
@@ -104,8 +106,10 @@ app.controller('SongController', function($scope, $rootScope, $sce, $templateReq
         $("#songRateDown").addClass("rated");
     }, 1000, true);
 
-    $rootScope.$on("showSongList", function(evt, arg){
-       $scope.showSongList(arg);
-    });
+
+    if(!songInfoListener)
+        songInfoListener = $rootScope.$on("showSongList", function(evt, arg){
+            $scope.showSongList(arg);
+        });
 
 });
