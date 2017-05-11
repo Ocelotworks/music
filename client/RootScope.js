@@ -287,6 +287,7 @@ app.run(['$rootScope', '$http', function($rootScope, $http){
             id: element.attributes["data-id"].value,
             artistID: element.attributes["data-artist"].value,
             artist: info[0],
+            album: element.attributes["data-album"].value,
             title: info[1],
             manual: manual
         });
