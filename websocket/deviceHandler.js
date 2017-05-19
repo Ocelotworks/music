@@ -86,7 +86,8 @@ module.exports = function(app){
                         for(var i in result){
                             var device = result[i];
                             var deviceClient = app.deviceClients[device.id];
-                            message.message.device = client.device.id;
+                            if(client.device && client.device.id)
+                                message.message.device = client.device.id;
                             if(deviceClient && deviceClient.readyState){
                                 app.sendUpdate(deviceClient, "songUpdate", message.message);
                             }else{
