@@ -64,10 +64,12 @@ app.downloader = downloader(app);
 app.downloader.processOneSong();
 
 sock.on("message", function(topic, message){
-    if(topic === "petify"){
+    if(topic == "petify"){
         console.log("Got petify message: "+message.toString());
-    }else if(topic === "downloader"){
+    }else if(topic == "downloader"){
         var args = JSON.parse(message.toString());
         app.downloader.queue.apply(this, args);
+    }else{
+        console.log("Unknown topic: "+topic);
     }
 });
