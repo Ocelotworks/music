@@ -22,6 +22,9 @@
     "behindProxy": false,
     "windowSize": 1048576
   },
+  "IPC": {
+    "port": 3003
+  },
   "Folders": {
     "baseDir": "/home/music/songs",
     "folders": [
@@ -37,8 +40,14 @@
     "maxConcurrentDownloads": 1,
     "audioCodec": "libmp3lame"
   },
+  "AbuseIPDB": {
+    "enabled": true,
+    "days": 7,
+    "clearCacheAfter": 1
+  },
   "Keys": {
     "lastfm": "",
+    "abuseipdb": "",
     "Google": {
       "clientID": "",
       "clientSecret": ""

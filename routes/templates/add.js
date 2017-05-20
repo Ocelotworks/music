@@ -83,7 +83,9 @@ module.exports = function(app){
 
     router.post('/song', function(req, res){
         if(req.body && req.body.url && req.body.songFolder){
-            app.downloader.queue(req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a");
+            //app.ipc.send(["downloader", "test"]);
+            app.ipc.send(["downloader", JSON.stringify([req.body.url, path.join(config.get("baseDir"), req.body.songFolder), req.body.getLastfmData || false, req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a"])]);
+            //app.downloader.queue();
             res.json({});
         }else{
             res.json({err: "A required piece of data is missing."});
