@@ -15,6 +15,7 @@ var config          = require('config');
 var compression     = require('compression');
 var fs              = require('fs');
 var async           = require('async');
+var request         = require('request');
 
 var app = express();
 
@@ -70,12 +71,14 @@ if(app.get('env') === 'development')
     app.warn("Started in DEVELOPMENT MODE! For better performance, set NODE_ENV to PRODUCTION");
 
 app.log("Loading modules...");
+app.ipc                 = require('./modules/ipc.js')(app);
 app.jobs                = require('./modules/jobs.js')(app);
 app.database            = require('./modules/database.js')(app);
 app.util                = require('./modules/util.js')(app);
-app.downloader          = require('./modules/downloader.js')(app);
+//app.downloader          = require('./modules/downloader.js')(app);
 app.auth                = require('./modules/auth.js')(app);
 app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
+
 
 app.jobs.addJob("Restart Server", {
     desc: "Restarts the server",
@@ -83,7 +86,7 @@ app.jobs.addJob("Restart Server", {
     func: process.exit
 });
 
-app.downloader.processOneSong();
+//app.downloader.processOneSong();
 
 app.initRoutes = function initRoutes(){
 
@@ -117,6 +120,38 @@ app.initRoutes = function initRoutes(){
         res.header('Access-Control-Allow-Headers', '*');
         next();
     });
+
+    if(config.get("AbuseIPDB.enabled")){
+        var allowedCache = [];
+        var blockedCache = [];
+        app.log("AbuseIDP Checking Enabled");
+        app.use(function(req, res, next){
+            var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+            var forwarded = !!req.headers['x-forwarded-for'];
+            if(forwarded && ip.indexOf(",") > -1)
+                ip = ip.split(", ")[1];
+            if(allowedCache.indexOf(ip) === -1 && blockedCache.indexOf(ip) === -1){
+                request("https://www.abuseipdb.com/check/"+ip+"/json?key="+config.get("Keys.abuseipdb")+"&days="+config.get("AbuseIPDB.days"), function(err, responce, body){
+                    if(!body || err || body === "[]"){
+                        allowedCache.push(ip);
+                        next();
+                    }else{
+                        if(!err && body){
+                            blockedCache.push(ip);
+                        }
+                        app.warn("Banned IP Address "+ip+" for "+body);
+                        res.render('banned', { reason: "Your "+ (forwarded ? "proxy" : "IP address") +" ("+ip+") has been involved in malicious activity in the past "+config.get("AbuseIPDB.days")+" days."});
+                    }
+                });
+            }else if(allowedCache.indexOf(ip) > -1){
+                next()
+            }else{
+                app.warn("Banned IP Address "+ip+" tried to access site again.");
+                res.render('banned', {layout: false, reason: "Your "+ (forwarded ? "proxy" : "IP address") +" ("+ip+") has been involved in malicious activity in the past "+config.get("AbuseIPDB.days")+" days."});
+            }
+        });
+    }
+
 
     app.log("Loading routes...");
 
@@ -173,6 +208,7 @@ app.initRoutes = function initRoutes(){
         err.status = 404;
         next(err);
     });
+
 
     // error handlers
 
