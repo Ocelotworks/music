@@ -278,14 +278,14 @@ module.exports = function(app){
                                                 status: "FAILED"
                                             }, updateErrorHandler);
                                         } else {
-                                            app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){
-                                                app.broadcastUpdate("alert", {
-                                                    lifetime: 5,
-                                                    title: "Download Finished",
-                                                    body: `${info.title} has downloaded successfully.`,
-                                                    image: "album/"+info.album
-                                                });
-                                            });
+                                            // app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){
+                                            //     app.broadcastUpdate("alert", {
+                                            //         lifetime: 5,
+                                            //         title: "Download Finished",
+                                            //         body: `${info.title} has downloaded successfully.`,
+                                            //         image: "album/"+info.album
+                                            //     });
+                                            // });
                                             app.database.removeQueuedSong(info.id, updateErrorHandler);
                                             if(info.playlist){
                                                 app.database.addSongToPlaylist(info.playlist, songUUID, function(err){

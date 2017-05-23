@@ -357,7 +357,7 @@ module.exports = function database(app){
                         }).asCallback(function(err){
                             cb(err, id);
                         });
-                        app.genreImageGenerator.updateArtistImage(id);
+                        //app.genreImageGenerator.updateArtistImage(id);
                     }
                 }
             });
