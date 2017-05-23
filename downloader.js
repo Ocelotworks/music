@@ -8,7 +8,7 @@ const database = require('./modules/database.js');
 const downloader = require('./modules/downloader.js');
 const zmq = require('zmq');
 const colours = require('colors');
-
+const caller_id = require('caller-id');
 var sock = zmq.socket('sub');
 
 console.log("Listening on port "+config.get("IPC.port"));
