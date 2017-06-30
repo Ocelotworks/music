@@ -798,7 +798,7 @@ module.exports = function database(app){
             knex.select("songs.id AS song_id", "genres.id AS genre_id",
                 "albums.id AS album_id", "artists.id AS artist_id",
                 "songs.duration", "songs.title", "artists.name AS artist_name",
-                "albums.name AS album_name", "genres.name AS genre_name", "username", "avatar", "userlevel")
+                "albums.name AS album_name", "genres.name AS genre_name", "username", "avatar", "userlevel", "path")
                 .from("songs")
                 .innerJoin("albums", "songs.album", "albums.id")
                 .innerJoin("genres", "songs.genre", "genres.id")
