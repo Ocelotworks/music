@@ -16,7 +16,7 @@ module.exports = function(app){
      * /song/:id/info
      */
     router.get('/:id/info', function(req, res){
-        app.database.getSongById(req.params.id, function(err, data) {
+        app.database.getSongInfo(req.params.id, function(err, data) {
             if (err) {
                 app.warn("Error processing song info request: "+err);
                 res.status(500).json({err: err});
