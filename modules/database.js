@@ -931,6 +931,17 @@ module.exports = function database(app){
                 .limit(10)
                 .asCallback(cb);
         },
+        getMostPlayedRecentlyStats: function getMostPlayedRecentlyStats(cb){
+            knex.select(knex.raw("COUNT(*) AS plays"), "songs.title", "artists.name", knex.raw("(COUNT(*)*songs.duration) AS seconds"), knex.raw("(COUNT(*)/(SELECT COUNT(*) FROM plays WHERE plays.timestamp BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()))*100 AS percentage"))
+                .from("plays")
+                .innerJoin("songs", "plays.song", "songs.id")
+                .innerJoin("artists", "songs.artist", "artists.id")
+                .groupBy("song")
+                .whereRaw("plays.timestamp BETWEEN CURDATE() - INTERVAL 30 DAY AND CURDATE()")
+                .orderBy(knex.raw("COUNT(*)"), "DESC")
+                .limit(10)
+                .asCallback(cb);
+        },
         /**
          * Gets the most popular songs based on the amount of votes they get
          * @param {function} cb

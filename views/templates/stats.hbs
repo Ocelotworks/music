@@ -37,15 +37,24 @@
                 <td style="width: {{percentage}}%; text-indent: calc({{percentage}}% + 10px);">{{percentage}}%</td></tr>
         {{/each}}
     </table>
-    <h1>Most Popular Songs</h1>
-    <table class="fancyTable">
-        <tr><td>Rank</td><td>Song</td><td>Total Vote</td></tr>
-        {{#each stats.mostPopular}}
+    <h1>Most Played Songs (Past 30 days)</h1>
+    <table class="fancyTable graphedTable">
+        <tr><td>Rank</td><td>Song</td><td>Plays</td><td>Time Listened</td><td>
+            Percentage of total plays (Past 30 days):<span class="fiftyPercentMarker">50%</span> <span class="hundredPercentMarker">100%</span>
+        </td></tr>
+        {{#each stats.mostPlayedRecently}}
             <tr>
                 <td>{{@index}}</td>
                 <td>{{name}}&nbsp;-&nbsp;{{title}}</td>
-                <td>{{'SUM(up)'}}</td> {{!Could YOU be arsed going and changing that, and restarting the server again?}}
-
+                <td>{{plays}}</td>
+                <td>
+                    {{#if seconds}}
+                        {{prettyParseDuration seconds}}
+                    {{else}}
+                        Unknown
+                    {{/if}}
+                </td>
+                <td style="width: {{percentage}}%; text-indent: calc({{percentage}}% + 10px);">{{percentage}}%</td></tr>
         {{/each}}
     </table>
     <h1>Most Skipped Songs</h1>
