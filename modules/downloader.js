@@ -126,7 +126,13 @@ module.exports = function(app){
                                         if (info.alt_title)
                                             title = info.alt_title;
 
-                                        artist = artist.replace(" Listen ad-free with YouTube Red", "").trim();
+                                        if(!artist && info.extractor === "Bandcamp" && info.webpage_url){
+                                            artist = info.webpage_url.split(".")[0].split("/")[2];
+                                        }
+
+                                        artist = artist ? artist.replace(" Listen ad-free with YouTube Red", "").trim() : "Unknown Artist";
+
+
 
                                         app.database.doesSongExist(artist, title, function doesSongExistCB(err, exists) {
                                             if (err) app.warn(`Error checking if song exists: ${err}`);
