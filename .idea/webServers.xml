@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="bbfd6622-8dfd-4684-9824-7b2a67f78935" name="Petify (project level)" url="http://boywanders.us">
+        <fileTransfer host="boywanders.us" port="22" privateKey="G:\earth.ppk" rootFolder="/home/peter/music" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

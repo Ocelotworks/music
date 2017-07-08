@@ -3,6 +3,35 @@
  */
 
 app.controller("PlaylistController", function($scope, $rootScope, $http){
+
+    $rootScope.isEditing = false;
+    $scope.isSaving = false;
+
+    $scope.toggleEditing = function(){
+        $rootScope.isEditing = !$rootScope.isEditing;
+        if($rootScope.isEditing){
+            $("#playlistSongList").sortable({
+                handle: ".moveSong"
+            });
+        }else{
+            //save
+        }
+    };
+
+    $scope.removeSong = function(e){
+        //console.log(e);
+        var song = e.target.parentElement.parentElement;
+        console.log(song);
+        $(song).css({'margin-left': '-1000px', opacity: 0});
+        setTimeout(function(){
+            $(song).remove();
+        }, 600);
+        e.preventDefault();
+        e.stopPropagation();
+    };
+
+    $scope.removedSongs = [];
+
     $scope.deletePlaylist = function(id){
         $rootScope.$emit("openModal", "delete/playlist/"+id);
     };

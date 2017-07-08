@@ -768,12 +768,24 @@ module.exports = function database(app){
                     this.where({"playlists.private": 0}).orWhere({"playlists.owner": user})
                 }).asCallback(cb);
         },
-        addSongToPlaylist: function addSongToPlaylist(playlist, song, cb){
+        addSongToPlaylist: function addSongToPlaylist(playlist, song, position, cb){
+            if(!cb){
+                cb = position;
+            }
             knex("playlist_data").insert({
                 song_id: song,
                 playlist_id: playlist,
-                position: 999 //TODO: Positioning
+                position: typeof position == "function" ? 999 : position
             }).asCallback(cb);
+        },
+        removeSongFromPlaylist: function removeSongFromPlaylist(playlist, song, cb){
+            knex.raw(knex.delete().from("playlist_data").where({song_id: song, playlist_id: playlist}).toString()+" LIMIT 1;").asCallback(cb)
+        },
+        editPlaylistItem: function editPlaylistItem(song, newPosition, cb){
+            knex.update({
+                position: newPosition
+            }).where({song_id: id})
+            .asCallback(cb);
         },
         /**
          * Checks whether a song with `id` exists
