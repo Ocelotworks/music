@@ -132,7 +132,7 @@ app.initRoutes = function initRoutes(){
                 ip = ip.split(", ")[1];
             if(allowedCache.indexOf(ip) === -1 && blockedCache.indexOf(ip) === -1){
                 request("https://www.abuseipdb.com/check/"+ip+"/json?key="+config.get("Keys.abuseipdb")+"&days="+config.get("AbuseIPDB.days"), function(err, responce, body){
-                    if(!body || err || body === "[]"){
+                    if(!body || err || body === "[]" || body.startsWith("<")){
                         allowedCache.push(ip);
                         next();
                     }else{
