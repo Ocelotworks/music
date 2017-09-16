@@ -61,6 +61,7 @@
     "baseURL": "",
     "tempDir": "temp/",
     "christmasMode": false,
+    "halloweenMode": false,
     "shuffleQueueSize": 100
   },
   "Cookies": {

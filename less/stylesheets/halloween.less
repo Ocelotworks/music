@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css?family=Nosifer');
+
+@halloweenColour: #ec9f10;
+
+.rzslider .rz-pointer {
+  background-color: @halloweenColour;
+  &:after {
+    content: " ";
+    background-image: url('https://halloween-fun.net/wp-content/uploads/halloween%20clipart/Pumpkin%20Free%20Clipart_08.jpg');
+    background-size: cover;
+    position: relative;
+    display:  block;
+    width: 40px;
+    height: 30px;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    left: -9px;
+    top: -7px;
+  }
+  &:hover{
+    &:after, &:active{
+      background-color: transparent;
+    }
+  }
+}
+
+.rzslider .rz-bar.rz-selection {
+  background: @halloweenColour;
+}
+
+.enabled {
+  color: @halloweenColour !important;
+}
+
+.selected {
+  border-bottom: 1px solid @halloweenColour !important;
+}
+
+
+.navButton {
+  font-family: "Nosifer", cursive;
+  color: #cc0210;
+
+  &:hover{
+    color: #cc0210 !important;
+  }
+}
+
+#nav{
+  left: 5% !important;
+}
+
+#profile:hover>#loginDropdown {
+  height: 200px;
+}
+
+.radioTitle {
+  font-family: 'Nosifer', cursive;
+  font-size: 24px;
+
+  &:before{
+    content: "Spooky ";
+  }
+}

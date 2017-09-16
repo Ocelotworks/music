@@ -86,7 +86,17 @@ app.jobs.addJob("Restart Server", {
     func: process.exit
 });
 
+app.christmasMode = config.get("General.christmasMode") || false;
+app.halloweenMode = config.get("General.halloweenMode") || false;
+
 //app.downloader.processOneSong();
+
+setTimeout(function(){
+	const now = new Date();
+	const month = now.getMonth();
+	app.halloweenMode = month === 9;
+	app.christmasMode = month === 11;
+}, 8.64e7);
 
 app.initRoutes = function initRoutes(){
 
@@ -114,7 +124,8 @@ app.initRoutes = function initRoutes(){
 
     app.use(function(req, res, next){
         app.requestCount++;
-        res.locals.christmasMode = config.get("General.christmasMode");
+        res.locals.christmasMode = app.christmasMode;
+		res.locals.halloweenMode = app.halloweenMode;
         res.header('Access-Control-Allow-Origin', '*');
         res.header('Access-Control-Allow-Methods', 'GET');
         res.header('Access-Control-Allow-Headers', '*');
