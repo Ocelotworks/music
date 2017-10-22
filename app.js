@@ -91,12 +91,18 @@ app.halloweenMode = config.get("General.halloweenMode") || false;
 
 //app.downloader.processOneSong();
 
-setTimeout(function(){
+
+
+function checkModes(){
 	const now = new Date();
 	const month = now.getMonth();
 	app.halloweenMode = month === 9;
 	app.christmasMode = month === 11;
-}, 8.64e7);
+}
+
+checkModes();
+
+setInterval(checkModes, 8.64e7);
 
 app.initRoutes = function initRoutes(){
 
