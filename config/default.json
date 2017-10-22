@@ -119,6 +119,7 @@
     "./routes/api/stats",
     "./routes/api/downloader",
     "./routes/api/playlist",
+    "./routes/api/user",
     "./routes/templates",
     "./routes/templates/admin",
     "./routes/templates/modals",

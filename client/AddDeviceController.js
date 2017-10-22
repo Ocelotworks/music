@@ -69,11 +69,38 @@ app.controller("AddDeviceController", function($scope, $http){
 
     $scope.addDevice = function(){
         console.log("Adding device");
-        $http.post(base+"templates/add/device", $scope.device).then(function(resp){
-          if(resp.data){
-              localStorage.setItem("deviceID", resp.data.id);
-          }
-        });
+        if($scope.reregistering){
+			localStorage.setItem("deviceID", $scope.selectedDevice.id);
+			location.reload();
+		}else{
+			$http.post(base+"templates/add/device", $scope.device).then(function(resp){
+				if(resp.data){
+					localStorage.setItem("deviceID", resp.data.id);
+				}
+			});
+		}
+
         $scope.$emit("closeModal");
-    }
+    };
+
+    $scope.reregistering = false;
+
+    $scope.selectedDevice = null;
+
+    $scope.reregister = function(){
+        $scope.reregistering = true;
+        $http.get(base+"api/user/me/devices").then(function(resp){
+        	console.log(resp.data);
+        	$scope.devices = resp.data;
+		});
+    };
+
+    $scope.unReregister = function(){
+		$scope.reregistering = false;
+	};
+
+    $scope.selectDevice = function(device){
+    	$scope.selectedDevice = device;
+    	console.log($scope.selectedDevice);
+	}
 });

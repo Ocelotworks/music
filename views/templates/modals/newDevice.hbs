@@ -1,13 +1,34 @@
 <div class="modalPadding">
     <h1>Add Device</h1>
-    <h3>It doesn't look like you've visited from this device before. You can give it a friendly name below, or leave it as it is.</h3>
 
     <form ng-controller="AddDeviceController" ng-submit="addDevice()">
-        <div class="formInputGroup">
+        <div ng-if="reregistering">
+            <h3>Select your device from the list below. If you register multiple devices as the same, your dog dies.</h3>
+            <table id="deviceList">
+                <tr ng-repeat="device in devices" class="deviceRegister" ng-click="selectDevice(device)" ng-if="!device.isOnline">
+                    <td class="deviceIcon"><i class="fa" ng-class="{'fa-desktop': !device.mobile, 'fa-mobile': device.mobile}"></i></td>
+                    <td class="deviceName">
+                        <span class="deviceTitle">{[{device.name}]}</span>
+                    </td>
+            </table>
+            <div id="deviceRegisterInfo" ng-if="selectedDevice">
+                <div id="deviceRegisterInfoTitle">
+                    <i class="fa fa-3x" ng-class="{'fa-desktop': !selectedDevice.mobile, 'fa-mobile': selectedDevice.mobile}"></i> {[{selectedDevice.name}]}
+                </div>
+                <input type="submit" class="happyButton" value="Re-register" ng-disabled="!selectedDevice">
+            </div>
+            <input type="button" ng-click="goAwayForever()" value="Go away forever" class="happyButton leftmost">
+            <input type="button" ng-click="unReregister()" class="happyButton" value="Back">
+        </div>
+        <div class="formInputGroup" ng-if="!reregistering">
+            <h3>It doesn't look like you've visited from this device before. You can give it a friendly name below, or leave it as it is.</h3>
             <input type="text" required ng-model="device.name" placeholder="Device Name" class="fancyInput">
         </div>
-        <div class="formInputGroup">
-            <input type="button" ng-click="goAwayForever()" value="Go away forever" class="happyButton leftmost"> <input type="submit" class="happyButton rightmost" value="Save">
+        <div class="formInputGroup" ng-if="!reregistering">
+            <input type="button" ng-click="reregister()" value="I've already registered this device..." class="happyButton">
+            <input type="button" ng-click="goAwayForever()" value="Go away forever" class="happyButton leftmost">
+            <input type="submit" class="happyButton rightmost" value="Save">
         </div>
+
     </form>
 </div>

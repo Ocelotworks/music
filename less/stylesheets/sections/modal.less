@@ -160,3 +160,33 @@
   position: absolute;
 }
 
+
+.deviceRegister {
+  background: @background-light;
+  cursor: pointer;
+
+  &:hover{
+    color: @accent-color;
+  }
+
+  & td{
+    padding: 5px;
+  }
+}
+
+#deviceRegisterInfo {
+  position: absolute;
+  top: 325px;
+  left: 50%;
+  border: 1px solid @background-dark;
+  background: @background-light;
+  padding: 5px;
+}
+
+#deviceRegisterInfoTitle{
+  & i {
+    vertical-align: middle;
+  }
+
+  margin: 25px;
+}
