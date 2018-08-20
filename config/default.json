@@ -104,7 +104,8 @@
       "client/TabController.js",
       "client/SongInfoTabController.js",
       "client/SettingsController.js",
-      "client/EditSongController.js"
+      "client/EditSongController.js",
+      "client/OfflineSongController.js"
     ]
   },
   "Routes": [
@@ -137,7 +138,7 @@
   ],
   "RateLimiter": {
     "General": {
-      "window": 1000,
+      "window": 60000,
       "max": 100,
       "delay": 0,
       "headers": true
@@ -150,7 +151,7 @@
     },
     "API": {
       "window": 1000,
-      "max": 100,
+      "max": 50,
       "delay": 0,
       "headers": true
     }
