@@ -75,10 +75,10 @@ app.ipc                 = require('./modules/ipc.js')(app);
 app.jobs                = require('./modules/jobs.js')(app);
 app.database            = require('./modules/database.js')(app);
 app.util                = require('./modules/util.js')(app);
-//app.downloader          = require('./modules/downloader.js')(app);
+app.downloader          = require('./modules/downloader.js')(app);
 app.auth                = require('./modules/auth.js')(app);
 app.genreImageGenerator = require('./modules/genreImageGenerator.js')(app);
-
+app.queue               = require('./modules/queue.js')(app);
 
 app.jobs.addJob("Restart Server", {
     desc: "Restarts the server",
@@ -197,6 +197,9 @@ app.initRoutes = function initRoutes(){
         headers: config.get("RateLimiter.General.headers"),
         keyGenerator: function(req){
             return req.user ? req.user.id : req.ip;
+        },
+        onLimitReached: function(req){
+            console.log("RATE LIMIT REACHED "+req.ip)
         }
     }));
 
@@ -211,11 +214,11 @@ app.initRoutes = function initRoutes(){
     }));
 
 
-    app.use(require('less-middleware')(path.join(__dirname, 'less'), {
-        debug: app.get('env') === 'development',
-        dest: path.join(__dirname, 'public'),
-        force: false
-    }));
+    // app.use(require('less-middleware')(path.join(__dirname, 'less'), {
+    //     debug: app.get('env') === 'development',
+    //     dest: path.join(__dirname, 'public'),
+    //     force: false
+    // }));
     app.use(express.static(path.join(__dirname, 'public'), config.get("Static")));
 
 
@@ -291,7 +294,7 @@ app.updateJavascript = function() {
     });
 };
 
-app.updateJavascript();
+//app.updateJavascript();
 
 if(app.get('env') === 'development')
     fs.watch("client", {

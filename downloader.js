@@ -10,7 +10,6 @@ const zmq = require('zmq');
 const colours = require('colors');
 const caller_id = require('caller-id');
 var sock = zmq.socket('sub');
-
 console.log("Listening on port "+config.get("IPC.port"));
 sock.connect('tcp://127.0.0.1:'+config.get("IPC.port"));
 
