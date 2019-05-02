@@ -12,6 +12,17 @@ module.exports = function(app){
         route: "/api/song"
     };
 
+    router.get('/', function(req, res){
+      app.database.getSongList(-1, function(err, data) {
+        if (err) {
+          app.warn("Error processing song info request: "+err);
+          res.status(500).json({err: err});
+        } else {
+          res.json(data);
+        }
+      });
+    });
+
     /**
      * /song/:id/info
      */
