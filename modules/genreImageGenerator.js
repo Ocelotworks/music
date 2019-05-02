@@ -118,7 +118,7 @@ module.exports = function(app){
                 }else{
                     var song = result[0];
                     if(song && song.artist_name){
-                        request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${config.get("Keys.lastfm")}&artist=${song.artist_name}&track=${song.title}&format=json`, function lastfmGetAlbumSearchCB(err, response, body){
+                        request(`https://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=${config.get("Keys.lastfm")}&artist=${encodeURIComponent(song.artist_name)}&track=${encodeURIComponent(song.title)}&format=json`, function lastfmGetAlbumSearchCB(err, response, body){
                             if(err){
                                 app.log(`Error getting info from lastFM: ${err}`);
                                 if(cb)cb();
@@ -194,7 +194,7 @@ module.exports = function(app){
                    var album = result[0];
                    if(album){
                        app.log(JSON.stringify(album));
-                       request(`https://ws.audioscrobbler.com/2.0/?method=album.search&album=${album.albumName}&api_key=${config.get("Keys.lastfm")}&format=json`, function lastfmGetAlbumSearchCB(err, response){
+                       request(`https://ws.audioscrobbler.com/2.0/?method=album.search&album=${encodeURIComponent(album.albumName)}&api_key=${config.get("Keys.lastfm")}&format=json`, function lastfmGetAlbumSearchCB(err, response){
                            if(err){
                                app.error(`Error getting album search page for album ${album.albumName}/${albumID}: ${err}`);
                                if(cb)cb(err);

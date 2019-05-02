@@ -141,13 +141,17 @@ module.exports = function database(app){
          * @param {function} cb
          */
         getSongList: function getSongList(offset, cb){
-            knex.from("songs")
+            var query = knex.from("songs")
                 .innerJoin("artists", "songs.artist", "artists.id")
-                .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album")
-                .orderByRaw("artists.name, songs.title ASC")
-                .limit(100)
+                .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album", "songs.path")
+                .orderByRaw("artists.name, songs.title ASC");
+
+            if(offset > -1){
+                query = query.limit(100)
                 .offset(parseInt(offset))
-                .asCallback(cb);
+            }
+
+            query.asCallback(cb);
         },
         /**
          * Gets information about a certain song
@@ -1059,7 +1063,7 @@ module.exports = function database(app){
                     knex.select("song")
                         .from("plays")
                         .where({user: user})
-                        .andWhereRaw("`timestamp` > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 2 HOUR)"))
+                        .andWhereRaw("`timestamp` > DATE_SUB(CURRENT_TIMESTAMP(), INTERVAL 24 HOUR)"))
                 .whereNotIn("songs.id",
                     knex.select("song")
                     .from("votes")
@@ -1187,6 +1191,13 @@ module.exports = function database(app){
             knex.select()
                 .from("ws_devices")
                 .asCallback(cb);
+        },
+        getShuffleQueueWeights: function(user, cb){
+            knex.select(knex.raw("plays.song, plays1.song, COUNT(*)/100"))
+              .from(knex.raw("plays AS plays1"))
+              .innerJoin("plays", "plays.id", knex.raw("plays1.id-1"))
+              .where("plays1.user", user)
+              .groupByRaw("plays1.song, plays.song").asCallback(cb);
         }
 
     };
