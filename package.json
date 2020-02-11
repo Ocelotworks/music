@@ -27,7 +27,7 @@
     "gm": "^1.23.0",
     "hbs": "~4.0.0",
     "htmlencode": "0.0.4",
-    "knex": "0.11.10",
+    "knex": "0.20.9",
     "less-middleware": "1.0.x",
     "md5-file": "^4.0.0",
     "morgan": "^1.7.0",
