@@ -83,6 +83,9 @@ function initialiseWebsocket($rootScope){
                 case "updateDevices":
                     $rootScope.settings.connectedDevices = data.message;
                     break;
+				case "remotePlay":
+
+					break;
                 case "play":
                     $rootScope.playById(data.id);
                     break;

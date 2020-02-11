@@ -2,6 +2,8 @@
  * Copyright Ocelotworks 2016
  */
 
+
+
 var songInfoListener;
 
 app.controller('SongController', function($scope, $rootScope, $sce, $templateRequest, $compile, $http, $location){

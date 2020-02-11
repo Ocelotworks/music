@@ -41,7 +41,7 @@
     "audioCodec": "libmp3lame"
   },
   "AbuseIPDB": {
-    "enabled": true,
+    "enabled": false,
     "days": 7,
     "clearCacheAfter": 1
   },
@@ -121,6 +121,8 @@
     "./routes/api/downloader",
     "./routes/api/playlist",
     "./routes/api/user",
+    "./routes/api/album",
+    "./routes/api/genre",
     "./routes/templates",
     "./routes/templates/admin",
     "./routes/templates/modals",

@@ -9,7 +9,7 @@
         </div>
     </div>
     <div class="formInputGroup">
-        <input type="text" class="fancyInput defaultValid" required id="newAlbumName" value="{{song.album_name}}" placeholder="Artist" ng-model="song.album" ng-change="displayAlbumSuggestions()">
+        <input type="text" class="fancyInput defaultValid" required id="newAlbumName" value="{{song.album_name}}" placeholder="Album" ng-model="song.album" ng-change="displayAlbumSuggestions()">
         <div id="albumSearch" class="suggestionDropdown fancyScroll" ng-if="albumSuggestions.length > 0">
             <span class="suggestion" ng-repeat="suggestion in albumSuggestions" ng-click="updateAndUnfocus('album', suggestion.name)">{[{suggestion.name}]}</span>
         </div>

@@ -11,6 +11,7 @@ var uuid        = require('uuid').v4;
 var ffprobe     = require('node-ffprobe');
 var spawn       = require('child_process').spawn;
 var async       = require('async');
+var md5file     = require('md5-file');
 var songRegex = /[{\[\('"].*["'\]\)}]|"|lyrics|official|(music )?video|hd|.*\|\|/ig;
 
 var downloaderConfig = config.get("Downloader");
@@ -268,40 +269,46 @@ module.exports = function(app){
                                     if(err){
                                         app.warn("Error probing file: "+path+": "+data);
                                     }
-                                    app.database.addSong({
-                                        id: songUUID,
-                                        path: filePath,
-                                        artist: info.artist,
-                                        album: info.album,
-                                        addedby: info.addedby,
-                                        title: info.title.trim(),
-                                        duration: !err ? (data.format.duration || 0) : 0,
-                                        genre: genreID ? genreID : "6fe0d616-2f05-40e5-8f9f-a2ecd8052543"
-                                    }, function addSong(err) {
-                                        if (err) {
-                                            app.error("Error adding song to database: "+err);
-                                            app.database.updateQueuedSong(info.id, {
-                                                status: "FAILED"
-                                            }, updateErrorHandler);
-                                        } else {
-                                            // app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){
-                                            //     app.broadcastUpdate("alert", {
-                                            //         lifetime: 5,
-                                            //         title: "Download Finished",
-                                            //         body: `${info.title} has downloaded successfully.`,
-                                            //         image: "album/"+info.album
-                                            //     });
-                                            // });
-                                            app.database.removeQueuedSong(info.id, updateErrorHandler);
-                                            if(info.playlist){
-                                                app.database.addSongToPlaylist(info.playlist, songUUID, function(err){
-                                                   if(err)app.warn("Unable to add song "+songUUID+" to playlist "+info.playlist);
-                                                });
+
+                                    md5file(filePath, function(err, hash){
+                                        console.log("Computed hash for "+filePath+" as "+hash);
+                                        app.database.addSong({
+                                            id: songUUID,
+                                            path: filePath,
+                                            artist: info.artist,
+                                            album: info.album,
+                                            hash: err ? null : hash,
+                                            addedby: info.addedby,
+                                            title: info.title.trim(),
+                                            duration: !err ? (data.format.duration || 0) : 0,
+                                            genre: genreID ? genreID : "6fe0d616-2f05-40e5-8f9f-a2ecd8052543"
+                                        }, function addSong(err) {
+                                            if (err) {
+                                                app.error("Error adding song to database: "+err);
+                                                app.database.updateQueuedSong(info.id, {
+                                                    status: "FAILED"
+                                                }, updateErrorHandler);
+                                            } else {
+                                                // app.genreImageGenerator.updateSongFromLastfmData(songUUID, function(){
+                                                //     app.broadcastUpdate("alert", {
+                                                //         lifetime: 5,
+                                                //         title: "Download Finished",
+                                                //         body: `${info.title} has downloaded successfully.`,
+                                                //         image: "album/"+info.album
+                                                //     });
+                                                // });
+                                                app.database.removeQueuedSong(info.id, updateErrorHandler);
+                                                if(info.playlist){
+                                                    app.database.addSongToPlaylist(info.playlist, songUUID, function(err){
+                                                        if(err)app.warn("Unable to add song "+songUUID+" to playlist "+info.playlist);
+                                                    });
+                                                }
                                             }
-                                        }
-                                        object.songsProcessing--;
-                                        object.processOneSong();
-                                    });
+                                            object.songsProcessing--;
+                                            object.processOneSong();
+                                        });
+                                    })
+
                                 });
                             });
                         });

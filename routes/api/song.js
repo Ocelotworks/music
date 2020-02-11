@@ -150,5 +150,42 @@ module.exports = function(app){
         }
     });
 
+    router.get('/artist/:id', function(req, res){
+        app.database.getSongsByArtist(req.params.id, function(err, songs){
+            if(err)
+                res.header(500).json({err: err});
+            else
+                res.json(songs);
+        });
+    });
+
+    router.get('/playlist/:id', function(req, res){
+        app.database.getSongsByPlaylist(req.params.id, function(err, songs){
+            if(err)
+                res.header(500).json({err: err});
+            else
+                res.json(songs);
+        });
+    });
+
+    router.get('/album/:id', function(req, res){
+        app.database.getSongsByAlbum(req.params.id, function(err, songs){
+            if(err)
+                res.header(500).json({err: err});
+            else
+                res.json(songs);
+        });
+    });
+
+
+    router.get('/genre/:id', function(req, res){
+        app.database.getSongsByGenre(req.params.id, function(err, songs){
+            if(err)
+                res.header(500).json({err: err});
+            else
+                res.json(songs);
+        });
+    });
+
     return router;
 };

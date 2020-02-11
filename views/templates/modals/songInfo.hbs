@@ -10,6 +10,9 @@
         <h3>Duration: {[{ {{info.duration}} | secondsToDateTime | date:'mm:ss'}]} | Played {{plays}} times.</h3>
         {{/if}}
     </div>
+    <div id="songInfoOffline" ng-controller="OfflineSongController">
+        <button class="happyButton" ng-if="!availableOffline('{{info.song_id}}')"><i class="fa fa-cloud-download"></i>&nbsp;Make Available Offline</button>
+    </div>
     <span class="addedBy">
         Added By
         <span class="addedByName">

@@ -13,7 +13,7 @@ if(config.pool){
 var knex    = require('knex')(config);
 var uuid    = require('uuid').v4;
 var async   = require('async');
-
+var md5file = require('md5-file');
 /**
  * @name database
  * @param app
@@ -46,6 +46,7 @@ module.exports = function database(app){
          * @param {function} cb - A callback, returning err as the first argument if the insert failed.
          */
         addSong: function addSong(song, cb){
+
             knex("songs").insert(song).asCallback(cb);
         },
         /**
@@ -143,7 +144,7 @@ module.exports = function database(app){
         getSongList: function getSongList(offset, cb){
             var query = knex.from("songs")
                 .innerJoin("artists", "songs.artist", "artists.id")
-                .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album", "songs.path")
+                .select("songs.id AS song_id", "artists.id AS artist_id", "artists.name", "songs.title", "songs.album", "songs.path", "songs.hash", "songs.genre")
                 .orderByRaw("artists.name, songs.title ASC");
 
             if(offset > -1){
@@ -618,6 +619,13 @@ module.exports = function database(app){
             knex.select("name", "id")
                 .from("artists")
                 .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .asCallback(cb);
+        },
+        searchPlaylists: function searchArtists(query, cb){
+            knex.select("name", "id", "owner")
+                .from("playlists")
+                .where(knex.raw("MATCH(name) AGAINST(? IN NATURAL LANGUAGE MODE)", query))
+                .andWhere({private: 0})
                 .asCallback(cb);
         },
         /**
@@ -1198,6 +1206,12 @@ module.exports = function database(app){
               .innerJoin("plays", "plays.id", knex.raw("plays1.id-1"))
               .where("plays1.user", user)
               .groupByRaw("plays1.song, plays.song").asCallback(cb);
+        },
+        getUnhashedSongs: function(cb){
+            knex.select().from("songs").whereNull("hash").asCallback(cb);
+        },
+        updateHash: function(id,hash, cb){
+            knex("songs").update({hash}).where({id}).limit(1).asCallback(cb)
         }
 
     };
@@ -1259,6 +1273,23 @@ module.exports = function database(app){
         desc: "Merge all genres of the same name with the specified genre ID",
         args: ["Genre ID"],
         func: object.mergeGenres
+    });
+
+    //This is dirty shit
+    app.jobs.addJob("Compute Hashes", {
+        desc: "Compute the hashes for all songs with no hash",
+        args: [],
+        func: function(){
+           object.getUnhashedSongs(function(err, result){
+                for(let i = 0; i < result.length; i++){
+                    md5file(result[i].path, function(err, hash){
+                        if(err)return;
+                        console.log(`Computed hash for (${result[i].id}) ${result[i].title} as ${hash}`);
+                        object.updateHash(result[i].id, hash, function(err){if(err)console.error(err)});
+                    })
+                }
+           })
+        }
     });
 
     object.init();

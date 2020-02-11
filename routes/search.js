@@ -19,7 +19,8 @@ module.exports = function(app){
             songs: app.database.searchSongs,
             albums: app.database.searchAlbums,
             artists: app.database.searchArtists,
-            genres: app.database.searchGenres
+            genres: app.database.searchGenres,
+            playlists: app.database.searchPlaylists
         }, function(searchFunction, key, cb){
             searchFunction(req.params.query, cb);
         }, function(err, result){
@@ -58,7 +59,8 @@ module.exports = function(app){
             songs: app.database.searchSongs,
             albums: app.database.searchAlbums,
             artists: app.database.searchArtists,
-            genres: app.database.searchGenres
+            genres: app.database.searchGenres,
+            playlists: app.database.searchPlaylists
         }, function(searchFunction, key, cb){
             searchFunction(req.params.query, cb);
         }, function(err, result){

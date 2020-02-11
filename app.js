@@ -117,6 +117,8 @@ app.initRoutes = function initRoutes(){
         knex: app.database.getKnex(),
         createtable: true
     });
+
+
     sessionConfig.cookie = config.get("Cookies");
     app.use(session(sessionConfig));
     app.use(bodyParser.urlencoded(config.get("Advanced.bodyparser")));
@@ -163,7 +165,7 @@ app.initRoutes = function initRoutes(){
             }else if(allowedCache.indexOf(ip) > -1){
                 next()
             }else{
-                app.warn("Banned IP Address "+ip+" tried to access site again.");
+                app.warn("Banned IP Address "+ip+" tried to access site again. "+req.originalUrl);
                 res.render('banned', {layout: false, reason: "Your "+ (forwarded ? "proxy" : "IP address") +" ("+ip+") has been involved in malicious activity in the past "+config.get("AbuseIPDB.days")+" days."});
             }
         });

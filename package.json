@@ -13,6 +13,7 @@
     "colors": "^1.1.2",
     "compression": "^1.6.2",
     "config": "^1.21.0",
+    "connect-datadog": "0.0.9",
     "connect-session-knex": "^1.2.0",
     "cookie-parser": "^1.4.3",
     "dateformat": "^1.0.12",
@@ -28,6 +29,7 @@
     "htmlencode": "0.0.4",
     "knex": "0.11.10",
     "less-middleware": "1.0.x",
+    "md5-file": "^4.0.0",
     "morgan": "^1.7.0",
     "mysql": "^2.11.1",
     "node-ffprobe": "^1.2.2",
@@ -39,6 +41,7 @@
     "serve-favicon": "^2.3.0",
     "spdy": "^3.4.4",
     "uuid": "^2.0.3",
+    "weighted": "^0.3.0",
     "youtube-dl": "^1.11.1"
   }
 }

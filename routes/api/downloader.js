@@ -72,23 +72,23 @@ module.exports = function(app){
      */
     router.post(['/add', '/:key/add'], app.util.validateKeyAbove(0), function(req, res){
         if(req.body && req.body.url && req.body.songFolder){
-            try{
-                app.ipc.send(["downloader", JSON.stringify([req.body.url,
-                    path.join(config.get("Folders.baseDir"), req.body.songFolder),
-                    req.body.getLastfmData || false,
-                    req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a",
-                    req.body.addToPlaylist && req.body.playlist ? req.body.playlist : null])]);
-                res.json({});
-            }catch(e){
-                console.log(e);
-                res.header(500).json({err: "The download service is unavailable right now.", stack: e})
-            }
+            // try{
+            //     app.ipc.send(["downloader", JSON.stringify([req.body.url,
+            //         path.join(config.get("Folders.baseDir"), req.body.songFolder),
+            //         req.body.getLastfmData || false,
+            //         req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a",
+            //         req.body.addToPlaylist && req.body.playlist ? req.body.playlist : null])]);
+            //     res.json({});
+            // }catch(e){
+            //     console.log(e);
+            //     res.header(500).json({err: "The download service is unavailable right now.", stack: e})
+            // }
 
-            // app.downloader.queue(req.body.url,
-            //     path.join(config.get("Folders.baseDir"), req.body.songFolder),
-            //     req.body.getLastfmData || false,
-            //     req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a",
-            //     req.body.addToPlaylist && req.body.playlist ? req.body.playlist : null);
+            app.downloader.queue(req.body.url,
+                path.join(config.get("Folders.baseDir"), req.body.songFolder),
+                req.body.getLastfmData || false,
+                req.user ? req.user.id : "c999f4ab-72a6-11e6-839f-00224dae0d2a",
+                req.body.addToPlaylist && req.body.playlist ? req.body.playlist : null);
         }else{
             res.json({err: "A required piece of data is missing."});
         }

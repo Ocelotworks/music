@@ -12,6 +12,17 @@ module.exports = function(app){
         route: "/api/artist"
     };
 
+    router.get("/", function(req, res){
+        app.database.getAllArtists(function(err, data){
+            if (err) {
+                app.warn("Error processing song info request: "+err);
+                res.status(500).json({err: err});
+            } else {
+                res.json(data);
+            }
+        })
+    });
+
     /**
      * /artist/:id/info
      */

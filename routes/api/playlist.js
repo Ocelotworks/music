@@ -12,6 +12,28 @@ module.exports = function(app){
         route: "/api/playlist"
     };
 
+    router.get("/", function(req, res){
+        app.database.getPublicPlaylists(function(err, publicPlaylists){
+            if (err) {
+                app.warn("Error processing song info request: "+err);
+                res.status(500).json({err});
+            } else {
+                if(req.user) {
+                    app.database.getPrivatePlaylists(req.user.id, function (err, privatePlaylists) {
+                        if (err) {
+                            app.warn("Error processing song info request: " + err);
+                            res.status(500).json({err});
+                        } else {
+                            res.json({public: publicPlaylists, private: privatePlaylists});
+                        }
+                    })
+                }else{
+                    res.json({public: publicPlaylists});
+                }
+            }
+        })
+    });
+
     /**
      * /api/playlist/:id
      * /api/playlist/:key/:id
