@@ -225,7 +225,7 @@ module.exports = function(app){
 
                 if (downloaderConfig.get("forceIpv4"))
                     options.push("--force-ipv4");
-                var downloader = ytdl(info.url, options);
+                var downloader = ytdl(info.url, options,{maxBuffer: Infinity});
                 var songUUID = uuid();
 
                 downloader.on("error", function songDownloadError(downloadError){
